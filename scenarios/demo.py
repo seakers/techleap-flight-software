@@ -17,7 +17,7 @@ fileName = os.path.basename(os.path.splitext(__file__)[0])
 
 
 
-sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+sys.path.insert(1, '/app')
 from modules.RGBImager import RGBImager
 from modules.Classifier import Classifier
 from modules.Gimbal import Gimbal
