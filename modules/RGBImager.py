@@ -30,6 +30,8 @@ class RGBImager(simulationArchTypes.PythonModelClass):
     def load_images(self):
         images = []
 
+        
+
 
         return images
 

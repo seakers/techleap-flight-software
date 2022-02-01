@@ -7,6 +7,8 @@ from Basilisk.utilities import simulationArchTypes
 from Basilisk import __path__
 
 import numpy as np
+import pickle
+import torch
 
 bskPath = __path__[0]
 
@@ -26,7 +28,7 @@ class Classifier(simulationArchTypes.PythonModelClass):
         self.classificationOutMsg = messaging.CModuleTemplateMsg()
 
         # --> ML Model
-        self.model = None
+        # self.model = pickle.load(open('/app/neuralnet/trained_net.p', 'rb'))
 
 
     def reset(self, currentTime):
@@ -53,6 +55,13 @@ class Classifier(simulationArchTypes.PythonModelClass):
 
 
     def unflatten_image(self, flattened_image):
+        image_tensor = torch.FloatTensor(flattened_image)
+
+
+
+
+
+
         return flattened_image
 
     def flatten_image(self, image):
