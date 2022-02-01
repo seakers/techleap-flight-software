@@ -1,0 +1,8 @@
+matplotlib==3.3.1
+numpy==1.19.1
+pytest
+wheel
+conan
+cmake
+parse
+pandas
