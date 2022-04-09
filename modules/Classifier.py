@@ -9,10 +9,14 @@ from Basilisk import __path__
 import numpy as np
 import pickle
 import torch
+import os
+import sys
 
 bskPath = __path__[0]
 
+sys.path.insert(1, '/app')
 
+from neuralnet.test_trainednet import CNN, FCN8s
 
 
 
@@ -28,8 +32,28 @@ class Classifier(simulationArchTypes.PythonModelClass):
         self.classificationOutMsg = messaging.CModuleTemplateMsg()
 
         # --> ML Model
-        # self.model = pickle.load(open('/app/neuralnet/trained_net.p', 'rb'))
+        torch.cuda.empty_cache()
+        DEVICE = "cuda"
+        batch_size = 1
+        n_class = 2
+        thres = torch.Tensor([.666]).to(DEVICE)  # try: 0, -.2, -.1, .1, .2, .3, .4
+        flnm = "666"
+        dataset_dir = "/app/neuralnet/landsat_datasets_manual_5bands/"
+        full_dataset = []
+        for str in os.listdir(dataset_dir):
+            f = open(dataset_dir + str, "rb")
+            dataset = pickle.load(f)
+            f.close()
+            full_dataset.extend(dataset)
 
+
+        fifteenpercent = int(len(full_dataset) * 0.15)
+        train_set, val_set = torch.utils.data.random_split(full_dataset, [len(full_dataset) - fifteenpercent, fifteenpercent])
+        test_loader = torch.utils.data.DataLoader(dataset=val_set, batch_size=batch_size, shuffle=False)
+        cnn_model = CNN().to(DEVICE)
+        self.model = FCN8s(pretrained_net=cnn_model, n_class=n_class).to(DEVICE)
+        self.model.load_state_dict(torch.load('./trained_net.p'))
+        self.model.eval()
 
     def reset(self, currentTime):
         return None
