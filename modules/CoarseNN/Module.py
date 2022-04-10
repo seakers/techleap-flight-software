@@ -21,11 +21,11 @@ from neuralnet.test_trainednet import CNN, FCN8s
 
 
 
-class Classifier(simulationArchTypes.PythonModelClass):
+class CoarseNN(simulationArchTypes.PythonModelClass):
 
 
     def __init__(self, modelName, modelActive=True, modelPriority=-1):
-        super(Classifier, self).__init__(modelName, modelActive, modelPriority)
+        super(CoarseNN, self).__init__(modelName, modelActive, modelPriority)
 
         # --> Messages
         self.imageInMsg = messaging.CModuleTemplateMsgReader()

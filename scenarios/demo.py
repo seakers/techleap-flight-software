@@ -1,16 +1,8 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import sys
 import os
 
 # --> Basilisk Imports
-from Basilisk.utilities import simulationArchTypes
-
-from Basilisk.utilities import SimulationBaseClass, unitTestSupport, macros, vizSupport
-from Basilisk.simulation import spacecraft, extForceTorque, simpleNav
-from Basilisk.fswAlgorithms import mrpFeedback, inertial3D, attTrackingError
-from Basilisk.architecture import messaging
-from Basilisk.moduleTemplates import cModuleTemplate, cppModuleTemplate
+from Basilisk.utilities import SimulationBaseClass, macros
 from Basilisk import __path__
 bskPath = __path__[0]
 fileName = os.path.basename(os.path.splitext(__file__)[0])
@@ -18,9 +10,9 @@ fileName = os.path.basename(os.path.splitext(__file__)[0])
 
 
 sys.path.insert(1, '/app')
-from modules.RGBImager import RGBImager
-from modules.Classifier import Classifier
-from modules.Gimbal import Gimbal
+from modules.ImagerVNIR.RGBImager import RGBImager
+from modules.CoarseNN.Module import CoarseNN
+from modules.GimbalControl.Gimbal import Gimbal
 
 
 
@@ -46,7 +38,7 @@ def run():
 
     # --> Add modules to task
     module_rgb = RGBImager('RGBImager')
-    module_ml = Classifier('Classifier')
+    module_ml = CoarseNN('Classifier')
     module_gimbal = Gimbal('Gimbal')
     py_process.addModelToTask(pyTaskName, module_rgb)
     py_process.addModelToTask(pyTaskName, module_ml)
