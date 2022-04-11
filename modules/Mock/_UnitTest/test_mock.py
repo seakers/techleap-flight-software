@@ -58,12 +58,15 @@ def test_function(param1, param2):
 def run(param1, param2):
     print('\n\n\n----> TESTING MODULE <-----')
 
+    # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
+    # --> 2. Add modules
     sim_client.new_py_module(Mock('MockModule1', mode='mtest_m1'))
     sim_client.new_py_module(Mock('MockModule2', mode='mtest_m2'))
     sim_client.new_py_module(Mock('MockModule3', mode='mtest_m3'))
 
+    # --> 3. Link modules
     sim_client.new_py_link('MockModule1', 'p_msg_out', 'MockModule2', 'p_msg_in')
     sim_client.new_py_link('MockModule2', 'p_msg_out', 'MockModule3', 'p_msg_in')
 

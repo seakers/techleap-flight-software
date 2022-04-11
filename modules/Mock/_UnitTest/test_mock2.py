@@ -64,16 +64,20 @@ def run(param1, param2):
     # --> 2. Create target module
     module = Mock('MockModule2', mode='mtest_m2')
 
-    # --> 3. Create mock message
-    mock_message_data = messaging.CModuleTemplateMsgPayload()  # Create a structure for the input message
-    mock_message_data.dataVector = [1.0, -0.5, 0.7]  # Set up a list as a 3-vector
-    mock_message = messaging.CModuleTemplateMsg().write(mock_message_data)
 
-    # --> 4. Subscribe to mock message
-    module.p_msg_in.subscribeTo(mock_message)
+
+    # # --> 3. Create mock message
+    # mock_message_data = messaging.CModuleTemplateMsgPayload()  # Create a structure for the input message
+    # mock_message_data.dataVector = [1.0, -0.5, 0.7]  # Set up a list as a 3-vector
+    # mock_message = messaging.CModuleTemplateMsg().write(mock_message_data)
+    #
+    # # --> 4. Subscribe to mock message
+    # module.p_msg_in.subscribeTo(mock_message)
 
     # --> 5. Add module to simulation
     sim_client.new_py_module(module)
+
+    sim_client.new_py_mock_message('MockModule2', 'p_msg_in', (1.0, -0.5, 0.7))
 
     # --> 6. Run simulation
     sim_client.run()

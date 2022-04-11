@@ -1,8 +1,9 @@
 import sys
-
+from copy import deepcopy
 
 # --> Basilisk Imports
 from Basilisk.utilities import SimulationBaseClass, macros
+from Basilisk.architecture import messaging
 from Basilisk import __path__
 bskPath = __path__[0]
 
@@ -44,6 +45,9 @@ class SimulationClient:
         self.c_process.addTask(new_task)
         return None
 
+    def new_c_module(self, module, task_name='base_task'):
+        self.simulation.AddModelToTask(task_name, module)
+
     def new_py_task(self, task_name, time_step=None):
         if time_step is None:
             time_step = self.time_step
@@ -67,6 +71,26 @@ class SimulationClient:
                 print('--> MODULES DO NOT CONTAIN PROPER MESSAGE VARIABLES')
         else:
             print('--> MODULES NOT FOUND IN SIMULATION')
+
+
+
+
+
+
+
+    def new_py_mock_message(self, target_name, target_msg, data_vector):
+        # --> 1. Create mock message from data_vector
+        mock_message_data = messaging.CModuleTemplateMsgPayload()
+        print('--> xx ', data_vector)
+        mock_message_data.dataVector = deepcopy(data_vector)
+        mock_message = messaging.CModuleTemplateMsg().write(mock_message_data)
+
+        # --> 2. Subscribe to message
+        if target_name in self.modules:
+            target_module = self.modules[target_name]
+            target_module_msg = getattr(target_module, target_msg, None)
+            if target_module_msg is not None:
+                target_module_msg.subscribeTo(mock_message)
 
 
     def run(self):
