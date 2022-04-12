@@ -10,6 +10,7 @@ fileName = os.path.basename(os.path.splitext(__file__)[0])
 
 # --> Module imports
 sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+from cmodules.C_ImagerVNIR import C_ImagerVNIR
 
 
 from simulation.api import SimulationClient
@@ -18,13 +19,9 @@ from simulation.api import SimulationClient
 def run():
 
 
-
-
-
-
     sim_client = SimulationClient(time_step=1.0, duration=3.0)
 
-    test_module = cppImagerVnir.CppImagerVnir()
+    test_module = C_ImagerVNIR().get_module()
     sim_client.new_c_module(test_module)
 
 

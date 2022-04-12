@@ -1,18 +1,16 @@
 import pytest
 import sys
-sys.path.insert(1, '/app')
+sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+
 
 # --> Simulation Import
 from simulation.api import SimulationClient
 
 # --> Module Import
-from modules.Mock.Module import Mock
+from cmodules.C_Potogrammetry import C_Photogrammetry
 
-# --> Basilisk Imports
-from Basilisk.architecture import messaging
-from Basilisk.utilities import SimulationBaseClass
-from Basilisk.utilities import unitTestSupport
-from Basilisk.utilities import macros
+
+
 
 
 # """
@@ -29,7 +27,7 @@ from Basilisk.utilities import macros
 @pytest.mark.parametrize(
     'param1, param2',
     [
-        (1.0, 2.0),
+        (1.0, 1.0),
     ]
 )
 def test_function(param1, param2):
@@ -42,6 +40,9 @@ def test_function(param1, param2):
 
     # --> 3. Set options
     __tracebackhide__ = True
+
+
+
 
 
 # """
@@ -62,17 +63,24 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Add modules
-    sim_client.new_py_module(Mock('MockModule1', mode='mtest_m1'))
-    sim_client.new_py_module(Mock('MockModule2', mode='mtest_m2'))
-    sim_client.new_py_module(Mock('MockModule3', mode='mtest_m3'))
+    test_module = C_Photogrammetry().get_module()
+    sim_client.new_c_module(test_module)
 
-    # --> 3. Link modules
-    sim_client.new_py_link('MockModule1', 'p_msg_out', 'MockModule2', 'p_msg_in')
-    sim_client.new_py_link('MockModule2', 'p_msg_out', 'MockModule3', 'p_msg_in')
-
+    # --> 3. Run simulation
     sim_client.run()
 
     return True
+
+
+
+
+
+
+
+
+
+
+
 
 
 
