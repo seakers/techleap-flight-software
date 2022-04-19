@@ -10,9 +10,9 @@ fileName = os.path.basename(os.path.splitext(__file__)[0])
 
 
 sys.path.insert(1, '/app')
-from modules.ImagerVNIR.RGBImager import RGBImager
-from modules.CoarseNN.Module import CoarseNN
-from modules.GimbalControl.Gimbal import Gimbal
+from pymodules.ImagerVNIR.RGBImager import RGBImager
+from pymodules.CoarseNN.Module import CoarseNN
+from pymodules.GimbalControl.Gimbal import Gimbal
 
 
 
@@ -36,7 +36,7 @@ def run():
 
 
 
-    # --> Add modules to task
+    # --> Add pymodules to task
     module_rgb = RGBImager('RGBImager')
     module_ml = CoarseNN('Classifier')
     module_gimbal = Gimbal('Gimbal')

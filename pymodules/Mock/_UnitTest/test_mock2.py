@@ -1,16 +1,19 @@
 import pytest
 import sys
-sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
 
+sys.path.insert(1, '/app')
 
 # --> Simulation Import
 from simulation.api import SimulationClient
 
 # --> Module Import
-from cmodule_imports.C_FineNN import C_FineNN
+from pymodules.Mock.Module import Mock
 
-
-
+# --> Basilisk Imports
+from Basilisk.architecture import messaging
+from Basilisk.utilities import SimulationBaseClass
+from Basilisk.utilities import unitTestSupport
+from Basilisk.utilities import macros
 
 
 # """
@@ -31,7 +34,6 @@ from cmodule_imports.C_FineNN import C_FineNN
     ]
 )
 def test_function(param1, param2):
-
     # --> 1. Run test function
     result = run(param1, param2)
 
@@ -40,9 +42,6 @@ def test_function(param1, param2):
 
     # --> 3. Set options
     __tracebackhide__ = True
-
-
-
 
 
 # """
@@ -62,25 +61,28 @@ def run(param1, param2):
     # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
-    # --> 2. Add pymodules
-    test_module = C_FineNN().get_module()
-    sim_client.new_c_module(test_module)
+    # --> 2. Create target module
+    module = Mock('MockModule2', mode='mtest_m2')
 
-    # --> 3. Run simulation
+
+
+    # # --> 3. Create mock message
+    # mock_message_data = messaging.CModuleTemplateMsgPayload()  # Create a structure for the input message
+    # mock_message_data.dataVector = [1.0, -0.5, 0.7]  # Set up a list as a 3-vector
+    # mock_message = messaging.CModuleTemplateMsg().write(mock_message_data)
+    #
+    # # --> 4. Subscribe to mock message
+    # module.p_msg_in.subscribeTo(mock_message)
+
+    # --> 5. Add module to simulation
+    sim_client.new_py_module(module)
+
+    sim_client.new_py_mock_message('MockModule2', 'p_msg_in', (1.0, -0.5, 0.7))
+
+    # --> 6. Run simulation
     sim_client.run()
 
     return True
-
-
-
-
-
-
-
-
-
-
-
 
 
 

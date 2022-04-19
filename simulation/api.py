@@ -9,7 +9,7 @@ bskPath = __path__[0]
 
 # --> Module Imports
 sys.path.insert(1, '/app')
-from modules.Template.Module import Template
+from pymodules.Template.Module import Template
 
 
 

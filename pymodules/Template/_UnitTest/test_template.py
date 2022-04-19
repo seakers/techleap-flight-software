@@ -1,16 +1,17 @@
 import pytest
 import sys
-sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
-
+sys.path.insert(1, '/app')
 
 # --> Simulation Import
 from simulation.api import SimulationClient
 
 # --> Module Import
-from cmodule_imports.C_FineNN import C_FineNN
+from pymodules.Template.Module import Template
 
-
-
+# --> Basilisk Imports
+from Basilisk.utilities import SimulationBaseClass
+from Basilisk.utilities import unitTestSupport
+from Basilisk.utilities import macros
 
 
 # """
@@ -25,24 +26,23 @@ from cmodule_imports.C_FineNN import C_FineNN
 
 
 @pytest.mark.parametrize(
-    'param1, param2',
+    'param1, param2, param3',
     [
-        (1.0, 1.0),
+        (1, 2, 3),
+        (1, 2, 3),
+        (1, 2, 3),
     ]
 )
-def test_function(param1, param2):
+def test_function(param1, param2, param3):
 
     # --> 1. Run test function
-    result = run(param1, param2)
+    result = run(param1, param2, param3)
 
     # --> 2. Assert result
     assert result is True
 
     # --> 3. Set options
     __tracebackhide__ = True
-
-
-
 
 
 # """
@@ -56,31 +56,14 @@ def test_function(param1, param2):
 # """
 
 
-def run(param1, param2):
-    print('\n\n\n----> TESTING MODULE <-----')
+def run(param1, param2, param3):
+    print('\n\n\n--> TESTING MODULE')
 
-    # --> 1. Create simulation client
-    sim_client = SimulationClient(time_step=param1, duration=param2)
-
-    # --> 2. Add pymodules
-    test_module = C_FineNN().get_module()
-    sim_client.new_c_module(test_module)
-
-    # --> 3. Run simulation
+    sim_client = SimulationClient()
+    sim_client.new_py_module(Template('TemplateModule'))
     sim_client.run()
 
     return True
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -17,11 +17,11 @@ fileName = os.path.basename(os.path.splitext(__file__)[0])
 
 
 # --> Module Imports
-# from modules.adcs import ADCS
-# from modules.comms import CommsSystem
-# from modules.payload import PayloadSystem
-# from modules.power import PowerSystem
-# from modules.thermal import ThermalSystem
+# from pymodules.adcs import ADCS
+# from pymodules.comms import CommsSystem
+# from pymodules.payload import PayloadSystem
+# from pymodules.power import PowerSystem
+# from pymodules.thermal import ThermalSystem
 
 class PythonMRPPD(simulationArchTypes.PythonModelClass):
 
@@ -195,7 +195,7 @@ def stand_alone_message():
     dynProcess = scSim.CreateNewProcess("dynamicsProcess")
     dynProcess.addTask(scSim.CreateNewTask("dynamicsTask", macros.sec2nano(1.)))
 
-    # create modules
+    # create pymodules
     mod1 = cppModuleTemplate.CppModuleTemplate()
     mod1.ModelTag = "cppModule1"
     scSim.AddModelToTask("dynamicsTask", mod1)
@@ -312,7 +312,7 @@ def py_test():
     scSim.AddModelToTask(simTaskName, mrpLog)
 
     #
-    # connect the messages to the modules
+    # connect the messages to the pymodules
     #
     sNavObject.scStateInMsg.subscribeTo(scObject.scStateOutMsg)
     attErrorConfig.attNavInMsg.subscribeTo(sNavObject.attOutMsg)

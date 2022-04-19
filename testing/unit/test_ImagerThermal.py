@@ -7,7 +7,7 @@ sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from cmodules.C_ImagerThermal import C_ImagerThermal
+from cmodule_imports.C_ImagerThermal import C_ImagerThermal
 
 
 
@@ -62,7 +62,7 @@ def run(param1, param2):
     # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
-    # --> 2. Add modules
+    # --> 2. Add pymodules
     test_module = C_ImagerThermal().get_module()
     sim_client.new_c_module(test_module)
 
