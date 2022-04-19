@@ -43,7 +43,7 @@ splitPath = path.split(bskName)
 from Basilisk.utilities import SimulationBaseClass
 from Basilisk.utilities import unitTestSupport                  # general support file with common unit test functions
 import matplotlib.pyplot as plt
-from Basilisk.ExternalModules import DataStorage                # import the module that is to be tested
+from Basilisk.ExternalModules import Photogrammetry                # import the module that is to be tested
 from Basilisk.utilities import macros
 from Basilisk.architecture import messaging                      # import the message definitions
 from Basilisk.architecture import bskLogging
@@ -61,9 +61,9 @@ from Basilisk.architecture import bskLogging
 @pytest.mark.parametrize()
 @pytest.mark.parametrize()
 def test_module():
-    
-    # --> Call test function
+
     result = run_test()
+
     assert 0 < 1
 
 
@@ -77,8 +77,8 @@ def run_test():
     testProc.addTask(simulation.CreateNewTask("UnitTask", macros.sec2nano(1.0)))
 
     # --> Create test module
-    test_module = DataStorage.DataStorage()
-    test_module.ModelTag = "DataStorage"
+    test_module = Photogrammetry.Photogrammetry()
+    test_module.ModelTag = "Photogrammetry"
 
     # --> Add module to task
     simulation.AddModelToTask("UnitTask", test_module)
