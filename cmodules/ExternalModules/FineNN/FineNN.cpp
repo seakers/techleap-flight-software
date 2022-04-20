@@ -10,19 +10,16 @@
 
 
 
-FineNN::FineNN() // --> CHANGE
-{
+FineNN::FineNN() {
 
 }
 
-FineNN::~FineNN() // --> CHANGE
-{
+FineNN::~FineNN() {
     return;
 }
 
 
-void FineNN::Reset(uint64_t CurrentSimNanos) // --> CHANGE
-{
+void FineNN::Reset(uint64_t CurrentSimNanos) {
     // --> 1. Init image with zeros
     std::cout << "--> RESETTING MODULE: FineNN" << std::endl;
     this->state = 0;
@@ -41,6 +38,10 @@ void FineNN::Reset(uint64_t CurrentSimNanos) // --> CHANGE
             this->mask[x][y] = 0;
         }
     }
+
+    // --> 2. Load nn model
+    this->nn_model_path = "/home/gabe/repos/techleap/techleap-flight-software/neuralnet/trainednet.pt";
+    std::cout << "--> LOADING NN MODEL " + this->nn_model_path << std::endl;
 
 
 

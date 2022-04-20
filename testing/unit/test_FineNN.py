@@ -7,7 +7,7 @@ sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from cmodule_imports.C_FineNN import C_FineNN
+from Basilisk.ExternalModules import FineNN
 
 
 
@@ -63,7 +63,7 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Add pymodules
-    test_module = C_FineNN().get_module()
+    test_module = FineNN.FineNN()
     sim_client.new_c_module(test_module)
 
     # --> 3. Run simulation

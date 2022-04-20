@@ -15,6 +15,9 @@
 #include "architecture/messaging/messaging.h"
 
 
+#include <torch/script.h>
+#include <string>
+
 
 /*! @brief basic Basilisk C++ module class */
 class FineNN: public SysModel { // --> CHANGE
@@ -32,6 +35,10 @@ public:
     int thermal_tensor[20][20];
     int vnir_tensor[20][20];
     int mask[20][20];
+
+
+    std::string nn_model_path;
+    torch::jit::script::Module nn_model;
 
     // --> MESSAGE IN
     ReadFunctor<ImagerVNIROutMsgPayload> vnir_image_msg;
