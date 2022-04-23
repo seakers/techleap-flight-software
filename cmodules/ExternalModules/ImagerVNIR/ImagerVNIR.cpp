@@ -49,15 +49,15 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
         }
     }
 
-
-    // --> 2. Create output buffer and copy instrument reading
-    ImagerVNIROutMsgPayload outMsgBuffer; // --> CHANGE
-    outMsgBuffer.state = 0;
-    memcpy(&outMsgBuffer.imageTensor, &vnir_reading, sizeof(vnir_reading));
-
-
-    // --> 3. Write output buffer to output message
-    this->dataOutMsg.write(&outMsgBuffer, this->moduleID, CurrentSimNanos);
+//
+//    // --> 2. Create output buffer and copy instrument reading
+//    ImagerVNIROutMsgPayload outMsgBuffer; // --> CHANGE
+//    outMsgBuffer.state = 0;
+//    memcpy(&outMsgBuffer.imageTensor, &vnir_reading, sizeof(vnir_reading));
+//
+//
+//    // --> 3. Write output buffer to output message
+//    this->dataOutMsg.write(&outMsgBuffer, this->moduleID, CurrentSimNanos);
 
 
     // --> 4. Log module run

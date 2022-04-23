@@ -77,7 +77,6 @@ def run(param1, param2):
     # --> 5. Add module to simulation
     sim_client.new_py_module(module)
 
-    sim_client.new_py_mock_message('MockModule2', 'p_msg_in', (1.0, -0.5, 0.7))
 
     # --> 6. Run simulation
     sim_client.run()

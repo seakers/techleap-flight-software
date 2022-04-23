@@ -73,26 +73,6 @@ class SimulationClient:
             print('--> MODULES NOT FOUND IN SIMULATION')
 
 
-
-
-
-
-
-    def new_py_mock_message(self, target_name, target_msg, data_vector):
-        # --> 1. Create mock message from data_vector
-        mock_message_data = messaging.CModuleTemplateMsgPayload()
-        print('--> xx ', data_vector)
-        mock_message_data.dataVector = deepcopy(data_vector)
-        mock_message = messaging.CModuleTemplateMsg().write(mock_message_data)
-
-        # --> 2. Subscribe to message
-        if target_name in self.modules:
-            target_module = self.modules[target_name]
-            target_module_msg = getattr(target_module, target_msg, None)
-            if target_module_msg is not None:
-                target_module_msg.subscribeTo(mock_message)
-
-
     def run(self):
         self.simulation.InitializeSimulation()
         self.simulation.ConfigureStopTime(self.duration)

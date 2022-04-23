@@ -5,9 +5,14 @@
 #ifndef FINE_NN_H  // -------------------------------------------------> CHANGE
 #define FINE_NN_H  // -------------------------------------------------> CHANGE
 #include "msgPayloadDefC/ImagerThermalOutMsgPayload.h" // --> CHANGE
-#include "msgPayloadDefC/ImagerVNIROutMsgPayload.h" // --> CHANGE
-#include "msgPayloadDefC/CoarsePredictionMsgPayload.h" // --> CHANGE
 #include "msgPayloadDefC/FinePredictionMsgPayload.h" // --> CHANGE
+
+// #include "msgPayloadDefC/CoarsePredictionMsgPayload.h" // --> CHANGE
+#include "cMsgCInterface/CoarsePredictionMsg_C.h"
+
+//#include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
+//#include "msgPayloadDefCpp/ImagerVNIROutMsgPayload.h"
+#include "cMsgCInterface/ImagerVNIROutMsg_C.h"
 
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
@@ -28,6 +33,9 @@ public:
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
+    void LoadModel();
+    void InitializeTensors();
+
 public:
 
     // --> VARIABLES
@@ -41,12 +49,18 @@ public:
     torch::jit::script::Module nn_model;
 
     // --> MESSAGE IN
-    ReadFunctor<ImagerVNIROutMsgPayload> vnir_image_msg;
-    ReadFunctor<ImagerThermalOutMsgPayload> thermal_image_msg;
-    ReadFunctor<CoarsePredictionMsgPayload> coarse_nn_out_msg;
+    ImagerVNIROutMsg_C vnir_msg;
+    // ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
+
+
+    ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
+
+    CoarsePredictionMsg_C coarse_msg;
+    // ReadFunctor<CoarsePredictionMsgPayload> coarse_msg;
+
 
     // --> MESSAGE OUT
-    Message<FinePredictionMsgPayload> fine_nn_out_msg;
+    Message<FinePredictionMsgPayload> fine_msg;
 
     // --> LOGGING
     BSKLogger bskLogger;

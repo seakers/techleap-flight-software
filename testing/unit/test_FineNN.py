@@ -1,6 +1,8 @@
 import pytest
 import sys
-sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+import numpy as np
+# sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+sys.path.insert(1, '/app')
 
 
 # --> Simulation Import
@@ -9,6 +11,11 @@ from simulation.api import SimulationClient
 # --> Module Import
 from Basilisk.ExternalModules import FineNN
 
+# --> Messaging Import
+from Basilisk.architecture import messaging
+
+# --> Basilisk logging
+from Basilisk.architecture import bskLogging
 
 
 
@@ -57,16 +64,53 @@ def test_function(param1, param2):
 
 
 def run(param1, param2):
-    print('\n\n\n----> TESTING MODULE <-----')
+    # bskLogging.setDefaultLogLevel(bskLogging.BSK_WARNING)
+
+    # fine_msg_rec = test_module.fine_msg.recorder()
+    # sim_client.new_c_module(fine_msg_rec)
+
+
+
+
+
+
+
+
+
+
+
 
     # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
-    # --> 2. Add pymodules
+
+    # --> 2. Create module
     test_module = FineNN.FineNN()
+    test_module.ModelTag = "FineNN"
     sim_client.new_c_module(test_module)
 
-    # --> 3. Run simulation
+
+
+    # --> 3. Create mock messages
+    # vnir_msg_data = messaging.ImagerVNIROutMsgPayload()
+    # vnir_msg_data.state = 20
+    # vnir_msg_data.imageTensor = np.zeros([20, 20]).tolist()
+    # vnir_msg = messaging.ImagerVNIROutMsg().write(vnir_msg_data)
+
+    coarse_msg_data = messaging.CoarsePredictionMsgPayload()
+    coarse_msg_data.prediction = 3
+    coarse_msg = messaging.CoarsePredictionMsgPayload().write(coarse_msg_data)
+
+
+    # --> 4. Subscribe to messages
+    # test_module.vnir_msg.subscribeTo(vnir_msg)
+    test_module.coarse_msg.subscribeTo(coarse_msg)
+
+
+    # --> 5. Setup message recording
+
+
+    # --> 6. Run simulation
     sim_client.run()
 
     return True
