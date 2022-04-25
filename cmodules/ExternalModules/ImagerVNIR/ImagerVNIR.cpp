@@ -20,46 +20,92 @@ ImagerVNIR::~ImagerVNIR() // --> CHANGE
     return;
 }
 
-
-void ImagerVNIR::Reset(uint64_t CurrentSimNanos) // --> CHANGE
-{
-    // --> 1. Init image with zeros
-    std::cout << "--> RESETTING MODULE";
-    /*! - reset any required variables */
-    this->state = 0;
+void ImagerVNIR::InitializeTensors(){
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
-            this->imageTensor[x][y] = 0;
+            this->image_tensor[x][y] = 0;
         }
     }
+}
 
-    // --> 2. Log information
-    bskLogger.bskLog(BSK_INFORMATION, "Variable state set to %f in reset.",this->state);
+void ImagerVNIR::ZeroOutputVariables(){
+    for(int x = 0; x < 20; x++){
+        for(int y = 0; y < 20; y++){
+            this->image_tensor[x][y] = 0;
+        }
+    }
 }
 
 
 
-void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
-{
-    // --> 1. Get instrument reading
-    int vnir_reading[20][20] = {0};
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            vnir_reading[x][y] = 0;
+void ImagerVNIR::Reset(uint64_t CurrentSimNanos) {
+    std::cout << "--> RESETTING MODULE: ImagerVNIR" << std::endl;
+
+    // --> 1. Reset module state
+    this->state = 0;
+
+    // --> 2. Initialize tensors
+    this->InitializeTensors();
+}
+
+
+
+void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
+
+
+    // -----------------------
+    // ----- Zero Output -----
+    // -----------------------
+
+    // --> Zero output messages
+    ImagerVNIROutMsgPayload vnir_msg_buffer = this->vnir_msg.zeroMsgPayload;
+
+    // --> Zero internal output variables
+    this->ZeroOutputVariables();
+
+
+    // --------------------------
+    // ----- Process Inputs -----
+    // --------------------------
+    // --> TODO: Implement SDK reading vnir sensor and copy values over to image_tensor
+    this->state += 1;
+
+    if(this->mock_msg.isLinked()){
+        ImagerVNIROutMsgPayload mock_msg_payload = this->mock_msg();
+        for(int x = 0; x < 20; x++){
+            for(int y = 0; y < 20; y++){
+                this->image_tensor[x][y] = mock_msg_payload.imageTensor[x][y];
+            }
+        }
+    }
+    else{
+        for(int x = 0; x < 20; x++){
+            for(int y = 0; y < 20; y++){
+                this->image_tensor[x][y] = this->image_tensor[x][y];
+            }
         }
     }
 
-//
-//    // --> 2. Create output buffer and copy instrument reading
-//    ImagerVNIROutMsgPayload outMsgBuffer; // --> CHANGE
-//    outMsgBuffer.state = 0;
-//    memcpy(&outMsgBuffer.imageTensor, &vnir_reading, sizeof(vnir_reading));
-//
-//
-//    // --> 3. Write output buffer to output message
-//    this->dataOutMsg.write(&outMsgBuffer, this->moduleID, CurrentSimNanos);
 
 
-    // --> 4. Log module run
+
+    // -------------------------
+    // ----- Write Outputs -----
+    // -------------------------
+    // --> TODO: Write correct image dimensions
+
+    vnir_msg_buffer.state = this->state;
+    for(int x = 0; x < 20; x++){
+        for(int y = 0; y < 20; y++){
+            vnir_msg_buffer.imageTensor[x][y] = this->image_tensor[x][y];
+        }
+    }
+    this->vnir_msg.write(&vnir_msg_buffer, this->moduleID, CurrentSimNanos);
+
+
+    // -------------------
+    // ----- Logging -----
+    // -------------------
+
     bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

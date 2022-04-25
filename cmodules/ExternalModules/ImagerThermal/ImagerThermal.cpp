@@ -20,46 +20,93 @@ ImagerThermal::~ImagerThermal() // --> CHANGE
     return;
 }
 
-
-void ImagerThermal::Reset(uint64_t CurrentSimNanos) // --> CHANGE
-{
-    // --> 1. Init image with zeros
-    std::cout << "--> RESETTING MODULE";
-    /*! - reset any required variables */
-    this->state = 0;
+void ImagerThermal::InitializeTensors(){
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
-            this->imageTensor[x][y] = 0;
+            this->image_tensor[x][y] = 0;
         }
     }
+}
 
-    // --> 2. Log information
-    bskLogger.bskLog(BSK_INFORMATION, "Variable state set to %f in reset.",this->state);
+void ImagerThermal::ZeroOutputVariables(){
+    for(int x = 0; x < 20; x++){
+        for(int y = 0; y < 20; y++){
+            this->image_tensor[x][y] = 0;
+        }
+    }
+}
+
+
+
+
+
+void ImagerThermal::Reset(uint64_t CurrentSimNanos) {
+    std::cout << "--> RESETTING MODULE: ImagerThermal" << std::endl;
+
+    // --> 1. Reset module state
+    this->state = 0;
+
+    // --> 2. Initialize tensors
+    this->InitializeTensors();
 }
 
 
 
 void ImagerThermal::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
 {
-    // --> 1. Get instrument reading
-    int thermal_reading[20][20] = {0};
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            thermal_reading[x][y] = 0;
+
+    // -----------------------
+    // ----- Zero Output -----
+    // -----------------------
+
+    // --> Zero output messages
+    ImagerThermalOutMsgPayload thermal_msg_buffer = this->thermal_msg.zeroMsgPayload;
+
+    // --> Zero internal output variables
+    this->ZeroOutputVariables();
+
+
+    // --------------------------
+    // ----- Process Inputs -----
+    // --------------------------
+    // --> TODO: Implement SDK reading thermal sensor and copy values over to image_tensor
+    this->state += 1;
+
+    if(this->mock_msg.isLinked()){
+        ImagerThermalOutMsgPayload mock_msg_payload = this->mock_msg();
+        for(int x = 0; x < 20; x++){
+            for(int y = 0; y < 20; y++){
+                this->image_tensor[x][y] = mock_msg_payload.imageTensor[x][y];
+            }
+        }
+    }
+    else {
+        for(int x = 0; x < 20; x++){
+            for(int y = 0; y < 20; y++){
+                this->image_tensor[x][y] = this->image_tensor[x][y];
+            }
         }
     }
 
 
-    // --> 2. Create output buffer and copy instrument reading
-    ImagerThermalOutMsgPayload outMsgBuffer; // --> CHANGE
-    outMsgBuffer.state = 0;
-    memcpy(&outMsgBuffer.imageTensor, &thermal_reading, sizeof(thermal_reading));
 
 
-    // --> 3. Write output buffer to output message
-    this->dataOutMsg.write(&outMsgBuffer, this->moduleID, CurrentSimNanos);
+    // -------------------------
+    // ----- Write Outputs -----
+    // -------------------------
+    // --> TODO: Write correct image dimensions
+
+    thermal_msg_buffer.state = this->state;
+    for(int x = 0; x < 20; x++){
+        for(int y = 0; y < 20; y++){
+            thermal_msg_buffer.imageTensor[x][y] = this->image_tensor[x][y];
+        }
+    }
+    this->thermal_msg.write(&thermal_msg_buffer, this->moduleID, CurrentSimNanos);
 
 
-    // --> 4. Log module run
+    // -------------------
+    // ----- Logging -----
+    // -------------------
     bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

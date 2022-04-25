@@ -1,52 +1,23 @@
-#
-#  ISC License
-#
-#  Copyright (c) 2021, Autonomous Vehicle Systems Lab, University of Colorado at Boulder
-#
-#  Permission to use, copy, modify, and/or distribute this software for any
-#  purpose with or without fee is hereby granted, provided that the above
-#  copyright notice and this permission notice appear in all copies.
-#
-#  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-#  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-#  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-#  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-#  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-#  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-#  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-#
-
-
-#
-#   Unit Test Script
-#   Module Name:        cppModuleTemplateParametrized
-#   Author:             (First Name) (Last Name)
-#   Creation Date:      Month Day, Year
-#
-
 import pytest
-import os, inspect
+import sys
 import numpy as np
-
-filename = inspect.getframeinfo(inspect.currentframe()).filename
-path = os.path.dirname(os.path.abspath(filename))
-bskName = 'Basilisk'
-splitPath = path.split(bskName)
+# sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+sys.path.insert(1, '/app')
 
 
+# --> Simulation Import
+from simulation.api import SimulationClient
 
+# --> Module Import
+from Basilisk.ExternalModules import ImagerVNIR
 
+# --> Messaging Import
+from Basilisk.architecture import messaging
 
-
-
-# Import all of the pymodules that we are going to be called in this simulation
-from Basilisk.utilities import SimulationBaseClass
-from Basilisk.utilities import unitTestSupport                  # general support file with common unit test functions
-import matplotlib.pyplot as plt
-from Basilisk.ExternalModules import ImagerVNIR                # import the module that is to be tested
-from Basilisk.utilities import macros
-from Basilisk.architecture import messaging                      # import the message definitions
+# --> Basilisk logging
 from Basilisk.architecture import bskLogging
+
+
 
 
 # """
@@ -58,38 +29,99 @@ from Basilisk.architecture import bskLogging
 #     |_|\___||___/\__| |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|
 #
 # """
-@pytest.mark.parametrize()
-@pytest.mark.parametrize()
-def test_module():
-    
-    # --> Call test function
-    result = run_test()
-    assert 0 < 1
 
 
-def run_test():
-    simulation = SimulationBaseClass.SimBaseClass()
+@pytest.mark.parametrize(
+    'param1, param2',
+    [
+        (1.0, 2.0),
+    ]
+)
+def test_function(param1, param2):
 
-    # --> Add process
-    testProc = simulation.CreateNewProcess("TestProcess")
+    # --> 1. Run test function
+    result = run(param1, param2)
 
-    # --> Add task
-    testProc.addTask(simulation.CreateNewTask("UnitTask", macros.sec2nano(1.0)))
+    # --> 2. Assert result
+    assert result is True
 
-    # --> Create test module
+    # --> 3. Set options
+    __tracebackhide__ = True
+
+
+
+
+
+# """
+#    _____  _                    _         _    _
+#   / ____|(_)                  | |       | |  (_)
+#  | (___   _  _ __ ___   _   _ | |  __ _ | |_  _   ___   _ __
+#   \___ \ | || '_ ` _ \ | | | || | / _` || __|| | / _ \ | '_ \
+#   ____) || || | | | | || |_| || || (_| || |_ | || (_) || | | |
+#  |_____/ |_||_| |_| |_| \__,_||_| \__,_| \__||_| \___/ |_| |_|
+#
+# """
+
+
+def run(param1, param2):
+
+    # --> 1. Create simulation client
+    sim_client = SimulationClient(time_step=param1, duration=param2)
+
+    # --> 2. Create module
     test_module = ImagerVNIR.ImagerVNIR()
     test_module.ModelTag = "ImagerVNIR"
+    sim_client.new_c_module(test_module)
 
-    # --> Add module to task
-    simulation.AddModelToTask("UnitTask", test_module)
+    # --> 3. Set output message recording
+    output_rec = test_module.vnir_msg.recorder()
+    sim_client.new_c_module(output_rec)
 
-    # --> Configure simulation runtime and execute
-    simulation.ConfigureStopTime(macros.sec2nano(1.0))        # seconds to stop simulation
-    simulation.ExecuteSimulation()
+    # --> 4. Set variable recording
+    var1 = "ImagerVNIR.state"
+    var2 = "ImagerVNIR.image_tensor"
+    sim_client.new_logging_var(var1)
+    sim_client.new_logging_var(var2)
 
-    return None
+    # --> 5. Run simulation
+    sim_client.run()
+
+    # --> 6. Get debug output
+    var1 = sim_client.get_var_log_data(var1)
+    var2 = sim_client.get_var_log_data(var2)
+
+    print(output_rec.state)
 
 
-# --> Allow test to be ran stand-alone
-if __name__ == "__main__":
-    test_module()
+    return True
+
+
+
+
+
+def get_tensor(value, rows=20, cols=20):
+    tensor = []
+    for x in range(rows):
+        row = []
+        for y in range(cols):
+            row.append(value)
+        tensor.append(row)
+    return tensor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,14 +2,20 @@
 // Created by gabe :)
 //
 
-#ifndef IMAGER_VNIR_H  // --------------------------------------------> CHANGE
-#define IMAGER_VNIR_H  // --------------------------------------------> CHANGE
-#include "msgPayloadDefC/ImagerVNIROutMsgPayload.h" // --> CHANGE
+#ifndef IMAGER_VNIR_H
+#define IMAGER_VNIR_H
 
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
 #include "architecture/utilities/bskLogging.h"
 #include "architecture/messaging/messaging.h"
+
+
+// ---------------------------
+// ----- MESSAGE IMPORTS -----
+// ---------------------------
+#include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
+
 
 
 
@@ -22,14 +28,27 @@ public:
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
+
+    void InitializeTensors();
+    void ZeroOutputVariables();
+
 public:
 
-    // --> VARIABLES
+    // ---------------------
+    // ----- VARIABLES -----
+    // ---------------------
+
+    // --> INTERNAL
     int state;
-    int imageTensor[20][20];
+
+    // --> MESSAGE IN
+    ReadFunctor<ImagerVNIROutMsgPayload> mock_msg;
 
     // --> MESSAGE OUT
-    Message<ImagerVNIROutMsgPayload> dataOutMsg;
+    Message<ImagerVNIROutMsgPayload> vnir_msg;
+
+    // --> OUTPUT
+    int image_tensor[20][20];
 
     // --> LOGGING
     BSKLogger bskLogger;

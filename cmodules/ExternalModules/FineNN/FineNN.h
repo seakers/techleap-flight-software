@@ -2,26 +2,26 @@
 // Created by gabe :)
 //
 
-#ifndef FINE_NN_H  // -------------------------------------------------> CHANGE
-#define FINE_NN_H  // -------------------------------------------------> CHANGE
-#include "msgPayloadDefC/ImagerThermalOutMsgPayload.h" // --> CHANGE
-#include "msgPayloadDefC/FinePredictionMsgPayload.h" // --> CHANGE
+#ifndef FINE_NN_H
+#define FINE_NN_H
 
-// #include "msgPayloadDefC/CoarsePredictionMsgPayload.h" // --> CHANGE
-#include "cMsgCInterface/CoarsePredictionMsg_C.h"
 
-//#include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
-//#include "msgPayloadDefCpp/ImagerVNIROutMsgPayload.h"
-#include "cMsgCInterface/ImagerVNIROutMsg_C.h"
+#include <torch/script.h>
+#include <string>
 
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
 #include "architecture/utilities/bskLogging.h"
 #include "architecture/messaging/messaging.h"
 
+// ---------------------------
+// ----- MESSAGE IMPORTS -----
+// ---------------------------
+#include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
+#include "msgPayloadDefC/CoarsePredictionMsgPayload.h"
+#include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
+#include "msgPayloadDefC/FinePredictionMsgPayload.h"
 
-#include <torch/script.h>
-#include <string>
 
 
 /*! @brief basic Basilisk C++ module class */
@@ -35,32 +35,38 @@ public:
 
     void LoadModel();
     void InitializeTensors();
+    void ZeroOutputVariables();
 
 public:
 
-    // --> VARIABLES
+
+    // ---------------------
+    // ----- VARIABLES -----
+    // ---------------------
+
+    // --> INTERNAL
     int state;
-    int thermal_tensor[20][20];
-    int vnir_tensor[20][20];
-    int mask[20][20];
-
-
     std::string nn_model_path;
     torch::jit::script::Module nn_model;
 
     // --> MESSAGE IN
-    ImagerVNIROutMsg_C vnir_msg;
-    // ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
-
-
+    ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
     ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
+    ReadFunctor<CoarsePredictionMsgPayload> coarse_msg;
 
-    CoarsePredictionMsg_C coarse_msg;
-    // ReadFunctor<CoarsePredictionMsgPayload> coarse_msg;
-
+    // --> INPUT
+    int vnir_tensor[20][20];    // vnir_msg
+    int vnir_state;             // vnir_msg
+    int thermal_tensor[20][20]; // thermal_msg
+    int thermal_state;          // thermal_msg
+    int coarse_prediction;      // coarse_msg
+    int coarse_state;           // coarse_msg
 
     // --> MESSAGE OUT
     Message<FinePredictionMsgPayload> fine_msg;
+
+    // --> OUTPUT
+    int mask[20][20]; // fine_msg
 
     // --> LOGGING
     BSKLogger bskLogger;

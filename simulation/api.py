@@ -36,17 +36,23 @@ class SimulationClient:
         return self.simulation
 
 
-    def new_c_task(self, task_name, time_step=None):
+    def new_c_task(self, task_name, time_step=None, priority=None):
         if time_step is None:
             time_step = self.time_step
         else:
             time_step = macros.sec2nano(time_step)
-        new_task = self.simulation.CreateNewTask(task_name, time_step)
+        if priority is None:
+            new_task = self.simulation.CreateNewTask(task_name, time_step)
+        else:
+            new_task = self.simulation.CreateNewTask(task_name, time_step, priority)
         self.c_process.addTask(new_task)
         return None
 
-    def new_c_module(self, module, task_name='base_task'):
-        self.simulation.AddModelToTask(task_name, module)
+    def new_c_module(self, module, task_name='base_task', priority=None):
+        if priority is None:
+            self.simulation.AddModelToTask(task_name, module)
+        else:
+            self.simulation.AddModelToTask(task_name, module, priority)
 
     def new_py_task(self, task_name, time_step=None):
         if time_step is None:
@@ -72,6 +78,14 @@ class SimulationClient:
         else:
             print('--> MODULES NOT FOUND IN SIMULATION')
 
+
+    def new_logging_var(self, variable, rate=None):
+        if rate is None:
+            rate = self.time_step
+        self.simulation.AddVariableForLogging(variable, rate)
+
+    def get_var_log_data(self, variable):
+        return self.simulation.GetLogVariableData(variable)
 
     def run(self):
         self.simulation.InitializeSimulation()

@@ -9,7 +9,7 @@ sys.path.insert(1, '/app')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import CoarseNN
+from Basilisk.ExternalModules import ImagerThermal, ImagerVNIR, DataStorage, CoarseNN, FineNN
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -73,44 +73,74 @@ def run(param1, param2):
     # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
-    # --> 2. Create module
-    test_module = CoarseNN.CoarseNN()
-    test_module.ModelTag = "CoarseNN"
-    sim_client.new_c_module(test_module)
+    # --> 2. Create modules
+    vnir_module = ImagerVNIR.ImagerVNIR()
+    vnir_module.ModelTag = "ImagerVNIR"
 
+    thermal_module = ImagerThermal.ImagerThermal()
+    thermal_module.ModelTag = "ImagerThermal"
+
+    coarse_module = CoarseNN.CoarseNN()
+    coarse_module.ModelTag = "CoarseNN"
+
+    fine_module = FineNN.FineNN()
+    fine_module.ModelTag = "FineNN"
+
+    storage_module = DataStorage.DataStorage()
+    storage_module.ModelTag = "DataStorage"
+
+
+    sim_client.new_c_module(vnir_module,    priority=1)
+    sim_client.new_c_module(thermal_module, priority=1)
+    sim_client.new_c_module(coarse_module,  priority=2)
+    sim_client.new_c_module(fine_module,    priority=3)
+    sim_client.new_c_module(storage_module, priority=4)
+
+    
     # --> 3. Create mock messages
     vnir_msg_data = messaging.ImagerVNIROutMsgPayload()
-    vnir_msg_data.state = 20
+    vnir_msg_data.state = 0
     vnir_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
     vnir_msg = messaging.ImagerVNIROutMsg().write(vnir_msg_data)
 
     thermal_msg_data = messaging.ImagerThermalOutMsgPayload()
-    thermal_msg_data.state = 20
+    thermal_msg_data.state = 0
     thermal_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
     thermal_msg = messaging.ImagerThermalOutMsg().write(thermal_msg_data)
 
+
     # --> 4. Subscribe to messages
-    test_module.vnir_msg.subscribeTo(vnir_msg)
-    test_module.thermal_msg.subscribeTo(thermal_msg)
+    vnir_module.mock_msg.subscribeTo(vnir_msg)
+    thermal_module.mock_msg.subscribeTo(thermal_msg)
+
+    coarse_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
+    coarse_module.thermal_msg.subscribeTo(thermal_module.thermal_msg)
+
+    fine_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
+    fine_module.thermal_msg.subscribeTo(thermal_module.thermal_msg)
+    fine_module.coarse_msg.subscribeTo(coarse_module.coarse_msg)
+
+    storage_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
+    storage_module.thermal_msg.subscribeTo(thermal_module.thermal_msg)
+    storage_module.fine_msg.subscribeTo(fine_module.fine_msg)
+
 
     # --> 5. Set output message recording
-    output_rec = test_module.coarse_msg.recorder()
-    sim_client.new_c_module(output_rec)
+    vnir_rec = vnir_module.vnir_msg.recorder()
+    thermal_rec = thermal_module.thermal_msg.recorder()
+    coarse_rec = coarse_module.coarse_msg.recorder()
+    fine_rec = fine_module.fine_msg.recorder()
 
-    # --> 6. Set variable recording
-    var1 = "CoarseNN.state"
-    var2 = "CoarseNN.prediction"
-    sim_client.new_logging_var(var1)
-    sim_client.new_logging_var(var2)
+    sim_client.new_c_module(vnir_rec)
+    sim_client.new_c_module(thermal_rec)
+    sim_client.new_c_module(coarse_rec)
+    sim_client.new_c_module(fine_rec)
 
     # --> 6. Run simulation
     sim_client.run()
 
     # --> 7. Get debug output
-    var1 = sim_client.get_var_log_data(var1)
-    var2 = sim_client.get_var_log_data(var2)
-
-    print(output_rec.state)
+    print(vnir_rec.state)
 
 
     return True
