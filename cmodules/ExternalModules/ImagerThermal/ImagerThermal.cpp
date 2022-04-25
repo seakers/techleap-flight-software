@@ -41,7 +41,7 @@ void ImagerThermal::ZeroOutputVariables(){
 
 
 void ImagerThermal::Reset(uint64_t CurrentSimNanos) {
-    std::cout << "--> RESETTING MODULE: ImagerThermal" << std::endl;
+    bskLogger.bskLog(BSK_INFORMATION, "ImagerThermal - (reset)");
 
     // --> 1. Reset module state
     this->state = 0;
@@ -108,5 +108,7 @@ void ImagerThermal::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // -------------------
     // ----- Logging -----
     // -------------------
-    bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
+
+
+    bskLogger.bskLog(BSK_INFORMATION, "ImagerThermal - ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

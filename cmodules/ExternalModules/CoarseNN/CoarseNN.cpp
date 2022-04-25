@@ -22,9 +22,8 @@ CoarseNN::~CoarseNN() // --> CHANGE
 
 
 void CoarseNN::LoadModel(){
-    std::cout << "--> LOADING COARSE NN MODEL: " + this->nn_model_path << std::endl;
-
     // --> TODO: Load coarse model (look at roshan code)
+    bskLogger.bskLog(BSK_INFORMATION, "CoarseNN ------ loaded nn model");
 }
 
 void CoarseNN::InitializeTensors(){
@@ -57,7 +56,7 @@ void CoarseNN::ZeroOutputVariables(){
 
 
 void CoarseNN::Reset(uint64_t CurrentSimNanos) {
-    std::cout << "--> RESETTING MODULE: CoarseNN" << std::endl;
+    bskLogger.bskLog(BSK_INFORMATION, "CoarseNN ------ (reset)");
 
     // --> 1. Reset module state
     this->state = 0;
@@ -135,5 +134,5 @@ void CoarseNN::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // ----- Logging -----
     // -------------------
 
-    bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
+    bskLogger.bskLog(BSK_INFORMATION, "CoarseNN ------ ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

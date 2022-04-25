@@ -39,7 +39,7 @@ void ImagerVNIR::ZeroOutputVariables(){
 
 
 void ImagerVNIR::Reset(uint64_t CurrentSimNanos) {
-    std::cout << "--> RESETTING MODULE: ImagerVNIR" << std::endl;
+    bskLogger.bskLog(BSK_INFORMATION, "ImagerVNIR ---- (reset)");
 
     // --> 1. Reset module state
     this->state = 0;
@@ -107,5 +107,5 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // ----- Logging -----
     // -------------------
 
-    bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
+    bskLogger.bskLog(BSK_INFORMATION, "ImagerVNIR ---- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

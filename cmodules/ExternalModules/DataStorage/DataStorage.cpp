@@ -38,7 +38,7 @@ void DataStorage::ZeroOutputVariables(){
 }
 
 void DataStorage::Reset(uint64_t CurrentSimNanos) {
-    std::cout << "--> RESETTING MODULE: DataStorage" << std::endl;
+    bskLogger.bskLog(BSK_INFORMATION, "DataStorage --- (reset)");
 
     // --> 1. Reset module state
     this->state = 0;
@@ -113,5 +113,5 @@ void DataStorage::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // ----- Logging -----
     // -------------------
 
-    bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
+    bskLogger.bskLog(BSK_INFORMATION, "DataStorage --- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

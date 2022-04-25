@@ -24,15 +24,13 @@ FineNN::~FineNN() {
 
 
 void FineNN::LoadModel(){
-    std::cout << "--> LOADING FINE NN MODEL: " + this->nn_model_path << std::endl;
-
     try {
         // Deserialize the ScriptModule from a file using torch::jit::load().
         this->nn_model = torch::jit::load(this->nn_model_path);
-        std::cout << "--> MODEL LOADED\n";
+        bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- loaded nn model");
     }
     catch (const c10::Error& e) {
-        std::cerr << "error loading the model\n";
+        bskLogger.bskLog(BSK_ERROR, "FineNN -------- failed to load nn model");
     }
 }
 
@@ -69,7 +67,7 @@ void FineNN::ZeroOutputVariables(){
 
 
 void FineNN::Reset(uint64_t CurrentSimNanos) {
-    std::cout << "--> RESETTING MODULE: FineNN" << std::endl;
+    bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- (reset)");
 
     // --> 1. Reset module state
     this->state = 0;
@@ -160,5 +158,5 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos) {
     // ----- Logging -----
     // -------------------
 
-    bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
+    bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

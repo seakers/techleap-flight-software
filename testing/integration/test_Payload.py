@@ -96,7 +96,7 @@ def run(param1, param2):
     sim_client.new_c_module(fine_module,    priority=3)
     sim_client.new_c_module(storage_module, priority=4)
 
-    
+
     # --> 3. Create mock messages
     vnir_msg_data = messaging.ImagerVNIROutMsgPayload()
     vnir_msg_data.state = 0
