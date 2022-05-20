@@ -9,6 +9,10 @@ services:
         source: /home/gabe/repos/techleap/techleap-flight-software
         target: /app
       - type: bind
-        source: /home/gabe/repos/techleap/basilisk/.
+        source: /home/gabe/repos/gabe/basilisk/.
         target: /basilisk
+      - type: bind
+        source: /home/gabe/repos/techleap/techleap_software_workbench
+        target: /software
     tty: true
+    container_name: FSW
