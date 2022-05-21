@@ -81,7 +81,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     else{
         for(int x = 0; x < 20; x++){
             for(int y = 0; y < 20; y++){
-                this->image_tensor[x][y] = this->image_tensor[x][y];
+                // this->image_tensor[x][y] = this->image_tensor[x][y];
+                this->image_tensor[x][y] = this->state;
             }
         }
     }

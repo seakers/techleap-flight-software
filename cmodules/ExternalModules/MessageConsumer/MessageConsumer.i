@@ -2,9 +2,9 @@
 // ----- Swig Module -----
 // -----------------------
 
-%module CoarseNN
+%module MessageConsumer
 %{
-   #include "CoarseNN.h"
+   #include "MessageConsumer.h"
 %}
 
 %pythoncode %{
@@ -26,21 +26,15 @@ from Basilisk.architecture.swig_common_model import *
 // ------------------
 
 %include "sys_model.h"
-%include "CoarseNN.h"
+%include "MessageConsumer.h"
 
 
 // --------------------
 // ----- Messages -----
 // --------------------
 
-%include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
-struct ImagerThermalOutMsg_C;
-
-%include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
-struct ImagerVNIROutMsg_C;
-
-%include "msgPayloadDefC/CoarsePredictionMsgPayload.h"
-struct CoarsePredictionMsg_C;
+%include "msgPayloadDefC/MessageConsumerMsgPayload.h"
+struct MessageConsumerMsg_C;
 
 
 

@@ -2,9 +2,9 @@
 // ----- Swig Module -----
 // -----------------------
 
-%module CoarseNN
+%module GimbalControl
 %{
-   #include "CoarseNN.h"
+   #include "GimbalControl.h"
 %}
 
 %pythoncode %{
@@ -26,21 +26,18 @@ from Basilisk.architecture.swig_common_model import *
 // ------------------
 
 %include "sys_model.h"
-%include "CoarseNN.h"
+%include "GimbalControl.h"
 
 
 // --------------------
 // ----- Messages -----
 // --------------------
 
-%include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
-struct ImagerThermalOutMsg_C;
+%include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
+struct ControllerManualAnglesMsg_C;
 
-%include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
-struct ImagerVNIROutMsg_C;
-
-%include "msgPayloadDefC/CoarsePredictionMsgPayload.h"
-struct CoarsePredictionMsg_C;
+%include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
+struct AttitudeDeterminationAnglesMsg_C;
 
 
 

@@ -67,31 +67,41 @@ void DataStorage::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // --> TODO: Write correct image dimensions
 
     // --> VNIR Reading
-    ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
-    this->vnir_state = vnir_msg_payload.state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->vnir_tensor[x][y] = vnir_msg_payload.imageTensor[x][y];
+    if(this->vnir_msg.isLinked()){
+        ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
+        this->vnir_state = vnir_msg_payload.state;
+        std::cout << "--> (DataStorage) VNIR READING " << vnir_msg_payload.imageTensor[0][0] << std::endl;
+        for(int x = 0; x < 20; x++){
+            for(int y = 0; y < 20; y++){
+                this->vnir_tensor[x][y] = vnir_msg_payload.imageTensor[x][y];
+            }
         }
     }
+
 
     // --> Thermal Reading
-    ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
-    this->thermal_state = thermal_msg_payload.state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->thermal_tensor[x][y] = thermal_msg_payload.imageTensor[x][y];
+    if(this->thermal_msg.isLinked()){
+        ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
+        this->thermal_state = thermal_msg_payload.state;
+        for(int x = 0; x < 20; x++){
+            for(int y = 0; y < 20; y++){
+                this->thermal_tensor[x][y] = thermal_msg_payload.imageTensor[x][y];
+            }
         }
     }
 
+
     // --> Fine Prediction
-    FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
-    this->fine_state = fine_msg_payload.state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->fine_mask[x][y] = fine_msg_payload.mask[x][y];
+    if(this->fine_msg.isLinked()){
+        FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
+        this->fine_state = fine_msg_payload.state;
+        for(int x = 0; x < 20; x++){
+            for(int y = 0; y < 20; y++){
+                this->fine_mask[x][y] = fine_msg_payload.mask[x][y];
+            }
         }
     }
+
 
 
     // --------------------------
