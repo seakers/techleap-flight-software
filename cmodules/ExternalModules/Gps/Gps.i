@@ -2,9 +2,9 @@
 // ----- Swig Module -----
 // -----------------------
 
-%module Photogrammetry
+%module Gps
 %{
-   #include "Photogrammetry.h"
+   #include "Gps.h"
 %}
 
 %pythoncode %{
@@ -26,15 +26,15 @@ from Basilisk.architecture.swig_common_model import *
 // ------------------
 
 %include "sys_model.h"
-%include "Photogrammetry.h"
+%include "Gps.h"
 
 
 // --------------------
 // ----- Messages -----
 // --------------------
 
-%include "msgPayloadDefC/PhotogrammetryMsgPayload.h"
-struct PhotogrammetryMsg_C;
+%include "msgPayloadDefC/GpsOutMsgPayload.h"
+struct GpsOutMsg_C;
 
 
 

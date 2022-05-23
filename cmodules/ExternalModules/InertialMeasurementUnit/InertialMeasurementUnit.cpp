@@ -22,39 +22,55 @@ InertialMeasurementUnit::~InertialMeasurementUnit() // --> CHANGE
     return;
 }
 
+void InertialMeasurementUnit::ZeroOutputVariables(){
+    this->yaw = 0.0;
+    this->pitch = 0.0;
+    this->roll = 0.0;
+}
+
+
 
 void InertialMeasurementUnit::Reset(uint64_t CurrentSimNanos) // --> CHANGE
 {
-    // --> 1. Init image with zeros
-    std::cout << "--> RESETTING MODULE: InertialMeasurementUnit" << std::endl;
+    bskLogger.bskLog(BSK_INFORMATION, "AttitudeDetermination ------ (reset)");
+
+    // --> 1. Reset module state
     this->state = 0;
-    for(int x = 0; x < 3; x++){
-        this->angles[x] = 0;
-    }
-
-
-
-
-
-    // --> 2. Log information
-    bskLogger.bskLog(BSK_INFORMATION, "Variable state set to %f in reset.",this->state);
 }
 
 
 
 void InertialMeasurementUnit::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
 {
+    // -----------------------
+    // ----- Zero Output -----
+    // -----------------------
 
-    // --> Create output buffer and copy instrument reading
-    InertialMeasurementUnitOutMsgPayload imu_out_msg_buffer; // --> CHANGE
-    for(int x = 0; x < 3; x++){
-        imu_out_msg_buffer.angles[x] = this->angles[x];
-    }
+    // --> Zero output messages
+    InertialMeasurementUnitOutMsgPayload imu_msg_buffer = this->imu_msg.zeroMsgPayload;
 
-    // --> Write output buffer to output message
-    this->imu_out_msg.write(&imu_out_msg_buffer, this->moduleID, CurrentSimNanos);
+    // --> Zero internal output variables
+    this->ZeroOutputVariables();
 
 
-    // --> Log module run
-    bskLogger.bskLog(BSK_INFORMATION, "C++ Module ID %lld ran Update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
+    // -----------------------
+    // ----- Read Inputs -----
+    // -----------------------
+
+
+    // --------------------------
+    // ----- Process Inputs -----
+    // --------------------------
+
+    // -------------------------
+    // ----- Write Outputs -----
+    // -------------------------
+
+    imu_msg_buffer.state = this->state;
+    imu_msg_buffer.yaw = this->yaw;
+    imu_msg_buffer.pitch = this->pitch;
+    imu_msg_buffer.roll = this->roll;
+    this->imu_msg.write(&imu_msg_buffer, this->moduleID, CurrentSimNanos);
+
+
 }

@@ -27,16 +27,24 @@ public:
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
+    void ZeroOutputVariables();
+
 public:
 
-    // --> VARIABLES
-    int state;
-    int angles[3];
+    // ---------------------
+    // ----- VARIABLES -----
+    // ---------------------
 
-    // --> MESSAGE IN
+    // --> INTERNAL
+    int state;
 
     // --> MESSAGE OUT
-    Message<InertialMeasurementUnitOutMsgPayload> imu_out_msg;
+    Message<InertialMeasurementUnitOutMsgPayload> imu_msg;
+
+    // --> OUTPUT
+    float yaw;
+    float pitch;
+    float roll;
 
     // --> LOGGING
     BSKLogger bskLogger;

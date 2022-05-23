@@ -8,7 +8,9 @@
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;                  // --> State of sensor
-    int angles[3];
+    float yaw;
+    float pitch;                  // 0 if no plume detected | 1 if plume detected
+    float roll;
 }InertialMeasurementUnitOutMsgPayload;
 
 #endif

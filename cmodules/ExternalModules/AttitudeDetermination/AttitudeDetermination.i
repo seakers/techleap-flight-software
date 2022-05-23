@@ -2,9 +2,9 @@
 // ----- Swig Module -----
 // -----------------------
 
-%module Photogrammetry
+%module AttitudeDetermination
 %{
-   #include "Photogrammetry.h"
+   #include "AttitudeDetermination.h"
 %}
 
 %pythoncode %{
@@ -26,15 +26,21 @@ from Basilisk.architecture.swig_common_model import *
 // ------------------
 
 %include "sys_model.h"
-%include "Photogrammetry.h"
+%include "AttitudeDetermination.h"
 
 
 // --------------------
 // ----- Messages -----
 // --------------------
 
-%include "msgPayloadDefC/PhotogrammetryMsgPayload.h"
-struct PhotogrammetryMsg_C;
+%include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
+struct InertialMeasurementUnitOutMsg_C;
+
+%include "msgPayloadDefC/GpsOutMsgPayload.h"
+struct GpsOutMsg_C;
+
+%include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
+struct AttitudeDeterminationAnglesMsg_C;
 
 
 

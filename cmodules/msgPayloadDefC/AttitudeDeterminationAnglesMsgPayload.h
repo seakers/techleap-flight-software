@@ -9,7 +9,7 @@
 typedef struct {
     int state;
     float yaw;
-    float pitch;                  // 0 if no plume detected | 1 if plume detected
+    float pitch;
     float roll;
 }AttitudeDeterminationAnglesMsgPayload;
 
