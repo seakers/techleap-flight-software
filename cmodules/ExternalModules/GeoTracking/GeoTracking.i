@@ -2,9 +2,9 @@
 // ----- Swig Module -----
 // -----------------------
 
-%module Photogrammetry
+%module GeoTracking
 %{
-   #include "Photogrammetry.h"
+   #include "GeoTracking.h"
 %}
 
 %pythoncode %{
@@ -26,15 +26,18 @@ from Basilisk.architecture.swig_common_model import *
 // ------------------
 
 %include "sys_model.h"
-%include "Photogrammetry.h"
+%include "GeoTracking.h"
 
 
 // --------------------
 // ----- Messages -----
 // --------------------
 
-%include "msgPayloadDefC/PhotogrammetryMsgPayload.h"
-struct PhotogrammetryMsg_C;
+%include "msgPayloadDefC/GeoTrackingMsgPayload.h"
+struct GeoTrackingMsg_C;
+
+%include "msgPayloadDefC/FinePredictionMsgPayload.h"
+struct FinePredictionMsg_C;
 
 
 

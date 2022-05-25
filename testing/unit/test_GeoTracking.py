@@ -1,14 +1,21 @@
 import pytest
 import sys
-sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+import numpy as np
+# sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+sys.path.insert(1, '/app')
 
 
 # --> Simulation Import
 from simulation.api import SimulationClient
 
 # --> Module Import
-from cmodule_imports.C_Potogrammetry import C_Photogrammetry
+from Basilisk.ExternalModules import GeoTracking
 
+# --> Messaging Import
+from Basilisk.architecture import messaging
+
+# --> Basilisk logging
+from Basilisk.architecture import bskLogging
 
 
 
@@ -27,7 +34,7 @@ from cmodule_imports.C_Potogrammetry import C_Photogrammetry
 @pytest.mark.parametrize(
     'param1, param2',
     [
-        (1.0, 1.0),
+        (1.0, 2.0),
     ]
 )
 def test_function(param1, param2):
@@ -55,25 +62,40 @@ def test_function(param1, param2):
 #
 # """
 
+def get_test_data():
+    image_file = '/app/images/test_dataset_'
+    return None
+
+
 
 def run(param1, param2):
-    print('\n\n\n----> TESTING MODULE <-----')
 
     # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
-    # --> 2. Add pymodules
-    test_module = C_Photogrammetry().get_module()
+    # --> 2. Create module
+    test_module = GeoTracking.GeoTracking()
+    test_module.ModelTag = "GeoTracking"
     sim_client.new_c_module(test_module)
 
-    # --> 3. Run simulation
+    # --> 5. Set output message recording
+    output_rec = test_module.fine_msg.recorder()
+    sim_client.new_c_module(output_rec)
+
+    # --> 6. Set variable recording
+    var1 = "GeoTracking.state"
+    sim_client.new_logging_var(var1)
+
+    # --> 6. Run simulation
     sim_client.run()
 
+    # --> 7. Get debug output
+    var1 = sim_client.get_var_log_data(var1)
+
+    print(output_rec.state)
+
+
     return True
-
-
-
-
 
 
 
