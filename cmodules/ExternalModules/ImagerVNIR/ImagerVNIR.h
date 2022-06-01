@@ -42,9 +42,10 @@ public:
     // --> MESSAGE OUT
     Message<ImagerVNIROutMsgPayload> vnir_msg;
     int state;
-    double red[3200][3200];
-    double green[3200][3200];
-    double blue[3200][3200];
+    double red[512][512];
+    double green[512][512];
+    double blue[512][512];
+    double nir[512][512];
 
     // --> LOGGING
     BSKLogger bskLogger;

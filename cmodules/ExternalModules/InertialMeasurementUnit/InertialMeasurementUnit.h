@@ -45,6 +45,7 @@ public:
     double yaw;
     double pitch;
     double roll;
+    double temperature;
 
     // --> LOGGING
     BSKLogger bskLogger;
