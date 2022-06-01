@@ -12,7 +12,7 @@
 
 CoarseNN::CoarseNN() // --> CHANGE
 {
-
+    this->state = 0;
 }
 
 CoarseNN::~CoarseNN() // --> CHANGE
@@ -26,34 +26,29 @@ void CoarseNN::LoadModel(){
     bskLogger.bskLog(BSK_INFORMATION, "CoarseNN ------ loaded nn model");
 }
 
-void CoarseNN::InitializeTensors(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->thermal_tensor[x][y] = 0;
-        }
-    }
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->vnir_tensor[x][y] = 0;
-        }
-    }
-}
-
 void CoarseNN::ZeroOutputVariables(){
-
-
     this->prediction = 0;
 }
 
+void CoarseNN::ReadMessages(){
 
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
+    }
 
-
-
-
-
-
-
-
+    if(this->vnir_msg.isLinked()){
+        ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
+        this->vnir_state = vnir_msg_payload.state;
+        for(int y = 0; y < 3200; y++){
+            for(int z = 0; z < 3200; z++){
+                this->red[y][z] = vnir_msg_payload.red[y][z];
+                this->green[y][z] = vnir_msg_payload.green[y][z];
+                this->blue[y][z] = vnir_msg_payload.blue[y][z];
+            }
+        }
+    }
+}
 
 void CoarseNN::Reset(uint64_t CurrentSimNanos) {
     bskLogger.bskLog(BSK_INFORMATION, "CoarseNN ------ (reset)");
@@ -61,78 +56,40 @@ void CoarseNN::Reset(uint64_t CurrentSimNanos) {
     // --> 1. Reset module state
     this->state = 0;
 
-    // --> 2. Initialize tensors
-    this->InitializeTensors();
+    // --> 2. Zero output variables
+    this->ZeroOutputVariables();
 
     // --> 3. Load nn model
     this->LoadModel();
 }
 
-
-
-void CoarseNN::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
+void CoarseNN::UpdateState(uint64_t CurrentSimNanos)
 {
-
-
     // -----------------------
     // ----- Zero Output -----
     // -----------------------
-
-    // --> Zero output messages
     CoarsePredictionMsgPayload coarse_msg_buffer = this->coarse_msg.zeroMsgPayload;
-
-    // --> Zero internal output variables
     this->ZeroOutputVariables();
-
 
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
-    // --> TODO: Write correct image dimensions
-
-    // --> VNIR Reading
-    ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
-    this->vnir_state = vnir_msg_payload.state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->vnir_tensor[x][y] = vnir_msg_payload.imageTensor[x][y];
-        }
-    }
-
-    // --> Thermal Reading
-    ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
-    this->thermal_state = thermal_msg_payload.state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->thermal_tensor[x][y] = thermal_msg_payload.imageTensor[x][y];
-        }
-    }
-
+    this->ReadMessages();
 
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
-    // --> TODO: Implement roshan model to coarsely classify input from thermal and vnir cameras
-    // --> TODO: Copy prediction to local output variable
-
-    this->state += 1;
-    this->prediction = 0;
-
-
 
 
     // -------------------------
     // ----- Write Outputs -----
     // -------------------------
-
     coarse_msg_buffer.state = this->state;
     coarse_msg_buffer.prediction = this->prediction;
     this->coarse_msg.write(&coarse_msg_buffer, this->moduleID, CurrentSimNanos);
 
-
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "CoarseNN ------ ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

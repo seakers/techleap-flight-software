@@ -17,8 +17,10 @@
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/GpsOutMsgPayload.h"
 #include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
+#include "msgPayloadDefC/GeoTrackingMsgPayload.h"
 
 #include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
 
@@ -33,39 +35,44 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
+    void ReadMessages();
 
 public:
+    // ----------------------
+    // ----- MESSAGE IN -----
+    // ----------------------
 
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
 
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-
-    // --> INTERNAL
-    int state;
-
-    // --> MESSAGE IN
     ReadFunctor<InertialMeasurementUnitOutMsgPayload> imu_msg;
+    int   imu_state;
+    double imu_yaw;
+    double imu_pitch;
+    double imu_roll;
+
     ReadFunctor<GpsOutMsgPayload> gps_msg;
+    int   gps_state;
+    double gps_lat;
+    double gps_lon;
+    double gps_altitude;
 
-    // --> INPUT
-    int   gps_state;    // gps_msg
-    float gps_lat;      // gps_msg
-    float gps_lon;      // gps_msg
-    float gps_altitude; // gps_msg
+    ReadFunctor<GeoTrackingMsgPayload> geo_msg;
+    double geo_lat;
+    double geo_lon;
+    int geo_state;
 
-    int   imu_state;  // imu_msg
-    float imu_yaw;    // imu_msg
-    float imu_pitch;  // imu_msg
-    float imu_roll;   // imu_msg
 
-    // --> MESSAGE OUT
+    // -----------------------
+    // ----- MESSAGE OUT -----
+    // -----------------------
+
     Message<AttitudeDeterminationAnglesMsgPayload> ad_msg;
+    int state;
+    double yaw;
+    double pitch;
+    double roll;
 
-    // --> OUTPUT
-    float yaw;
-    float pitch;
-    float roll;
 
     // --> LOGGING
     BSKLogger bskLogger;

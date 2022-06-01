@@ -18,8 +18,6 @@ from Basilisk.architecture.swig_common_model import *
 
 %include "std_string.i"
 %include "swig_conly_data.i"
-%include "swig_eigen.i"
-
 
 // ------------------
 // ----- Module -----
@@ -32,6 +30,9 @@ from Basilisk.architecture.swig_common_model import *
 // --------------------
 // ----- Messages -----
 // --------------------
+
+%include "msgPayloadDefC/ControllerModeMsgPayload.h"
+struct ControllerModeMsg_C;
 
 %include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
 struct ImagerThermalOutMsg_C;

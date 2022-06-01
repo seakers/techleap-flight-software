@@ -2,7 +2,7 @@
 // Created by gabe :)
 //
 
-#include "ExternalModules/AttitudeDetermination/AttitudeDetermination.h" // --> CHANGE
+#include "ExternalModules/AttitudeDetermination/AttitudeDetermination.h"
 #include <iostream>
 #include <cstring>
 #include "architecture/utilities/avsEigenSupport.h"
@@ -26,46 +26,13 @@ void AttitudeDetermination::ZeroOutputVariables(){
     this->roll = 0.0;
 }
 
+void AttitudeDetermination::ReadMessages(){
 
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
+    }
 
-
-
-
-
-
-
-
-
-void AttitudeDetermination::Reset(uint64_t CurrentSimNanos) {
-    bskLogger.bskLog(BSK_INFORMATION, "AttitudeDetermination ------ (reset)");
-
-    // --> 1. Reset module state
-    this->state = 0;
-}
-
-
-
-void AttitudeDetermination::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
-{
-
-
-    // -----------------------
-    // ----- Zero Output -----
-    // -----------------------
-
-    // --> Zero output messages
-    AttitudeDeterminationAnglesMsgPayload ad_msg_buffer = this->ad_msg.zeroMsgPayload;
-
-    // --> Zero internal output variables
-    this->ZeroOutputVariables();
-
-
-    // -----------------------
-    // ----- Read Inputs -----
-    // -----------------------
-    // --> TODO: Write correct image dimensions
-
-    // --> VNIR Reading
     if(this->imu_msg.isLinked()){
         InertialMeasurementUnitOutMsgPayload imu_msg_payload = this->imu_msg();
         this->imu_state = imu_msg_payload.state;
@@ -82,31 +49,50 @@ void AttitudeDetermination::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
         this->gps_altitude = gps_msg_payload.altitude;
     }
 
+    if(this->geo_msg.isLinked()){
+        GeoTrackingMsgPayload geo_msg_payload = this->geo_msg();
+        this->geo_state = geo_msg_payload.state;
+        this->geo_lat = geo_msg_payload.lat;
+        this->geo_lon = geo_msg_payload.lon;
+    }
+}
+
+void AttitudeDetermination::Reset(uint64_t CurrentSimNanos) {
+    bskLogger.bskLog(BSK_INFORMATION, "AttitudeDetermination ------ (reset)");
+
+    // --> 1. Reset module state
+    this->state = 0;
+}
+
+void AttitudeDetermination::UpdateState(uint64_t CurrentSimNanos)
+{
+    // -----------------------
+    // ----- Zero Output -----
+    // -----------------------
+    AttitudeDeterminationAnglesMsgPayload ad_msg_buffer = this->ad_msg.zeroMsgPayload;
+    this->ZeroOutputVariables();
+
+    // -----------------------
+    // ----- Read Inputs -----
+    // -----------------------
+    this->ReadMessages();
+
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
-    // --> TODO: Implement roshan model to coarsely classify input from thermal and vnir cameras
-    // --> TODO: Copy prediction to local output variable
-
-
-
-
 
 
     // -------------------------
     // ----- Write Outputs -----
     // -------------------------
-
     ad_msg_buffer.state = this->state;
     ad_msg_buffer.yaw = this->yaw;
     ad_msg_buffer.pitch = this->pitch;
     ad_msg_buffer.roll = this->roll;
     this->ad_msg.write(&ad_msg_buffer, this->moduleID, CurrentSimNanos);
 
-
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "AttitudeDetermination ------ ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

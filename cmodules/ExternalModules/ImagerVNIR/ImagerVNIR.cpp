@@ -20,18 +20,13 @@ ImagerVNIR::~ImagerVNIR() // --> CHANGE
     return;
 }
 
-void ImagerVNIR::InitializeTensors(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->image_tensor[x][y] = 0;
-        }
-    }
-}
 
 void ImagerVNIR::ZeroOutputVariables(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->image_tensor[x][y] = 0;
+    for(int y = 0; y < 3200; y++){
+        for(int z = 0; z < 3200; z++){
+            this->red[y][z] = 0;
+            this->green[y][z] = 0;
+            this->blue[y][z] = 0;
         }
     }
 }
@@ -45,7 +40,7 @@ void ImagerVNIR::Reset(uint64_t CurrentSimNanos) {
     this->state = 0;
 
     // --> 2. Initialize tensors
-    this->InitializeTensors();
+    this->ZeroOutputVariables();
 }
 
 
@@ -70,22 +65,22 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // --> TODO: Implement SDK reading vnir sensor and copy values over to image_tensor
     this->state += 1;
 
-    if(this->mock_msg.isLinked()){
-        ImagerVNIROutMsgPayload mock_msg_payload = this->mock_msg();
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                this->image_tensor[x][y] = mock_msg_payload.imageTensor[x][y];
-            }
-        }
-    }
-    else{
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                // this->image_tensor[x][y] = this->image_tensor[x][y];
-                this->image_tensor[x][y] = this->state;
-            }
-        }
-    }
+//    if(this->mock_msg.isLinked()){
+//        ImagerVNIROutMsgPayload mock_msg_payload = this->mock_msg();
+//        for(int x = 0; x < 20; x++){
+//            for(int y = 0; y < 20; y++){
+//                this->image_tensor[x][y] = mock_msg_payload.imageTensor[x][y];
+//            }
+//        }
+//    }
+//    else{
+//        for(int x = 0; x < 20; x++){
+//            for(int y = 0; y < 20; y++){
+//                // this->image_tensor[x][y] = this->image_tensor[x][y];
+//                this->image_tensor[x][y] = this->state;
+//            }
+//        }
+//    }
 
 
 
@@ -94,11 +89,12 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // ----- Write Outputs -----
     // -------------------------
     // --> TODO: Write correct image dimensions
-
     vnir_msg_buffer.state = this->state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            vnir_msg_buffer.imageTensor[x][y] = this->image_tensor[x][y];
+    for(int y = 0; y < 3200; y++){
+        for(int z = 0; z < 3200; z++){
+            vnir_msg_buffer.red[y][z] = this->red[y][z];
+            vnir_msg_buffer.green[y][z] = this->green[y][z];
+            vnir_msg_buffer.blue[y][z] = this->blue[y][z];
         }
     }
     this->vnir_msg.write(&vnir_msg_buffer, this->moduleID, CurrentSimNanos);
@@ -107,6 +103,5 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "ImagerVNIR ---- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

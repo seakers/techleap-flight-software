@@ -33,6 +33,9 @@ from Basilisk.architecture.swig_common_model import *
 // ----- Messages -----
 // --------------------
 
+%include "msgPayloadDefC/ControllerModeMsgPayload.h"
+struct ControllerModeMsg_C;
+
 %include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
 struct ImagerThermalOutMsg_C;
 
@@ -41,6 +44,9 @@ struct ImagerVNIROutMsg_C;
 
 %include "msgPayloadDefC/FinePredictionMsgPayload.h"
 struct FinePredictionMsg_C;
+
+%include "msgPayloadDefC/GeoTrackingMsgPayload.h"
+struct GeoTrackingMsg_C;
 
 
 

@@ -20,18 +20,13 @@ ImagerThermal::~ImagerThermal() // --> CHANGE
     return;
 }
 
-void ImagerThermal::InitializeTensors(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->image_tensor[x][y] = 0;
-        }
-    }
-}
-
 void ImagerThermal::ZeroOutputVariables(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->image_tensor[x][y] = 0;
+    for(int y = 0; y < 3200; y++){
+        for(int z = 0; z < 3200; z++){
+            this->b1[y][z] = 0;
+            this->b2[y][z] = 0;
+            this->b3[y][z] = 0;
+            this->b4[y][z] = 0;
         }
     }
 }
@@ -47,7 +42,7 @@ void ImagerThermal::Reset(uint64_t CurrentSimNanos) {
     this->state = 0;
 
     // --> 2. Initialize tensors
-    this->InitializeTensors();
+    this->ZeroOutputVariables();
 }
 
 
@@ -72,21 +67,21 @@ void ImagerThermal::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // --> TODO: Implement SDK reading thermal sensor and copy values over to image_tensor
     this->state += 1;
 
-    if(this->mock_msg.isLinked()){
-        ImagerThermalOutMsgPayload mock_msg_payload = this->mock_msg();
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                this->image_tensor[x][y] = mock_msg_payload.imageTensor[x][y];
-            }
-        }
-    }
-    else {
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                this->image_tensor[x][y] = this->image_tensor[x][y];
-            }
-        }
-    }
+//    if(this->mock_msg.isLinked()){
+//        ImagerThermalOutMsgPayload mock_msg_payload = this->mock_msg();
+//        for(int x = 0; x < 20; x++){
+//            for(int y = 0; y < 20; y++){
+//                this->image_tensor[x][y] = mock_msg_payload.imageTensor[x][y];
+//            }
+//        }
+//    }
+//    else {
+//        for(int x = 0; x < 20; x++){
+//            for(int y = 0; y < 20; y++){
+//                this->image_tensor[x][y] = this->image_tensor[x][y];
+//            }
+//        }
+//    }
 
 
 
@@ -95,11 +90,13 @@ void ImagerThermal::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // ----- Write Outputs -----
     // -------------------------
     // --> TODO: Write correct image dimensions
-
     thermal_msg_buffer.state = this->state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            thermal_msg_buffer.imageTensor[x][y] = this->image_tensor[x][y];
+    for(int y = 0; y < 3200; y++){
+        for(int z = 0; z < 3200; z++){
+            thermal_msg_buffer.b1[y][z] = this->b1[y][z];
+            thermal_msg_buffer.b2[y][z] = this->b2[y][z];
+            thermal_msg_buffer.b3[y][z] = this->b3[y][z];
+            thermal_msg_buffer.b4[y][z] = this->b4[y][z];
         }
     }
     this->thermal_msg.write(&thermal_msg_buffer, this->moduleID, CurrentSimNanos);
@@ -108,7 +105,5 @@ void ImagerThermal::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // -------------------
     // ----- Logging -----
     // -------------------
-
-
     bskLogger.bskLog(BSK_INFORMATION, "ImagerThermal - ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

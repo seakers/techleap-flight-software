@@ -21,8 +21,6 @@ FineNN::~FineNN() {
     return;
 }
 
-
-
 void FineNN::LoadModel(){
     try {
         // Deserialize the ScriptModule from a file using torch::jit::load().
@@ -34,24 +32,6 @@ void FineNN::LoadModel(){
     }
 }
 
-void FineNN::InitializeTensors(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->thermal_tensor[x][y] = 0;
-        }
-    }
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->vnir_tensor[x][y] = 0;
-        }
-    }
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->mask[x][y] = 0;
-        }
-    }
-}
-
 void FineNN::ZeroOutputVariables(){
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
@@ -60,11 +40,44 @@ void FineNN::ZeroOutputVariables(){
     }
 }
 
+void FineNN::ReadMessages(){
 
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
+    }
 
+    if(this->vnir_msg.isLinked()){
+        ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
+        this->vnir_state = vnir_msg_payload.state;
+        for(int y = 0; y < 3200; y++){
+            for(int z = 0; z < 3200; z++){
+                this->red[y][z] = vnir_msg_payload.red[y][z];
+                this->green[y][z] = vnir_msg_payload.green[y][z];
+                this->blue[y][z] = vnir_msg_payload.blue[y][z];
+            }
+        }
+    }
 
+    if(this->thermal_msg.isLinked()){
+        ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
+        this->thermal_state = thermal_msg_payload.state;
+        for(int y = 0; y < 3200; y++){
+            for(int z = 0; z < 3200; z++){
+                this->b1[y][z] = thermal_msg_payload.b1[y][z];
+                this->b2[y][z] = thermal_msg_payload.b2[y][z];
+                this->b3[y][z] = thermal_msg_payload.b3[y][z];
+                this->b4[y][z] = thermal_msg_payload.b4[y][z];
+            }
+        }
+    }
 
-
+    if(this->coarse_msg.isLinked()){
+        CoarsePredictionMsgPayload coarse_msg_payload = this->coarse_msg();
+        this->coarse_state = coarse_msg_payload.state;
+        this->coarse_prediction = coarse_msg_payload.prediction;
+    }
+}
 
 void FineNN::Reset(uint64_t CurrentSimNanos) {
     bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- (reset)");
@@ -72,57 +85,21 @@ void FineNN::Reset(uint64_t CurrentSimNanos) {
     // --> 1. Reset module state
     this->state = 0;
 
-    // --> 2. Initialize tensors
-    this->InitializeTensors();
-
-    // --> 3. Load nn model
+    // --> 2. Load nn model
     this->LoadModel();
 }
 
-
-
-void FineNN::UpdateState(uint64_t CurrentSimNanos) {
-
-
+void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // -----------------------
     // ----- Zero Output -----
     // -----------------------
-
-    // --> Zero output messages
     FinePredictionMsgPayload fine_msg_buffer = this->fine_msg.zeroMsgPayload;
-
-    // --> Zero internal output variables
     this->ZeroOutputVariables();
-
 
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
-    // --> TODO: Write correct image dimensions
-
-    // --> VNIR Reading
-    ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
-    this->vnir_state = vnir_msg_payload.state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->vnir_tensor[x][y] = vnir_msg_payload.imageTensor[x][y];
-        }
-    }
-
-    // --> Thermal Reading
-    ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
-    this->thermal_state = thermal_msg_payload.state;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->thermal_tensor[x][y] = thermal_msg_payload.imageTensor[x][y];
-        }
-    }
-
-    // --> Coarse Prediction
-    CoarsePredictionMsgPayload coarse_msg_payload = this->coarse_msg();
-    this->coarse_state = coarse_msg_payload.state;
-    this->coarse_prediction = coarse_msg_payload.prediction;
-
+    this->ReadMessages();
 
     // --------------------------
     // ----- Process Inputs -----
@@ -130,21 +107,10 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos) {
     // --> TODO: Implement pytorch model to classify input from thermal and vnir cameras
     // --> TODO: Copy mask prediction values over to local mask output variable
 
-    this->state += 1;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->mask[x][y] = this->thermal_tensor[x][y];
-        }
-    }
-
-
-
 
     // -------------------------
     // ----- Write Outputs -----
     // -------------------------
-    // --> TODO: Write correct image dimensions
-
     fine_msg_buffer.state = this->state;
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
@@ -153,10 +119,8 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos) {
     }
     this->fine_msg.write(&fine_msg_buffer, this->moduleID, CurrentSimNanos);
 
-
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

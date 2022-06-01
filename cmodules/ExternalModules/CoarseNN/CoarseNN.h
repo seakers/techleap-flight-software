@@ -17,8 +17,9 @@
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
-#include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
+
 #include "msgPayloadDefC/CoarsePredictionMsgPayload.h"
 
 
@@ -32,38 +33,34 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void LoadModel();
-    void InitializeTensors();
     void ZeroOutputVariables();
+    void ReadMessages();
 
 public:
 
-
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-
-    // --> INTERNAL
-    int state;
     std::string nn_model_path;
     torch::jit::script::Module nn_model;
 
-    // --> MESSAGE IN
+    // ----------------------
+    // ----- MESSAGE IN -----
+    // ----------------------
+
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
+
     ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
-    ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
+    double red[3200][3200];
+    double green[3200][3200];
+    double blue[3200][3200];
+    int vnir_state;
 
-    // --> INPUT
-    int vnir_tensor[20][20];    // vnir_msg
-    int vnir_state;             // vnir_msg
-    int thermal_tensor[20][20]; // thermal_msg
-    int thermal_state;          // thermal_msg
-    int coarse_prediction;      // coarse_msg
-    int coarse_state;           // coarse_msg
+    // -----------------------
+    // ----- MESSAGE OUT -----
+    // -----------------------
 
-    // --> MESSAGE OUT
     Message<CoarsePredictionMsgPayload> coarse_msg;
-
-    // --> OUTPUT
-    int prediction; // coarse_msg (0 | 1)
+    int prediction;
+    int state;
 
     // --> LOGGING
     BSKLogger bskLogger;

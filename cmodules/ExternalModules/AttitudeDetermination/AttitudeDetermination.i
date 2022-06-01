@@ -33,6 +33,9 @@ from Basilisk.architecture.swig_common_model import *
 // ----- Messages -----
 // --------------------
 
+%include "msgPayloadDefC/ControllerModeMsgPayload.h"
+struct ControllerModeMsg_C;
+
 %include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
 struct InertialMeasurementUnitOutMsg_C;
 
@@ -41,6 +44,9 @@ struct GpsOutMsg_C;
 
 %include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
 struct AttitudeDeterminationAnglesMsg_C;
+
+%include "msgPayloadDefC/GeoTrackingMsgPayload.h"
+struct GeoTrackingMsg_C;
 
 
 

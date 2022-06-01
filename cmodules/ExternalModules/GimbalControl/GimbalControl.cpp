@@ -10,17 +10,38 @@
 
 
 
-GimbalControl::GimbalControl() // --> CHANGE
+GimbalControl::GimbalControl()
 {
-
+    this->state = 0;
 }
 
-GimbalControl::~GimbalControl() // --> CHANGE
+GimbalControl::~GimbalControl()
 {
     return;
 }
 
+void GimbalControl::ReadMessages(){
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
+    }
 
+    if(this->adcs_angles_msg.isLinked()){
+        AttitudeDeterminationAnglesMsgPayload adcs_angles_msg_payload = this->adcs_angles_msg();
+        this->adcs_state = adcs_angles_msg_payload.state;
+        this->adcs_yaw = adcs_angles_msg_payload.yaw;
+        this->adcs_pitch = adcs_angles_msg_payload.pitch;
+        this->adcs_roll = adcs_angles_msg_payload.roll;
+    }
+
+    if(this->cont_angles_msg.isLinked()){
+        ControllerManualAnglesMsgPayload cont_angles_msg_payload = this->cont_angles_msg();
+        this->cont_state = cont_angles_msg_payload.state;
+        this->cont_yaw = cont_angles_msg_payload.yaw;
+        this->cont_pitch = cont_angles_msg_payload.pitch;
+        this->cont_roll = cont_angles_msg_payload.roll;
+    }
+}
 
 
 
@@ -30,49 +51,24 @@ void GimbalControl::Reset(uint64_t CurrentSimNanos) {
 
     // --> 1. Reset module state
     this->state = 0;
-    this->adcs_state = 0;
-    this->adcs_yaw = 0.0;
-    this->adcs_pitch = 0.0;
-    this->adcs_roll = 0.0;
-    this->cont_state = 0;
-    this->cont_yaw = 0.0;
-    this->cont_pitch = 0.0;
-    this->cont_roll = 0.0;
 }
 
 
 
-void GimbalControl::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
+void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
 {
-
-
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
-
-    // --> ADCS Angles
-    AttitudeDeterminationAnglesMsgPayload adcs_angles_msg_payload = this->adcs_angles_msg();
-    this->adcs_state = adcs_angles_msg_payload.state;
-    this->adcs_yaw = adcs_angles_msg_payload.yaw;
-    this->adcs_pitch = adcs_angles_msg_payload.pitch;
-    this->adcs_roll = adcs_angles_msg_payload.roll;
-
-    // --> Controller Angles
-    ControllerManualAnglesMsgPayload controller_angles_msg_payload = this->controller_angles_msg();
-    this->cont_state = controller_angles_msg_payload.state;
-    this->cont_yaw = controller_angles_msg_payload.yaw;
-    this->cont_pitch = controller_angles_msg_payload.pitch;
-    this->cont_roll = controller_angles_msg_payload.roll;
+    this->ReadMessages();
 
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
 
-    this->state += 1;
 
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "GimbalControl ------ ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

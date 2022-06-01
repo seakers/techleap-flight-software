@@ -33,6 +33,9 @@ from Basilisk.architecture.swig_common_model import *
 // ----- Messages -----
 // --------------------
 
+%include "msgPayloadDefC/ControllerModeMsgPayload.h"
+struct ControllerModeMsg_C;
+
 %include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
 struct ControllerManualAnglesMsg_C;
 

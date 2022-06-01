@@ -13,46 +13,59 @@
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
 #include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
 #include "msgPayloadDefC/FinePredictionMsgPayload.h"
+#include "msgPayloadDefC/GeoTrackingMsgPayload.h"
 
 
 
 /*! @brief basic Basilisk C++ module class */
 class DataStorage: public SysModel { // --> CHANGE
 public:
-    DataStorage();  // --> CHANGE
-    ~DataStorage(); // --> CHANGE
+    DataStorage();
+    ~DataStorage();
 
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
-    void InitializeTensors();
-    void ZeroOutputVariables();
+    void ReadMessages();
 
 public:
 
-
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-
-    // --> INTERNAL
     int state;
 
-    // --> MESSAGE IN
-    ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
-    ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
-    ReadFunctor<FinePredictionMsgPayload> fine_msg;
+    // ----------------------
+    // ----- MESSAGE IN -----
+    // ----------------------
 
-    // --> INPUT
-    int vnir_tensor[20][20];    // vnir_msg
-    int vnir_state;             // vnir_msg
-    int thermal_tensor[20][20]; // thermal_msg
-    int thermal_state;          // thermal_msg
-    int fine_mask[20][20];      // fine_msg
-    int fine_state;             // fine_msg
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
+
+    ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
+    double red[3200][3200];
+    double green[3200][3200];
+    double blue[3200][3200];
+    int vnir_state;
+
+    ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
+    double b1[3200][3200];
+    double b2[3200][3200];
+    double b3[3200][3200];
+    double b4[3200][3200];
+    int thermal_state;
+
+    ReadFunctor<FinePredictionMsgPayload> fine_msg;
+    int fine_mask[20][20];
+    int fine_state;
+
+    ReadFunctor<GeoTrackingMsgPayload> geo_msg;
+    double geo_lat;
+    double geo_lon;
+    int geo_state;
+
+
 
     // --> LOGGING
     BSKLogger bskLogger;

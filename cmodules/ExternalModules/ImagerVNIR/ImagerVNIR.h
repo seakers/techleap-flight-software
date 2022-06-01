@@ -28,8 +28,6 @@ public:
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
-
-    void InitializeTensors();
     void ZeroOutputVariables();
 
 public:
@@ -38,17 +36,15 @@ public:
     // ----- VARIABLES -----
     // ---------------------
 
-    // --> INTERNAL
-    int state;
-
     // --> MESSAGE IN
     ReadFunctor<ImagerVNIROutMsgPayload> mock_msg;
 
     // --> MESSAGE OUT
     Message<ImagerVNIROutMsgPayload> vnir_msg;
-
-    // --> OUTPUT
-    int image_tensor[20][20];
+    int state;
+    double red[3200][3200];
+    double green[3200][3200];
+    double blue[3200][3200];
 
     // --> LOGGING
     BSKLogger bskLogger;

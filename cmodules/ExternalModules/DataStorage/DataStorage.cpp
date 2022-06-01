@@ -20,76 +20,33 @@ DataStorage::~DataStorage() // --> CHANGE
     return;
 }
 
-
-void DataStorage::InitializeTensors(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->fine_mask[x][y] = 0;
-        }
-    }
-}
-
-void DataStorage::ZeroOutputVariables(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->fine_mask[x][y] = 0;
-        }
-    }
-}
-
-void DataStorage::Reset(uint64_t CurrentSimNanos) {
-    bskLogger.bskLog(BSK_INFORMATION, "DataStorage --- (reset)");
-
-    // --> 1. Reset module state
-    this->state = 0;
-
-    // --> 2. Initialize tensors
-    this->InitializeTensors();
-}
-
-
-
-void DataStorage::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
-{
-
-
-    // -----------------------
-    // ----- Zero Output -----
-    // -----------------------
-
-    // --> Zero internal output variables
-    this->ZeroOutputVariables();
-
-
-    // -----------------------
-    // ----- Read Inputs -----
-    // -----------------------
-    // --> TODO: Write correct image dimensions
-
+void DataStorage::ReadMessages(){
     // --> VNIR Reading
     if(this->vnir_msg.isLinked()){
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
-        std::cout << "--> (DataStorage) VNIR READING " << vnir_msg_payload.imageTensor[0][0] << std::endl;
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                this->vnir_tensor[x][y] = vnir_msg_payload.imageTensor[x][y];
+        for(int y = 0; y < 3200; y++){
+            for(int z = 0; z < 3200; z++){
+                this->red[y][z] = vnir_msg_payload.red[y][z];
+                this->green[y][z] = vnir_msg_payload.green[y][z];
+                this->blue[y][z] = vnir_msg_payload.blue[y][z];
             }
         }
     }
-
 
     // --> Thermal Reading
     if(this->thermal_msg.isLinked()){
         ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
         this->thermal_state = thermal_msg_payload.state;
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                this->thermal_tensor[x][y] = thermal_msg_payload.imageTensor[x][y];
+        for(int y = 0; y < 3200; y++){
+            for(int z = 0; z < 3200; z++){
+                this->b1[y][z] = thermal_msg_payload.b1[y][z];
+                this->b2[y][z] = thermal_msg_payload.b2[y][z];
+                this->b3[y][z] = thermal_msg_payload.b3[y][z];
+                this->b4[y][z] = thermal_msg_payload.b4[y][z];
             }
         }
     }
-
 
     // --> Fine Prediction
     if(this->fine_msg.isLinked()){
@@ -102,26 +59,38 @@ void DataStorage::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
         }
     }
 
+    // --> GeoTracking data
+    if(this->geo_msg.isLinked()){
+        GeoTrackingMsgPayload geo_msg_payload = this->geo_msg();
+        this->geo_state = geo_msg_payload.state;
+        this->geo_lat = geo_msg_payload.lat;
+        this->geo_lon = geo_msg_payload.lon;
+    }
+}
 
+void DataStorage::Reset(uint64_t CurrentSimNanos) {
+    bskLogger.bskLog(BSK_INFORMATION, "DataStorage --- (reset)");
+
+    // --> 1. Reset module state
+    this->state = 0;
+}
+
+
+
+void DataStorage::UpdateState(uint64_t CurrentSimNanos)
+{
+    // -----------------------
+    // ----- Read Inputs -----
+    // -----------------------
+    this->ReadMessages();
 
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
-    // --> TODO: Image post-processing... Compression?
-
-
-
-
-    // -------------------------
-    // ----- Write Outputs -----
-    // -------------------------
-    // --> TODO: Write to some storage device
-
 
 
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "DataStorage --- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

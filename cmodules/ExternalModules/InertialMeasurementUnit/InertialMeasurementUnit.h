@@ -42,9 +42,9 @@ public:
     Message<InertialMeasurementUnitOutMsgPayload> imu_msg;
 
     // --> OUTPUT
-    float yaw;
-    float pitch;
-    float roll;
+    double yaw;
+    double pitch;
+    double roll;
 
     // --> LOGGING
     BSKLogger bskLogger;

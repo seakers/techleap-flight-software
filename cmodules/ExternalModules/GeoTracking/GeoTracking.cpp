@@ -12,7 +12,6 @@
 
 GeoTracking::GeoTracking() // --> CHANGE
 {
-    // --> Always start FSW on mode 0
     this->state = 0;
 }
 
@@ -26,47 +25,13 @@ void GeoTracking::ZeroOutputVariables(){
     this->lon = 0.0;
 }
 
-void GeoTracking::InitializeTensors(){
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            this->fine_mask[x][y] = 0;
-        }
+void GeoTracking::ReadMessages(){
+
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
     }
-}
 
-
-
-
-
-void GeoTracking::Reset(uint64_t CurrentSimNanos) {
-    bskLogger.bskLog(BSK_INFORMATION, "GeoTracking ------ (reset)");
-
-    // --> 1. Reset module state
-    this->state = 0;
-
-    // --> 2. Initialize tensors
-    this->InitializeTensors();
-}
-
-
-
-void GeoTracking::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
-{
-
-    // -----------------------
-    // ----- Zero Output -----
-    // -----------------------
-
-    // --> Zero output messages
-    GeoTrackingMsgPayload geo_msg_buffer = this->geo_msg.zeroMsgPayload;
-
-    // --> Zero internal output variables
-    this->ZeroOutputVariables();
-
-
-    // -----------------------
-    // ----- Read Inputs -----
-    // -----------------------
     if(this->fine_msg.isLinked()){
         FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
         this->fine_state = fine_msg_payload.state;
@@ -76,11 +41,31 @@ void GeoTracking::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
             }
         }
     }
+}
+
+void GeoTracking::Reset(uint64_t CurrentSimNanos) {
+    bskLogger.bskLog(BSK_INFORMATION, "GeoTracking ------ (reset)");
+
+    // --> 1. Reset module state
+    this->state = 0;
+}
+
+void GeoTracking::UpdateState(uint64_t CurrentSimNanos)
+{
+    // -----------------------
+    // ----- Zero Output -----
+    // -----------------------
+    GeoTrackingMsgPayload geo_msg_buffer = this->geo_msg.zeroMsgPayload;
+    this->ZeroOutputVariables();
+
+    // -----------------------
+    // ----- Read Inputs -----
+    // -----------------------
+    this->ReadMessages();
 
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
-    // --> TODO: Determine lat / lon from mask
 
 
     // -------------------------
@@ -91,11 +76,8 @@ void GeoTracking::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     geo_msg_buffer.lon = this->lon;
     this->geo_msg.write(&geo_msg_buffer, this->moduleID, CurrentSimNanos);
 
-
-
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "GeoTracking -------- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

@@ -8,9 +8,9 @@
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;
-    float yaw;
-    float pitch;
-    float roll;
+    double yaw;
+    double pitch;
+    double roll;
 }AttitudeDeterminationAnglesMsgPayload;
 
 #endif

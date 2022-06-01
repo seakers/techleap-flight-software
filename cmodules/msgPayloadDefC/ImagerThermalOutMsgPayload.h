@@ -7,8 +7,11 @@
 
 /*! @brief Brief description of what this message contains */
 typedef struct {
-    int state;                  // --> State of sensor
-    int imageTensor[20][20];    // --> Image captured
+    int state;
+    double b1[3200][3200];
+    double b2[3200][3200];
+    double b3[3200][3200];
+    double b4[3200][3200];
 }ImagerThermalOutMsgPayload;
 
 #endif

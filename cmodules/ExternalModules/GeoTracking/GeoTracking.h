@@ -13,37 +13,45 @@
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
-#include "msgPayloadDefC/FinePredictionMsgPayload.h" // --> CHANGE
-#include "msgPayloadDefC/GeoTrackingMsgPayload.h" // --> CHANGE
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
+#include "msgPayloadDefC/FinePredictionMsgPayload.h"
+
+#include "msgPayloadDefC/GeoTrackingMsgPayload.h"
 
 
 
 /*! @brief basic Basilisk C++ module class */
 class GeoTracking: public SysModel { // --> CHANGE
 public:
-    GeoTracking();  // --> CHANGE
-    ~GeoTracking(); // --> CHANGE
+    GeoTracking();
+    ~GeoTracking();
 
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
-    void InitializeTensors();
+    void ReadMessages();
 
 public:
 
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-    int state;
+    // ----------------------
+    // ----- MESSAGE IN -----
+    // ----------------------
 
-    // --> MESSAGE IN
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
+
     ReadFunctor<FinePredictionMsgPayload> fine_msg;
     int fine_state;
     int fine_mask[20][20];
 
-    // --> MESSAGE OUT
+
+    // -----------------------
+    // ----- MESSAGE OUT -----
+    // -----------------------
+
     Message<GeoTrackingMsgPayload> geo_msg;
+    int state;
     int lat;
     int lon;
 

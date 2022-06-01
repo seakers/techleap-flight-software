@@ -15,42 +15,44 @@
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
 #include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
 
 
 /*! @brief basic Basilisk C++ module class */
-class GimbalControl: public SysModel { // --> CHANGE
+class GimbalControl: public SysModel {
 public:
-    GimbalControl();  // --> CHANGE
-    ~GimbalControl(); // --> CHANGE
+    GimbalControl();
+    ~GimbalControl();
 
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
+    void ReadMessages();
+
 public:
 
-
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-
-    // --> INTERNAL
     int state;
 
-    // --> MESSAGE IN
-    ReadFunctor<AttitudeDeterminationAnglesMsgPayload> adcs_angles_msg;
-    ReadFunctor<ControllerManualAnglesMsgPayload>      controller_angles_msg;
+    // ----------------------
+    // ----- MESSAGE IN -----
+    // ----------------------
 
-    // --> INPUT
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
+
+    ReadFunctor<AttitudeDeterminationAnglesMsgPayload> adcs_angles_msg;
     int   adcs_state;
-    float adcs_yaw;
-    float adcs_pitch;
-    float adcs_roll;
+    double adcs_yaw;
+    double adcs_pitch;
+    double adcs_roll;
+
+    ReadFunctor<ControllerManualAnglesMsgPayload> cont_angles_msg;
     int   cont_state;
-    float cont_yaw;
-    float cont_pitch;
-    float cont_roll;
+    double cont_yaw;
+    double cont_pitch;
+    double cont_roll;
 
     // --> LOGGING
     BSKLogger bskLogger;

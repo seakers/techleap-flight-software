@@ -8,8 +8,8 @@
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;
-    float lat;
-    float lon;
+    double lat;
+    double lon;
 }GeoTrackingMsgPayload;
 
 #endif

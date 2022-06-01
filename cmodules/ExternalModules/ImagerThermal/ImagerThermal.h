@@ -30,7 +30,6 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
 
-    void InitializeTensors();
     void ZeroOutputVariables();
 
 public:
@@ -39,17 +38,16 @@ public:
     // ----- VARIABLES -----
     // ---------------------
 
-    // --> INTERNAL
-    int state;
-
     // --> MESSAGE IN
     ReadFunctor<ImagerThermalOutMsgPayload> mock_msg;
 
     // --> MESSAGE OUT
     Message<ImagerThermalOutMsgPayload> thermal_msg;
-
-    // --> OUTPUT
-    int image_tensor[20][20];
+    int state;
+    double b1[3200][3200];
+    double b2[3200][3200];
+    double b3[3200][3200];
+    double b4[3200][3200];
 
     // --> LOGGING
     BSKLogger bskLogger;

@@ -41,9 +41,9 @@ public:
     Message<GpsOutMsgPayload> gps_msg;
 
     // --> OUTPUT
-    float lat;       // gps_msg
-    float lon;       // gps_msg
-    float altitude;  // gps_msg
+    double lat;       // gps_msg
+    double lon;       // gps_msg
+    double altitude;  // gps_msg
 
     // --> LOGGING
     BSKLogger bskLogger;
