@@ -9,8 +9,9 @@
 typedef struct {
     int state;                  // --> State of sensor
     double yaw;
-    double pitch;                  // 0 if no plume detected | 1 if plume detected
+    double pitch;
     double roll;
+    double temperature;
 }InertialMeasurementUnitOutMsgPayload;
 
 #endif
