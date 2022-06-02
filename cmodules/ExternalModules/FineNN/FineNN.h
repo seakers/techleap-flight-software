@@ -6,7 +6,7 @@
 #define FINE_NN_H
 
 
-#include <torch/script.h>
+//#include <torch/script.h>
 #include <string>
 
 
@@ -42,7 +42,7 @@ public:
 public:
 
     std::string nn_model_path;
-    torch::jit::script::Module nn_model;
+    //torch::jit::script::Module nn_model;
 
     // ----------------------
     // ----- MESSAGE IN -----

@@ -1,6 +1,6 @@
 import pytest
 import sys
-sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
+sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 
 
 # --> Simulation Import
