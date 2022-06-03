@@ -10,6 +10,16 @@
 #include "architecture/utilities/bskLogging.h"
 #include "architecture/messaging/messaging.h"
 
+#include <Eigen/Dense>
+
+
+// Include files for using StApi.
+//#include <StApi_TL.h>
+//#include <StApi_IP.h>
+
+//#include "vn/StApi_TL.h"
+//#include "vn/StApi_IP.h"
+
 
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
@@ -20,10 +30,10 @@
 
 
 /*! @brief basic Basilisk C++ module class */
-class ImagerVNIR: public SysModel { // --> CHANGE
+class ImagerVNIR: public SysModel {
 public:
-    ImagerVNIR();  // --> CHANGE
-    ~ImagerVNIR(); // --> CHANGE
+    ImagerVNIR();
+    ~ImagerVNIR();
 
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
@@ -42,10 +52,10 @@ public:
     // --> MESSAGE OUT
     Message<ImagerVNIROutMsgPayload> vnir_msg;
     int state;
-    double red[512][512];
-    double green[512][512];
-    double blue[512][512];
-    double nir[512][512];
+    Eigen::MatrixXd red;
+    Eigen::MatrixXd green;
+    Eigen::MatrixXd blue;
+    Eigen::MatrixXd nir;
 
     // --> LOGGING
     BSKLogger bskLogger;

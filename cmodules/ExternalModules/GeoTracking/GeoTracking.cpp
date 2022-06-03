@@ -13,6 +13,7 @@
 GeoTracking::GeoTracking() // --> CHANGE
 {
     this->state = 0;
+    this->fine_mask.setZero(512, 512);
 }
 
 GeoTracking::~GeoTracking() // --> CHANGE
@@ -35,11 +36,7 @@ void GeoTracking::ReadMessages(){
     if(this->fine_msg.isLinked()){
         FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
         this->fine_state = fine_msg_payload.state;
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                this->fine_mask[x][y] = fine_msg_payload.mask[x][y];
-            }
-        }
+        this->fine_mask = fine_msg_payload.mask;
     }
 }
 

@@ -13,6 +13,10 @@
 CoarseNN::CoarseNN() // --> CHANGE
 {
     this->state = 0;
+    this->red.setZero(512, 512);
+    this->green.setZero(512, 512);
+    this->blue.setZero(512, 512);
+    this->nir.setZero(512, 512);
 }
 
 CoarseNN::~CoarseNN() // --> CHANGE
@@ -40,13 +44,10 @@ void CoarseNN::ReadMessages(){
     if(this->vnir_msg.isLinked()){
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
-        for(int y = 0; y < 3200; y++){
-            for(int z = 0; z < 3200; z++){
-                this->red[y][z] = vnir_msg_payload.red[y][z];
-                this->green[y][z] = vnir_msg_payload.green[y][z];
-                this->blue[y][z] = vnir_msg_payload.blue[y][z];
-            }
-        }
+        this->red = vnir_msg_payload.red;
+        this->green = vnir_msg_payload.green;
+        this->blue = vnir_msg_payload.blue;
+        this->nir = vnir_msg_payload.nir;
     }
 }
 

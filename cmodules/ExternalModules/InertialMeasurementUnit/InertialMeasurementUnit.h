@@ -9,12 +9,13 @@
 
 #include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h" // --> CHANGE
 
-
 #include "architecture/_GeneralModuleFiles/sys_model.h"
 #include "architecture/utilities/bskLogging.h"
 #include "architecture/messaging/messaging.h"
 
 
+
+#include "vn/sensors.h"
 
 
 
@@ -30,18 +31,13 @@ public:
     void ZeroOutputVariables();
 
 public:
-
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-
-    // --> INTERNAL
-    int state;
+    // --------------------
+    // ----- MESSAGES -----
+    // --------------------
 
     // --> MESSAGE OUT
     Message<InertialMeasurementUnitOutMsgPayload> imu_msg;
-
-    // --> OUTPUT
+    int state;
     double yaw;
     double pitch;
     double roll;

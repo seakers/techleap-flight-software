@@ -9,7 +9,7 @@ sys.path.insert(1, '/app')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import BalloonInterface
+from Basilisk.ExternalModules import MessageConsumer
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -69,7 +69,7 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Create module
-    test_module = BalloonInterface.BalloonInterface()
+    test_module = MessageConsumer.MessageConsumer()
     test_module.ModelTag = "MessageConsumer"
     sim_client.new_c_module(test_module)
 
@@ -80,16 +80,13 @@ def run(param1, param2):
 
     # --> 4. Set variable recording
     var1 = "MessageConsumer.state"
-    var2 = "MessageConsumer.msg"
     sim_client.new_logging_var(var1)
-    sim_client.new_logging_var(var2)
 
     # --> 5. Run simulation
     sim_client.run()
 
     # --> 6. Get debug output
     var1 = sim_client.get_var_log_data(var1)
-    var2 = sim_client.get_var_log_data(var2)
 
     print(output_rec.state)
 

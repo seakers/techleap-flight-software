@@ -12,7 +12,15 @@
 
 DataStorage::DataStorage() // --> CHANGE
 {
-
+    this->red.setZero(512, 512);
+    this->green.setZero(512, 512);
+    this->blue.setZero(512, 512);
+    this->nir.setZero(512, 512);
+    this->b1.setZero(512, 512);
+    this->b2.setZero(512, 512);
+    this->b3.setZero(512, 512);
+    this->b4.setZero(512, 512);
+    this->fine_mask.setZero(512, 512);
 }
 
 DataStorage::~DataStorage() // --> CHANGE
@@ -21,42 +29,38 @@ DataStorage::~DataStorage() // --> CHANGE
 }
 
 void DataStorage::ReadMessages(){
+
+    // --> Mode Reading
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
+    }
+
     // --> VNIR Reading
     if(this->vnir_msg.isLinked()){
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
-        for(int y = 0; y < 3200; y++){
-            for(int z = 0; z < 3200; z++){
-                this->red[y][z] = vnir_msg_payload.red[y][z];
-                this->green[y][z] = vnir_msg_payload.green[y][z];
-                this->blue[y][z] = vnir_msg_payload.blue[y][z];
-            }
-        }
+        this->red = vnir_msg_payload.red;
+        this->green = vnir_msg_payload.green;
+        this->blue = vnir_msg_payload.blue;
+        this->nir = vnir_msg_payload.nir;
     }
 
     // --> Thermal Reading
     if(this->thermal_msg.isLinked()){
         ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
         this->thermal_state = thermal_msg_payload.state;
-        for(int y = 0; y < 3200; y++){
-            for(int z = 0; z < 3200; z++){
-                this->b1[y][z] = thermal_msg_payload.b1[y][z];
-                this->b2[y][z] = thermal_msg_payload.b2[y][z];
-                this->b3[y][z] = thermal_msg_payload.b3[y][z];
-                this->b4[y][z] = thermal_msg_payload.b4[y][z];
-            }
-        }
+        this->b1 = thermal_msg_payload.b1;
+        this->b2 = thermal_msg_payload.b2;
+        this->b3 = thermal_msg_payload.b3;
+        this->b4 = thermal_msg_payload.b4;
     }
 
     // --> Fine Prediction
     if(this->fine_msg.isLinked()){
         FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
         this->fine_state = fine_msg_payload.state;
-        for(int x = 0; x < 20; x++){
-            for(int y = 0; y < 20; y++){
-                this->fine_mask[x][y] = fine_msg_payload.mask[x][y];
-            }
-        }
+        this->fine_mask = fine_msg_payload.mask;
     }
 
     // --> GeoTracking data

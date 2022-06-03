@@ -5,14 +5,15 @@
 #ifndef IMAGER_VNIR_OUT_H
 #define IMAGER_VNIR_OUT_H
 
-
+#include <Eigen/Dense>
 
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;
-    double red[512][512];
-    double green[512][512];
-    double blue[512][512];
+    Eigen::MatrixXd red;
+    Eigen::MatrixXd green;
+    Eigen::MatrixXd blue;
+    Eigen::MatrixXd nir;
 }ImagerVNIROutMsgPayload;
 
 #endif

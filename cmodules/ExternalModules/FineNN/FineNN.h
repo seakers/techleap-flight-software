@@ -24,7 +24,7 @@
 
 #include "msgPayloadDefC/FinePredictionMsgPayload.h"
 
-
+#include <Eigen/Dense>
 
 /*! @brief basic Basilisk C++ module class */
 class FineNN: public SysModel { // --> CHANGE
@@ -52,16 +52,17 @@ public:
     int mode;
 
     ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
-    double red[3200][3200];
-    double green[3200][3200];
-    double blue[3200][3200];
+    Eigen::MatrixXd red;
+    Eigen::MatrixXd green;
+    Eigen::MatrixXd blue;
+    Eigen::MatrixXd nir;
     int vnir_state;
 
     ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
-    double b1[3200][3200];
-    double b2[3200][3200];
-    double b3[3200][3200];
-    double b4[3200][3200];
+    Eigen::MatrixXd b1;
+    Eigen::MatrixXd b2;
+    Eigen::MatrixXd b3;
+    Eigen::MatrixXd b4;
     int thermal_state;
 
     ReadFunctor<CoarsePredictionMsgPayload> coarse_msg;
@@ -75,7 +76,7 @@ public:
 
     Message<FinePredictionMsgPayload> fine_msg;
     int state;
-    int mask[20][20];
+    Eigen::MatrixXd mask;
 
 
     // --> LOGGING

@@ -18,6 +18,8 @@
 #include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
 
 
+#include <Eigen/Dense>
+
 
 
 /*! @brief basic Basilisk C++ module class */
@@ -44,10 +46,10 @@ public:
     // --> MESSAGE OUT
     Message<ImagerThermalOutMsgPayload> thermal_msg;
     int state;
-    double b1[3200][3200];
-    double b2[3200][3200];
-    double b3[3200][3200];
-    double b4[3200][3200];
+    Eigen::MatrixXd b1;
+    Eigen::MatrixXd b2;
+    Eigen::MatrixXd b3;
+    Eigen::MatrixXd b4;
 
     // --> LOGGING
     BSKLogger bskLogger;

@@ -18,6 +18,8 @@
 
 #include "msgPayloadDefC/GeoTrackingMsgPayload.h"
 
+#include <Eigen/Dense>
+
 
 
 /*! @brief basic Basilisk C++ module class */
@@ -42,8 +44,8 @@ public:
     int mode;
 
     ReadFunctor<FinePredictionMsgPayload> fine_msg;
+    Eigen::MatrixXd fine_mask;
     int fine_state;
-    int fine_mask[20][20];
 
 
     // -----------------------
