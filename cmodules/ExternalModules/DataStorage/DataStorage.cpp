@@ -12,6 +12,8 @@
 
 DataStorage::DataStorage() // --> CHANGE
 {
+    this->state = 0;
+    this->mode = 0;
     this->red.setZero(512, 512);
     this->green.setZero(512, 512);
     this->blue.setZero(512, 512);

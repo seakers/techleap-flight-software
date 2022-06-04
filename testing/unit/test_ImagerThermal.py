@@ -79,34 +79,18 @@ def run(param1, param2):
 
     # --> 4. Set variable recording
     var1 = "ImagerThermal.state"
-    var2 = "ImagerThermal.image_tensor"
     sim_client.new_logging_var(var1)
-    sim_client.new_logging_var(var2)
 
     # --> 5. Run simulation
     sim_client.run()
 
     # --> 6. Get debug output
     var1 = sim_client.get_var_log_data(var1)
-    var2 = sim_client.get_var_log_data(var2)
 
     print(output_rec.state)
 
 
     return True
-
-
-
-
-
-def get_tensor(value, rows=20, cols=20):
-    tensor = []
-    for x in range(rows):
-        row = []
-        for y in range(cols):
-            row.append(value)
-        tensor.append(row)
-    return tensor
 
 
 

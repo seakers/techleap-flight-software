@@ -7,6 +7,7 @@ sys.path.insert(1, '/app')
 
 # --> Simulation Import
 from simulation.api import SimulationClient
+from simulation.mock_messages import get_consumer_msg
 
 # --> Module Import
 from Basilisk.ExternalModules import Controller
@@ -73,24 +74,26 @@ def run(param1, param2):
     test_module.ModelTag = "Controller"
     sim_client.new_c_module(test_module)
 
-    # --> 3. Set output message recording
-    output_rec = test_module.controller_msg.recorder()
+    # --> 3. Create mock messages
+    consumer_msg = get_consumer_msg()
+
+    # --> 4. Subscribe to messages
+    test_module.consumer_msg.subscribeTo(consumer_msg)
+
+    # --> 5. Set output message recording
+    output_rec = test_module.controller_mode_msg.recorder()
     sim_client.new_c_module(output_rec)
 
     # --> 4. Set variable recording
     var1 = "Controller.state"
-    var2 = "Controller.msg"
     sim_client.new_logging_var(var1)
-    sim_client.new_logging_var(var2)
 
     # --> 5. Run simulation
     sim_client.run()
 
     # --> 6. Get debug output
     var1 = sim_client.get_var_log_data(var1)
-    var2 = sim_client.get_var_log_data(var2)
-
-    print(output_rec.state)
+    print(output_rec.mode)
 
 
     return True

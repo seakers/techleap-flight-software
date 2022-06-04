@@ -7,6 +7,7 @@ sys.path.insert(1, '/app')
 
 # --> Simulation Import
 from simulation.api import SimulationClient
+from simulation.mock_messages import get_controller_mode_msg, get_imu_msg, get_gps_msg, get_geo_msg
 
 # --> Module Import
 from Basilisk.ExternalModules import AttitudeDetermination
@@ -78,6 +79,18 @@ def run(param1, param2):
     test_module.ModelTag = "AttitudeDetermination"
     sim_client.new_c_module(test_module)
 
+    # --> 3. Create mock messages
+    mode_msg = get_controller_mode_msg()
+    imu_msg = get_imu_msg()
+    gps_msg = get_gps_msg()
+    geo_msg = get_geo_msg()
+
+    # --> 4. Subscribe to messages
+    test_module.mode_msg.subscribeTo(mode_msg)
+    test_module.imu_msg.subscribeTo(imu_msg)
+    test_module.gps_msg.subscribeTo(gps_msg)
+    test_module.geo_msg.subscribeTo(geo_msg)
+
     # --> 5. Set output message recording
     output_rec = test_module.ad_msg.recorder()
     sim_client.new_c_module(output_rec)
@@ -86,10 +99,10 @@ def run(param1, param2):
     var1 = "AttitudeDetermination.state"
     sim_client.new_logging_var(var1)
 
-    # --> 6. Run simulation
+    # --> 7. Run simulation
     sim_client.run()
 
-    # --> 7. Get debug output
+    # --> 8. Get debug output
     var1 = sim_client.get_var_log_data(var1)
 
     print(output_rec.state)

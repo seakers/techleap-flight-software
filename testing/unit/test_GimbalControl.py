@@ -7,6 +7,7 @@ sys.path.insert(1, '/app')
 
 # --> Simulation Import
 from simulation.api import SimulationClient
+from simulation.mock_messages import get_controller_mode_msg, get_controller_angles_msg, get_adcs_msg
 
 # --> Module Import
 from Basilisk.ExternalModules import GimbalControl
@@ -79,26 +80,16 @@ def run(param1, param2):
     sim_client.new_c_module(test_module)
 
     # --> 3. Create mock messages
-    adcs_angles_msg_data = messaging.AttitudeDeterminationAnglesMsgPayload()
-    adcs_angles_msg_data.state = 20
-    adcs_angles_msg_data.yaw = 1.0
-    adcs_angles_msg_data.pitch = 1.0
-    adcs_angles_msg_data.roll = 1.0
-    adcs_angles_msg = messaging.AttitudeDeterminationAnglesMsg().write(adcs_angles_msg_data)
-
-    controller_angles_msg_data = messaging.ControllerManualAnglesMsgPayload()
-    controller_angles_msg_data.state = 20
-    controller_angles_msg_data.yaw = 1.0
-    controller_angles_msg_data.pitch = 1.0
-    controller_angles_msg_data.roll = 1.0
-    controller_angles_msg = messaging.ControllerManualAnglesMsg().write(controller_angles_msg_data)
+    mode_msg = get_controller_mode_msg()
+    adcs_angles_msg = get_adcs_msg()
+    cont_angles_msg = get_controller_angles_msg()
 
     # --> 4. Subscribe to messages
+    test_module.mode_msg.subscribeTo(mode_msg)
     test_module.adcs_angles_msg.subscribeTo(adcs_angles_msg)
-    test_module.controller_angles_msg.subscribeTo(controller_angles_msg)
+    test_module.cont_angles_msg.subscribeTo(cont_angles_msg)
 
-
-    # --> 6. Set variable recording
+    # --> 5. Set variable recording
     var1 = "GimbalControl.state"
     sim_client.new_logging_var(var1)
 

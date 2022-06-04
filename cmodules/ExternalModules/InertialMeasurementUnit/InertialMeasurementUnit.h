@@ -7,6 +7,7 @@
 
 
 
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h" // --> CHANGE
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
@@ -29,13 +30,15 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
+    void ReadMessages();
 
 public:
     // --------------------
     // ----- MESSAGES -----
     // --------------------
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
 
-    // --> MESSAGE OUT
     Message<InertialMeasurementUnitOutMsgPayload> imu_msg;
     int state;
     double yaw;

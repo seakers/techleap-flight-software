@@ -29,7 +29,12 @@ void Gps::ZeroOutputVariables(){
     this->altitude = 0.0;
 }
 
-
+void Gps::ReadMessages(){
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
+    }
+}
 
 void Gps::Reset(uint64_t CurrentSimNanos) // --> CHANGE
 {
@@ -70,7 +75,7 @@ void Gps::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // -------------------------
     // ----- Write Outputs -----
     // -------------------------
-
+    gps_msg_buffer.state    = this->state;
     gps_msg_buffer.lat      = this->lat;
     gps_msg_buffer.lon      = this->lon;
     gps_msg_buffer.altitude = this->altitude;
@@ -84,6 +89,5 @@ void Gps::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "Gps ------ ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

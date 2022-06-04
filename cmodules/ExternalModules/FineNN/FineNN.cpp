@@ -31,16 +31,16 @@ FineNN::~FineNN() {
     return;
 }
 
-/*void FineNN::LoadModel(){
-    try {
-        // Deserialize the ScriptModule from a file using torch::jit::load().
-        //this->nn_model = torch::jit::load(this->nn_model_path);
-        bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- loaded nn model");
-    }
-    catch (const c10::Error& e) {
-        bskLogger.bskLog(BSK_ERROR, "FineNN -------- failed to load nn model");
-    }
-}*/
+void FineNN::LoadModel(){
+//    try {
+//        // Deserialize the ScriptModule from a file using torch::jit::load().
+//        //this->nn_model = torch::jit::load(this->nn_model_path);
+//        bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- loaded nn model");
+//    }
+//    catch (const c10::Error& e) {
+//        bskLogger.bskLog(BSK_ERROR, "FineNN -------- failed to load nn model");
+//    }
+}
 
 void FineNN::ZeroOutputVariables(){
     this->mask.setZero(512, 512);

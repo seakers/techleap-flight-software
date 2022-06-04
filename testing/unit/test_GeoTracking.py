@@ -7,6 +7,7 @@ sys.path.insert(1, '/app')
 
 # --> Simulation Import
 from simulation.api import SimulationClient
+from simulation.mock_messages import get_controller_mode_msg, get_fine_msg
 
 # --> Module Import
 from Basilisk.ExternalModules import GeoTracking
@@ -78,20 +79,27 @@ def run(param1, param2):
     test_module.ModelTag = "GeoTracking"
     sim_client.new_c_module(test_module)
 
+    # --> 3. Create Messages
+    fine_msg = get_fine_msg()
+    mode_msg = get_controller_mode_msg()
+
+    # --> 4. Subscribe to messages
+    test_module.fine_msg.subscribeTo(fine_msg)
+    test_module.mode_msg.subscribeTo(mode_msg)
+
     # --> 5. Set output message recording
-    output_rec = test_module.fine_msg.recorder()
+    output_rec = test_module.geo_msg.recorder()
     sim_client.new_c_module(output_rec)
 
     # --> 6. Set variable recording
     var1 = "GeoTracking.state"
     sim_client.new_logging_var(var1)
 
-    # --> 6. Run simulation
+    # --> 7. Run simulation
     sim_client.run()
 
-    # --> 7. Get debug output
+    # --> 8. Get debug output
     var1 = sim_client.get_var_log_data(var1)
-
     print(output_rec.state)
 
 

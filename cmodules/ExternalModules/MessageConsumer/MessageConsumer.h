@@ -30,14 +30,12 @@ public:
     void ZeroOutputVariables();
 
 public:
-
-
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-
-    // --> INTERNAL
+    // --------------------
+    // ----- MESSAGES -----
+    // --------------------
+    Message<MessageConsumerMsgPayload> consumer_msg;
     int state;
+    int msg;
 
     // --> LOGGING
     BSKLogger bskLogger;

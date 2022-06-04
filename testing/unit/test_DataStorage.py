@@ -7,6 +7,7 @@ sys.path.insert(1, '/app')
 
 # --> Simulation Import
 from simulation.api import SimulationClient
+from simulation.mock_messages import get_controller_mode_msg, get_vnir_msg, get_thermal_msg, get_geo_msg, get_fine_msg
 
 # --> Module Import
 from Basilisk.ExternalModules import DataStorage
@@ -56,10 +57,6 @@ def test_function(param1, param2):
 #
 # """
 
-def get_test_data():
-    image_file = '/app/images/test_dataset_'
-    return None
-
 
 def run(param1, param2):
     # --> 1. Create simulation client
@@ -71,54 +68,28 @@ def run(param1, param2):
     sim_client.new_c_module(test_module)
 
     # --> 3. Create mock messages
-    vnir_msg_data = messaging.ImagerVNIROutMsgPayload()
-    vnir_msg_data.state = 20
-    vnir_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
-    vnir_msg = messaging.ImagerVNIROutMsg().write(vnir_msg_data)
-
-    thermal_msg_data = messaging.ImagerThermalOutMsgPayload()
-    thermal_msg_data.state = 20
-    thermal_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
-    thermal_msg = messaging.ImagerThermalOutMsg().write(thermal_msg_data)
-
-    fine_msg_data = messaging.FinePredictionMsgPayload()
-    fine_msg_data.state = 1
-    fine_msg_data.mask = np.zeros([20, 20], dtype=int).tolist()
-    fine_msg = messaging.FinePredictionMsg().write(fine_msg_data)
+    vnir_msg = get_vnir_msg()
+    thermal_msg = get_thermal_msg()
+    fine_msg = get_fine_msg()
+    mode_msg = get_controller_mode_msg()
 
     # --> 4. Subscribe to messages
     test_module.vnir_msg.subscribeTo(vnir_msg)
     test_module.thermal_msg.subscribeTo(thermal_msg)
     test_module.fine_msg.subscribeTo(fine_msg)
+    test_module.mode_msg.subscribeTo(mode_msg)
 
     # --> 6. Set variable recording
     var1 = "DataStorage.state"
-    var2 = "DataStorage.fine_mask"
     sim_client.new_logging_var(var1)
-    sim_client.new_logging_var(var2)
 
     # --> 6. Run simulation
     sim_client.run()
 
     # --> 7. Get debug output
     var1 = sim_client.get_var_log_data(var1)
-    var2 = sim_client.get_var_log_data(var2)
 
     return True
-
-
-def get_tensor(value, rows=20, cols=20):
-    tensor = []
-    for x in range(rows):
-        row = []
-        for y in range(cols):
-            row.append(value)
-        tensor.append(row)
-    return tensor
-
-
-
-
 
 
 

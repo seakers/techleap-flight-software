@@ -47,7 +47,6 @@ public:
     // ----------------------
     // ----- MESSAGE IN -----
     // ----------------------
-
     ReadFunctor<ControllerModeMsgPayload> mode_msg;
     int mode;
 
@@ -73,7 +72,6 @@ public:
     // -----------------------
     // ----- MESSAGE OUT -----
     // -----------------------
-
     Message<FinePredictionMsgPayload> fine_msg;
     int state;
     Eigen::MatrixXd mask;

@@ -7,12 +7,17 @@
 
 
 
-#include "msgPayloadDefC/GpsOutMsgPayload.h" // --> CHANGE
 
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
 #include "architecture/utilities/bskLogging.h"
 #include "architecture/messaging/messaging.h"
+
+// ---------------------------
+// ----- MESSAGE IMPORTS -----
+// ---------------------------
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
+#include "msgPayloadDefC/GpsOutMsgPayload.h" // --> CHANGE
 
 
 
@@ -28,22 +33,23 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
+    void ReadMessages();
 
 public:
 
-    // --> VARIABLES
-    int state;
     int angles[3];
 
-    // --> MESSAGE IN
+    // --------------------
+    // ----- MESSAGES -----
+    // --------------------
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
 
-    // --> MESSAGE OUT
     Message<GpsOutMsgPayload> gps_msg;
-
-    // --> OUTPUT
-    double lat;       // gps_msg
-    double lon;       // gps_msg
-    double altitude;  // gps_msg
+    int state;
+    double lat;
+    double lon;
+    double altitude;
 
     // --> LOGGING
     BSKLogger bskLogger;

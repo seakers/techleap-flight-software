@@ -27,6 +27,13 @@ void InertialMeasurementUnit::ZeroOutputVariables(){
 }
 
 
+void InertialMeasurementUnit::ReadMessages(){
+
+    if(this->mode_msg.isLinked()){
+        ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+        this->mode = mode_msg_payload.mode;
+    }
+}
 
 void InertialMeasurementUnit::Reset(uint64_t CurrentSimNanos){
     bskLogger.bskLog(BSK_INFORMATION, "InertialMeasurementUnit ------ (reset)");
@@ -60,6 +67,8 @@ void InertialMeasurementUnit::UpdateState(uint64_t CurrentSimNanos) // --> CHNAG
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
+    this->ReadMessages();
+
 //    const std::string SensorPort = "/dev/ttyUSB0";
 //    const uint32_t SensorBaudrate = 115200;
 //    vn::sensors::VnSensor vs;

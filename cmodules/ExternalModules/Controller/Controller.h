@@ -17,8 +17,9 @@
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
-#include "msgPayloadDefC/ControllerOutMsgPayload.h"
 #include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
+#include "msgPayloadDefC/MessageConsumerMsgPayload.h"
+
 
 
 
@@ -32,8 +33,16 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
+    void ReadMessages();
 
 public:
+    // --------------------
+    // ----- MESSAGES -----
+    // --------------------
+    ReadFunctor<MessageConsumerMsgPayload> consumer_msg;
+    int consumer_state;
+    int consumer_msg_content;
+
 
     // ---------------------
     // ----- FSW MODEs -----
@@ -42,27 +51,14 @@ public:
     // 1 - ManualPoint
     // 2 - Scan
     // 3 - TrackPlume
+    Message<ControllerModeMsgPayload> controller_mode_msg;
     int mode;
 
-
-    // ---------------------
-    // ----- VARIABLES -----
-    // ---------------------
-
-    // --> INTERNAL
-    int state;
-
-
-    // --> MESSAGE OUT
-    Message<ControllerOutMsgPayload>          controller_msg;
-    Message<ControllerModeMsgPayload>         controller_mode_msg;
     Message<ControllerManualAnglesMsgPayload> controller_manual_angle_msg;
-
-    // --> OUTPUT
-    int   msg;       // controller_msg
-    double yaw;       // controller_mode_msg
-    double pitch;     // controller_mode_msg
-    double roll;      // controller_mode_msg
+    int state;
+    double yaw;
+    double pitch;
+    double roll;
 
     // --> LOGGING
     BSKLogger bskLogger;

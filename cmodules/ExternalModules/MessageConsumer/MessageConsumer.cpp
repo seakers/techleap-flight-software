@@ -23,6 +23,7 @@ MessageConsumer::~MessageConsumer() // --> CHANGE
 
 
 void MessageConsumer::ZeroOutputVariables(){
+    this->msg = 0;
     return;
 }
 
@@ -45,6 +46,7 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // -----------------------
     // ----- Zero Output -----
     // -----------------------
+    MessageConsumerMsgPayload consumer_msg_buffer = this->consumer_msg.zeroMsgPayload;
 
     // -----------------------
     // ----- Read Inputs -----
@@ -62,11 +64,12 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // ----- Write Outputs -----
     // -------------------------
     // --> TODO: create outputs for each module
-
+    consumer_msg_buffer.state = this->state;
+    consumer_msg_buffer.msg = this->msg;
+    this->consumer_msg.write(&consumer_msg_buffer, this->moduleID, CurrentSimNanos);
 
     // -------------------
     // ----- Logging -----
     // -------------------
-
     bskLogger.bskLog(BSK_INFORMATION, "MessageConsumer ------ ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }

@@ -1,13 +1,15 @@
 import pytest
 import sys
-sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+# sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+sys.path.insert(1, '/app')
 
 
 # --> Simulation Import
 from simulation.api import SimulationClient
+from simulation.mock_messages import get_controller_mode_msg
 
 # --> Module Import
-from cmodule_imports.C_InertialMeasurementUnit import C_InertialMeasurementUnit
+from Basilisk.ExternalModules import InertialMeasurementUnit
 
 
 
@@ -27,7 +29,7 @@ from cmodule_imports.C_InertialMeasurementUnit import C_InertialMeasurementUnit
 @pytest.mark.parametrize(
     'param1, param2',
     [
-        (1.0, 1.0),
+        (1.0, 2.0),
     ]
 )
 def test_function(param1, param2):
@@ -62,12 +64,31 @@ def run(param1, param2):
     # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
-    # --> 2. Add pymodules
-    test_module = C_InertialMeasurementUnit().get_module()
+    # --> 2. Create module
+    test_module = InertialMeasurementUnit.InertialMeasurementUnit()
+    test_module.ModelTag = "InertialMeasurementUnit"
     sim_client.new_c_module(test_module)
 
-    # --> 3. Run simulation
+    # --> 3. Create Messages
+    mode_msg = get_controller_mode_msg()
+
+    # --> 4. Subscribe to messages
+    test_module.mode_msg.subscribeTo(mode_msg)
+
+    # --> 5. Set output message recording
+    output_rec = test_module.imu_msg.recorder()
+    sim_client.new_c_module(output_rec)
+
+    # --> 6. Set variable recording
+    var1 = "InertialMeasurementUnit.state"
+    sim_client.new_logging_var(var1)
+
+    # --> 7. Run simulation
     sim_client.run()
+
+    # --> 8. Get debug output
+    var1 = sim_client.get_var_log_data(var1)
+    print(output_rec.state)
 
     return True
 

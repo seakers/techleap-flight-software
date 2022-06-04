@@ -61,7 +61,6 @@ public:
     // -----------------------
     // ----- MESSAGE OUT -----
     // -----------------------
-
     Message<CoarsePredictionMsgPayload> coarse_msg;
     int prediction;
     int state;
