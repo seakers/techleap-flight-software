@@ -338,3 +338,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // -------------------
     bskLogger.bskLog(BSK_INFORMATION, "ImagerVNIR ---- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }
+
+void ImagerVNIR::readInputMessages(){
+    this->captureMode = this->captureModeMsg();
+}

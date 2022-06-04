@@ -29,6 +29,7 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
+    void readInputMessages();
 
 public:
 
@@ -46,6 +47,8 @@ public:
     double green[512][512];
     double blue[512][512];
     double nir[512][512];
+    string captureMode;
+    
 
     // --> LOGGING
     BSKLogger bskLogger;
