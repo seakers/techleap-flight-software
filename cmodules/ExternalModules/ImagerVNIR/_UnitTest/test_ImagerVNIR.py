@@ -1,8 +1,8 @@
 import pytest
 import sys
 import numpy as np
-# sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
-sys.path.insert(1, '/app')
+sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+#sys.path.insert(1, '/app')
 
 
 # --> Simulation Import

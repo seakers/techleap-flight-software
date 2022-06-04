@@ -13,7 +13,8 @@
 
 FineNN::FineNN() {
     // this->nn_model_path = "/home/gabe/repos/techleap/techleap-flight-software/neuralnet/trainednet.pt";
-    this->nn_model_path = "/app/neuralnet/trainednet.pt";
+    // this->nn_model_path = "/app/neuralnet/trainednet.pt";
+    this->nn_model_path = "/home/ben/repos/techleap-flight-software/neuralnet/trainednet.pt";
     this->state = 0;
 }
 
@@ -21,16 +22,16 @@ FineNN::~FineNN() {
     return;
 }
 
-void FineNN::LoadModel(){
+/*void FineNN::LoadModel(){
     try {
         // Deserialize the ScriptModule from a file using torch::jit::load().
-        this->nn_model = torch::jit::load(this->nn_model_path);
+        //this->nn_model = torch::jit::load(this->nn_model_path);
         bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- loaded nn model");
     }
     catch (const c10::Error& e) {
         bskLogger.bskLog(BSK_ERROR, "FineNN -------- failed to load nn model");
     }
-}
+}*/
 
 void FineNN::ZeroOutputVariables(){
     for(int x = 0; x < 20; x++){
@@ -86,7 +87,7 @@ void FineNN::Reset(uint64_t CurrentSimNanos) {
     this->state = 0;
 
     // --> 2. Load nn model
-    this->LoadModel();
+    //this->LoadModel();
 }
 
 void FineNN::UpdateState(uint64_t CurrentSimNanos){
