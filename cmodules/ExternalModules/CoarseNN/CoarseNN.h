@@ -47,9 +47,10 @@ public:
     int mode;
 
     ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
-    double red[3200][3200];
-    double green[3200][3200];
-    double blue[3200][3200];
+    Eigen::MatrixXd red;
+    Eigen::MatrixXd green;
+    Eigen::MatrixXd blue;
+    Eigen::MatrixXd nir;
     int vnir_state;
 
     // -----------------------

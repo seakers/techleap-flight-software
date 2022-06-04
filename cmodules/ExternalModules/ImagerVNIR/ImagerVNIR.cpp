@@ -9,8 +9,8 @@
 #include "architecture/utilities/linearAlgebra.h"
 
 // Include files for using StApi.
-#include <StApi_TL.h>
-#include <StApi_IP.h>
+#include "StApi_TL.h"
+#include "StApi_IP.h"
 
 //Namespace for using StApi.
 using namespace StApi;
@@ -25,7 +25,11 @@ const uint64_t nCountOfImagesToGrab = 1;
 
 ImagerVNIR::ImagerVNIR() // --> CHANGE
 {
-
+    this->state = 0;
+    this->red.setZero(512, 512);
+    this->green.setZero(512, 512);
+    this->blue.setZero(512, 512);
+    this->nir.setZero(512, 512);
 }
 
 ImagerVNIR::~ImagerVNIR() // --> CHANGE
@@ -35,14 +39,10 @@ ImagerVNIR::~ImagerVNIR() // --> CHANGE
 
 
 void ImagerVNIR::ZeroOutputVariables(){
-    for(int y = 0; y < 512; y++){
-        for(int z = 0; z < 512; z++){
-            this->red[y][z] = 0;
-            this->green[y][z] = 0;
-            this->blue[y][z] = 0;
-            this->nir[y][z] = 0;
-        }
-    }
+    this->red.setZero(512, 512);
+    this->green.setZero(512, 512);
+    this->blue.setZero(512, 512);
+    this->nir.setZero(512, 512);
 }
 
 
@@ -65,7 +65,7 @@ class Band{
         int Row;
         int ColInc;
         int RowInc;
-}
+};
 
 
 
@@ -178,7 +178,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         avg = 0;
                     }
                     if (avg > 255) { avg = 255; }
-                    this->red[tr][tc] = (uint8_t)avg;
+                    //this->red[tr][tc] = (uint8_t)avg;
+                    this->red(tr,tc) = (uint8_t)avg;
                 }
             }
             Band greenBand;
@@ -216,7 +217,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         avg = 0;
                     }
                     if (avg > 255) { avg = 255; }
-                    this->green[tr][tc] = (uint8_t)avg;
+                    this->green(tr,tc) = (uint8_t)avg;
                 }
             }
             Band blueBand;
@@ -254,7 +255,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         avg = 0;
                     }
                     if (avg > 255) { avg = 255; }
-                    this->blue[tr][tc] = (uint8_t)avg;
+                    this->blue(tr,tc) = (uint8_t)avg;
                 }
             }
             Band nirBand;
@@ -292,7 +293,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         avg = 0;
                     }
                     if (avg > 255) { avg = 255; }
-                    this->nir[tr][tc] = (uint8_t)avg;
+                    this->nir(tr,tc) = (uint8_t)avg;
                 }
             }
         }
@@ -333,13 +334,10 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // -------------------------
     // --> TODO: Write correct image dimensions
     vnir_msg_buffer.state = this->state;
-    for(int y = 0; y < 512; y++){
-        for(int z = 0; z < 512; z++){
-            vnir_msg_buffer.red[y][z] = this->red[y][z];
-            vnir_msg_buffer.green[y][z] = this->green[y][z];
-            vnir_msg_buffer.blue[y][z] = this->blue[y][z];
-        }
-    }
+    vnir_msg_buffer.red = this->red;
+    vnir_msg_buffer.green = this->green;
+    vnir_msg_buffer.blue = this->blue;
+    vnir_msg_buffer.nir = this->nir;
     this->vnir_msg.write(&vnir_msg_buffer, this->moduleID, CurrentSimNanos);
 
 
@@ -350,5 +348,6 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
 }
 
 void ImagerVNIR::readInputMessages(){
-    this->captureMode = this->captureModeMsg();
+    ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
+    this->captureMode = mode_msg_payload.mode;
 }

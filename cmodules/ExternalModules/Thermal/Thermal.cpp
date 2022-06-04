@@ -54,7 +54,7 @@ void Thermal::UpdateState(uint64_t CurrentSimNanos){
     initialize_port(teensy);
 
     unsigned char read_teensy[] = { "GET TEMPS\r" };
-
+    int count = 0;
     while(count<100) {
         write(teensy, read_teensy, sizeof(read_teensy));
         char read_buf [256];
@@ -63,7 +63,6 @@ void Thermal::UpdateState(uint64_t CurrentSimNanos){
         // n is the number of bytes read. n may be 0 if no bytes were received, and can also be -1 to signal an error.
         if (num_bytes < 0) {
           printf("Error reading: %s", strerror(errno));
-          return 1;
         }
         for(int i; i < 4; i++) {
           this->temps[i] = 0.0;

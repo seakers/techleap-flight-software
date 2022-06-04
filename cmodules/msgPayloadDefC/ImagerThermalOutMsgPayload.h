@@ -5,13 +5,15 @@
 #ifndef IMAGER_THERMAL_OUT_H
 #define IMAGER_THERMAL_OUT_H
 
+#include <Eigen/Dense>
+
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;
-    double b1[3200][3200];
-    double b2[3200][3200];
-    double b3[3200][3200];
-    double b4[3200][3200];
+    Eigen::MatrixXd b1;
+    Eigen::MatrixXd b2;
+    Eigen::MatrixXd b3;
+    Eigen::MatrixXd b4;
 }ImagerThermalOutMsgPayload;
 
 #endif

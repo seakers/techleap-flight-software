@@ -43,7 +43,7 @@ public:
 
     ReadFunctor<FinePredictionMsgPayload> fine_msg;
     int fine_state;
-    int fine_mask[20][20];
+    Eigen::MatrixXd fine_mask;
 
 
     // -----------------------

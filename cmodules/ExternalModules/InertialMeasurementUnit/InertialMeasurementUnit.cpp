@@ -5,11 +5,14 @@
 #include "ExternalModules/InertialMeasurementUnit/InertialMeasurementUnit.h" // --> CHANGE
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
 
-
 #include "vn/sensors.h"
+
+using namespace vn::math;
+using namespace vn::sensors;
 
 
 InertialMeasurementUnit::InertialMeasurementUnit() // --> CHANGE
@@ -34,7 +37,7 @@ void InertialMeasurementUnit::ZeroOutputVariables(){
 void InertialMeasurementUnit::Reset(uint64_t CurrentSimNanos) // --> CHANGE
 {
     bskLogger.bskLog(BSK_INFORMATION, "AttitudeDetermination ------ (reset)");
-    const string SensorPort = "/dev/ttyUSB0";
+    const std::string SensorPort = "/dev/ttyUSB0";
     const uint32_t SensorBaudrate = 115200;
     VnSensor vs;
 	vs.connect(SensorPort, SensorBaudrate);
@@ -61,7 +64,10 @@ void InertialMeasurementUnit::UpdateState(uint64_t CurrentSimNanos) // --> CHNAG
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
-
+    VnSensor vs;
+    const std::string SensorPort = "/dev/ttyUSB0";
+    const uint32_t SensorBaudrate = 115200;
+	vs.connect(SensorPort, SensorBaudrate);
     // --> Read yaw pitch roll
     vec3f ypr = vs.readYawPitchRoll();
 

@@ -14,9 +14,10 @@
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
 
-
+#include <Eigen/Dense>
 
 
 /*! @brief basic Basilisk C++ module class */
@@ -38,16 +39,17 @@ public:
     // ---------------------
 
     // --> MESSAGE IN
-    ReadFunctor<ImagerVNIROutMsgPayload> mock_msg;
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
 
     // --> MESSAGE OUT
     Message<ImagerVNIROutMsgPayload> vnir_msg;
     int state;
-    double red[512][512];
-    double green[512][512];
-    double blue[512][512];
-    double nir[512][512];
-    string captureMode;
+    Eigen::MatrixXd red;
+    Eigen::MatrixXd green;
+    Eigen::MatrixXd blue;
+    Eigen::MatrixXd nir;
+    int captureMode;
     
 
     // --> LOGGING

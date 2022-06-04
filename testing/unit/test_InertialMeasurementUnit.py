@@ -7,7 +7,7 @@ sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from cmodule_imports.C_InertialMeasurementUnit import C_InertialMeasurementUnit
+from Basilisk.ExternalModules import InertialMeasurementUnit
 
 
 
@@ -63,7 +63,7 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Add pymodules
-    test_module = C_InertialMeasurementUnit().get_module()
+    test_module = InertialMeasurementUnit.InertialMeasurementUnit()
     sim_client.new_c_module(test_module)
 
     # --> 3. Run simulation
