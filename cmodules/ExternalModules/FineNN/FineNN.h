@@ -35,7 +35,7 @@ public:
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
-    void LoadModel();
+    //void LoadModel();
     void ZeroOutputVariables();
     void ReadMessages();
 

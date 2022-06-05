@@ -12,8 +12,6 @@
 
 
 FineNN::FineNN() {
-    // this->nn_model_path = "/home/gabe/repos/techleap/techleap-flight-software/neuralnet/trainednet.pt";
-    // this->nn_model_path = "/app/neuralnet/trainednet.pt";
     this->nn_model_path = "/home/ben/repos/techleap-flight-software/neuralnet/trainednet.pt";
     this->state = 0;
     this->red.setZero(512, 512);

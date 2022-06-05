@@ -1,6 +1,7 @@
 import pytest
 import sys
 import numpy as np
+import os
 # sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
 sys.path.insert(1, '/app')
 
@@ -9,7 +10,7 @@ sys.path.insert(1, '/app')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import Gps
+from Basilisk.ExternalModules import Thermal
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -32,15 +33,17 @@ from Basilisk.architecture import bskLogging
 
 
 @pytest.mark.parametrize(
-    'param1, param2',
+    'image_file, label_file',
     [
-        (1.0, 2.0),
+        ('/app/images/VNIR/image_1.nc', '/app/images/VNIR/label_1.nc'),
     ]
 )
-def test_function(param1, param2):
+def test_function(image_file, label_file):
+    print('Running test...')
 
     # --> 1. Run test function
-    result = run(param1, param2)
+    result = run()
+    # result = True
 
     # --> 2. Assert result
     assert result is True
@@ -63,49 +66,34 @@ def test_function(param1, param2):
 # """
 
 
-def run(param1, param2):
+def run():
 
     # --> 1. Create simulation client
-    sim_client = SimulationClient(time_step=param1, duration=param2)
+    sim_client = SimulationClient(time_step=1.0, duration=2.0)
 
     # --> 2. Create module
-    test_module = Gps.Gps()
-    test_module.ModelTag = "Gps"
+    test_module = Thermal.Thermal()
+    test_module.ModelTag = "Thermal"
     sim_client.new_c_module(test_module)
 
-    # --> 3. Set output message recording
-    output_rec = test_module.gps_msg.recorder()
+    # --> 4. Subscribe to messages
+    test_module.thermal_msg.subscribeTo(thermal_msg)
+
+    # --> 5. Set output message recording
+    output_rec = test_module.fine_msg.recorder()
     sim_client.new_c_module(output_rec)
 
-    # --> 4. Set variable recording
-    var1 = "Gps.state"
+    # --> 6. Set variable recording
+    var1 = "Thermal.state"
     sim_client.new_logging_var(var1)
 
-    # --> 5. Run simulation
+    # --> 6. Run simulation
     sim_client.run()
 
-    # --> 6. Get debug output
+    # --> 7. Get debug output
     var1 = sim_client.get_var_log_data(var1)
 
     print(output_rec.state)
 
 
     return True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

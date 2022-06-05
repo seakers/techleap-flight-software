@@ -59,7 +59,6 @@ from Basilisk.architecture import bskLogging
 #
 # """
 @pytest.mark.parametrize()
-@pytest.mark.parametrize()
 def test_module():
     
     # --> Call test function

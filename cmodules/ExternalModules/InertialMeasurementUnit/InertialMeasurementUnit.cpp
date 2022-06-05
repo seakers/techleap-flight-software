@@ -5,9 +5,18 @@
 #include "ExternalModules/InertialMeasurementUnit/InertialMeasurementUnit.h" // --> CHANGE
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
 
+<<<<<<< HEAD
+=======
+#include "vn/sensors.h"
+
+using namespace vn::math;
+using namespace vn::sensors;
+
+>>>>>>> origin
 
 InertialMeasurementUnit::InertialMeasurementUnit() // --> CHANGE
 {
@@ -28,24 +37,21 @@ void InertialMeasurementUnit::ZeroOutputVariables(){
 
 
 void InertialMeasurementUnit::ReadMessages(){
-
     if(this->mode_msg.isLinked()){
         ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
         this->mode = mode_msg_payload.mode;
     }
 }
 
-void InertialMeasurementUnit::Reset(uint64_t CurrentSimNanos){
-    bskLogger.bskLog(BSK_INFORMATION, "InertialMeasurementUnit ------ (reset)");
-
-    // --> 1. Get sensor
-//    const std::string SensorPort = "/dev/ttyUSB0";
-//    const uint32_t SensorBaudrate = 115200;
-//    vn::sensors::VnSensor vs;
-//    vs.connect(SensorPort, SensorBaudrate);
-//    vs.writeAsyncDataOutputFrequency(2);
-
-    // --> 2. Reset module state
+void InertialMeasurementUnit::Reset(uint64_t CurrentSimNanos) // --> CHANGE
+{
+    bskLogger.bskLog(BSK_INFORMATION, "AttitudeDetermination ------ (reset)");
+    const std::string SensorPort = "/dev/ttyUSB0";
+    const uint32_t SensorBaudrate = 115200;
+    VnSensor vs;
+	vs.connect(SensorPort, SensorBaudrate);
+    vs.writeAsyncDataOutputFrequency(2);
+    // --> 1. Reset module state
     this->state = 0;
 }
 
@@ -69,16 +75,15 @@ void InertialMeasurementUnit::UpdateState(uint64_t CurrentSimNanos) // --> CHNAG
     // -----------------------
     this->ReadMessages();
 
-//    const std::string SensorPort = "/dev/ttyUSB0";
-//    const uint32_t SensorBaudrate = 115200;
-//    vn::sensors::VnSensor vs;
-//    vs.connect(SensorPort, SensorBaudrate);
-//
-//    // --> Read yaw pitch roll
-//    vn::math::vec3f ypr = vs.readYawPitchRoll();
-//
-//    // --> Read temperature
-//    vn::sensors::ImuMeasurementsRegister reg = vs.readImuMeasurements();
+    VnSensor vs;
+    const std::string SensorPort = "/dev/ttyUSB0";
+    const uint32_t SensorBaudrate = 115200;
+	vs.connect(SensorPort, SensorBaudrate);
+    // --> Read yaw pitch roll
+    vec3f ypr = vs.readYawPitchRoll();
+
+    // --> Read temperature
+    ImuMeasurementsRegister reg = vs.readImuMeasurements();
 
     // --------------------------
     // ----- Process Inputs -----

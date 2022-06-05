@@ -24,9 +24,16 @@
 // ---------------------------
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
+#include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
 
+#include <Eigen/Dense>
 
+#include <torch/torch.h>
+
+// Include files for using StApi.
+#include "StApi_TL.h"
+#include "StApi_IP.h"
 
 
 /*! @brief basic Basilisk C++ module class */
@@ -39,6 +46,7 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
+    void readInputMessages();
 
 public:
 
@@ -47,7 +55,8 @@ public:
     // ---------------------
 
     // --> MESSAGE IN
-    ReadFunctor<ImagerVNIROutMsgPayload> mock_msg;
+    ReadFunctor<ControllerModeMsgPayload> mode_msg;
+    int mode;
 
     // --> MESSAGE OUT
     Message<ImagerVNIROutMsgPayload> vnir_msg;

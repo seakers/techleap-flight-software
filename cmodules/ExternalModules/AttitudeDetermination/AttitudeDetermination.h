@@ -6,7 +6,6 @@
 #define ATTITUDE_DETERMINATION_H
 
 
-//#include <torch/script.h>
 #include <string>
 
 

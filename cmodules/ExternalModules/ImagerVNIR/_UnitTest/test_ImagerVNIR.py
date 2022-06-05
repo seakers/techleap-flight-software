@@ -34,10 +34,10 @@ from Basilisk.architecture import bskLogging
 @pytest.mark.parametrize(
     'param1, param2',
     [
-        (1.0, 2.0),
+        (512, 512),
     ]
 )
-def test_function(param1, param2):
+def test_image_size(param1, param2):
 
     # --> 1. Run test function
     result = run(param1, param2)
@@ -47,6 +47,16 @@ def test_function(param1, param2):
 
     # --> 3. Set options
     __tracebackhide__ = True
+
+@pytest.mark.parametrize(
+    'param3',
+    [
+        (4),
+    ]
+)
+def test_image_quantity(param3):
+
+def test_image_exists
 
 
 
