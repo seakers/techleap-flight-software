@@ -62,7 +62,7 @@ def motor_setup(ser):
         send(ser,'2AR') # Alarm reset
         send(ser,'2AC1') # Acceleration 
         send(ser,'2DE0.2') # Deceleration
-        send(ser,'2VE5') # Velocity 
+        send(ser,'2VE0.5') # Velocity 
         send(ser,'2ME')  # Enable Motor
         send(ser,'2IP')
 
@@ -75,7 +75,7 @@ def tiltBySteps(ser, nsteps):
         This section demonstrates the drives ability to poll immediate position
         and check status to see if the move is done.
         """
-        time.sleep(0.1)
+        time.sleep(0.5)
         return send(ser, '2IP') # IP is immediate position
         #time.sleep(0.2)
         #send(ser,'2IP')
