@@ -19,6 +19,12 @@
 
 #include <Eigen/Dense>
 
+#include <torch/torch.h>
+
+// Include files for using StApi.
+#include "StApi_TL.h"
+#include "StApi_IP.h"
+
 
 /*! @brief basic Basilisk C++ module class */
 class ImagerVNIR: public SysModel { // --> CHANGE

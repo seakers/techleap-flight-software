@@ -79,9 +79,15 @@ def run(param1, param2):
 
     # --> 4. Set variable recording
     var1 = "ImagerVNIR.state"
-    var2 = "ImagerVNIR.image_tensor"
+    var2 = "ImagerVNIR.red"
+    var3 = "ImagerVNIR.green"
+    var4 = "ImagerVNIR.blue"
+    var5 = "ImagerVNIR.nir"
     sim_client.new_logging_var(var1)
     sim_client.new_logging_var(var2)
+    sim_client.new_logging_var(var3)
+    sim_client.new_logging_var(var4)
+    sim_client.new_logging_var(var5)
 
     # --> 5. Run simulation
     sim_client.run()
@@ -89,27 +95,15 @@ def run(param1, param2):
     # --> 6. Get debug output
     var1 = sim_client.get_var_log_data(var1)
     var2 = sim_client.get_var_log_data(var2)
+    var3 = sim_client.get_var_log_data(var3)
+    var4 = sim_client.get_var_log_data(var4)
+    var5 = sim_client.get_var_log_data(var5)
+    print(var2.shape)
 
-    print(output_rec.state)
+    print(output_rec.red)
 
 
     return True
-
-
-
-
-
-def get_tensor(value, rows=20, cols=20):
-    tensor = []
-    for x in range(rows):
-        row = []
-        for y in range(cols):
-            row.append(value)
-        tensor.append(row)
-    return tensor
-
-
-
 
 
 

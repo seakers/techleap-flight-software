@@ -88,8 +88,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // --------------------------
     // --> TODO: Implement SDK reading vnir sensor and copy values over to image_tensor
     this->state += 1;
-
-            // Initialize StApi before using.
+    try{
+             // Initialize StApi before using.
         CStApiAutoInit objStApiAutoInit;
 
         // Create a system object for device scan and connection.
@@ -165,7 +165,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         {
                             sindex = imageCols * kr + kc;
                             if (sindex > s) break;
-                            sum += (uint32_t)ptr[sindex];
+                            IStPixelComponentValue *pIStPixelComponentValue = pIStImage->GetIStPixelComponentValue(kr,kc);
+                            sum+=pIStPixelComponentValue->GetValue(0);
                             n += 1;
                         }
                     }
@@ -204,7 +205,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         {
                             sindex = imageCols * kr + kc;
                             if (sindex > s) break;
-                            sum += (uint32_t)ptr[sindex];
+                            IStPixelComponentValue *pIStPixelComponentValue = pIStImage->GetIStPixelComponentValue(kr,kc);
+                            sum+=pIStPixelComponentValue->GetValue(0);
                             n += 1;
                         }
                     }
@@ -242,7 +244,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         {
                             sindex = imageCols * kr + kc;
                             if (sindex > s) break;
-                            sum += (uint32_t)ptr[sindex];
+                            IStPixelComponentValue *pIStPixelComponentValue = pIStImage->GetIStPixelComponentValue(kr,kc);
+                            sum+=pIStPixelComponentValue->GetValue(0);
                             n += 1;
                         }
                     }
@@ -280,7 +283,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                         {
                             sindex = imageCols * kr + kc;
                             if (sindex > s) break;
-                            sum += (uint32_t)ptr[sindex];
+                            IStPixelComponentValue *pIStPixelComponentValue = pIStImage->GetIStPixelComponentValue(kr,kc);
+                            sum+=pIStPixelComponentValue->GetValue(0);
                             n += 1;
                         }
                     }
@@ -308,6 +312,13 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
 
         // Stop the image acquisition of the host side.
         pIStDataStream->StopAcquisition();
+    }
+    catch (const GenICam::GenericException &e)
+    {
+        // Display a description of the error.
+        cerr << endl << "An exception occurred." << endl << e.GetDescription() << endl;
+    }
+       
     
 //    if(this->mock_msg.isLinked()){
 //        ImagerVNIROutMsgPayload mock_msg_payload = this->mock_msg();
