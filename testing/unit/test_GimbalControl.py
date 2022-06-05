@@ -1,8 +1,8 @@
 import pytest
 import sys
 import numpy as np
-# sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
-sys.path.insert(1, '/app')
+sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+#sys.path.insert(1, '/app')
 
 
 # --> Simulation Import
@@ -86,16 +86,16 @@ def run(param1, param2):
     adcs_angles_msg_data.roll = 1.0
     adcs_angles_msg = messaging.AttitudeDeterminationAnglesMsg().write(adcs_angles_msg_data)
 
-    controller_angles_msg_data = messaging.ControllerManualAnglesMsgPayload()
-    controller_angles_msg_data.state = 20
-    controller_angles_msg_data.yaw = 1.0
-    controller_angles_msg_data.pitch = 1.0
-    controller_angles_msg_data.roll = 1.0
-    controller_angles_msg = messaging.ControllerManualAnglesMsg().write(controller_angles_msg_data)
+    # controller_angles_msg_data = messaging.ControllerManualAnglesMsgPayload()
+    # controller_angles_msg_data.state = 20
+    # controller_angles_msg_data.yaw = 1.0
+    # controller_angles_msg_data.pitch = 1.0
+    # controller_angles_msg_data.roll = 1.0
+    # controller_angles_msg = messaging.ControllerManualAnglesMsg().write(controller_angles_msg_data)
 
     # --> 4. Subscribe to messages
     test_module.adcs_angles_msg.subscribeTo(adcs_angles_msg)
-    test_module.controller_angles_msg.subscribeTo(controller_angles_msg)
+    # test_module.controller_angles_msg.subscribeTo(controller_angles_msg)
 
 
     # --> 6. Set variable recording

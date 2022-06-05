@@ -7,6 +7,16 @@
 
 #include <string>
 
+#include<iostream>
+#include<fcntl.h>
+#include <termios.h>
+#include <unistd.h>
+#include <errno.h>
+#include<fstream>
+#include<string>
+#include <stdio.h>
+#include <string.h>
+#include <sstream>
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
 #include "architecture/utilities/bskLogging.h"
@@ -18,6 +28,7 @@
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
 #include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
+#include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
 
 
 /*! @brief basic Basilisk C++ module class */
@@ -30,6 +41,11 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ReadMessages();
+    void InitializePort(int serial_port, int motorID);
+    void SendCommand(int port, int motorID, char command[]);
+    void MotorSetup(int port, int motorID);
+    void MoveBySteps(int port, int motorID, int nSteps);
+    int DegToSteps(int degrees);
 
 public:
 
@@ -53,6 +69,12 @@ public:
     double cont_yaw;
     double cont_pitch;
     double cont_roll;
+
+    ReadFunctor<InertialMeasurementUnitOutMsgPayload> imu_angles_msg;
+    int   imu_state;
+    double imu_yaw;
+    double imu_pitch;
+    double imu_roll;
 
     // --> LOGGING
     BSKLogger bskLogger;
