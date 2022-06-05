@@ -17,6 +17,8 @@
 // ---------------------------
 #include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 
+#include <zmq.hpp>
+
 
 /*! @brief basic Basilisk C++ module class */
 class MessageConsumer: public SysModel { // --> CHANGE
@@ -28,8 +30,17 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
 
     void ZeroOutputVariables();
+    void OpenClientPairSocket();
 
 public:
+
+    // --> ZeroMQ
+    std::string fcu_port;
+    std::string fcu_ip;
+    std::string fcu_interface;
+
+
+
     // --------------------
     // ----- MESSAGES -----
     // --------------------

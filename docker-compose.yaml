@@ -4,6 +4,8 @@ services:
       dockerfile: ./Dockerfile
       context: .
     image: apazagab/fsw:demo
+    ports:
+      - "5561:5561"
     volumes:
       - type: bind
         source: /home/gabe/repos/techleap/techleap-flight-software

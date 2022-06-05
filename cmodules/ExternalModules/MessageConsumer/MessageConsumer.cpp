@@ -10,13 +10,13 @@
 
 
 
-MessageConsumer::MessageConsumer() // --> CHANGE
-{
-
+MessageConsumer::MessageConsumer(){
+    this->fcu_ip = "10.1.3.7";
+    this->fcu_port = "5561";
+    this->fcu_interface = "eth0";
 }
 
-MessageConsumer::~MessageConsumer() // --> CHANGE
-{
+MessageConsumer::~MessageConsumer(){
     return;
 }
 
@@ -24,6 +24,14 @@ MessageConsumer::~MessageConsumer() // --> CHANGE
 
 void MessageConsumer::ZeroOutputVariables(){
     this->msg = 0;
+    return;
+}
+
+void MessageConsumer::OpenClientPairSocket(){
+    std::string source_endpoint = this->fcu_ip + ":" + this->fcu_port;
+    std::string dest_endpoint = this->fcu_interface + ":" + this->fcu_port;
+
+
     return;
 }
 

@@ -1,5 +1,6 @@
 import pytest
 import sys
+import zmq
 import numpy as np
 # sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
 sys.path.insert(1, '/app')
@@ -63,8 +64,16 @@ def test_function(param1, param2):
 #
 # """
 
+def server_socket():
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://*:5555")
+    return socket
+
 
 def run(param1, param2):
+
+    # --> 0.1 Create socket
 
     # --> 1. Create simulation client
     sim_client = SimulationClient(time_step=param1, duration=param2)
