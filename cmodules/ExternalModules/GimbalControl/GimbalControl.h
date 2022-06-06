@@ -30,6 +30,17 @@
 #include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
 #include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
 
+class PID {
+    public:
+        int Kp;
+        int Ki;
+        int Kd;
+        double currTime;
+        double prevTime;
+        double prevErr;
+        double Ci;
+    double pidUpdate(double error, uint64_t CurrentSimNanos);
+};
 
 /*! @brief basic Basilisk C++ module class */
 class GimbalControl: public SysModel {
@@ -46,10 +57,15 @@ public:
     void MotorSetup(int port, int motorID);
     void MoveBySteps(int port, int motorID, int nSteps);
     int DegToSteps(int degrees);
+    double LimitAngle(double angle, double upperLimit, double lowerLimit, double imuAngle);
 
 public:
 
     int state;
+    double desiredPanAngle;
+    double desiredTiltAngle;
+    PID panPID;
+    PID tiltPID;
 
     // ----------------------
     // ----- MESSAGE IN -----

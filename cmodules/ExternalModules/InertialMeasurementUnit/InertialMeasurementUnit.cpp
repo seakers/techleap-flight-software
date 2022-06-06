@@ -81,6 +81,8 @@ void InertialMeasurementUnit::UpdateState(uint64_t CurrentSimNanos) // --> CHNAG
     this->yaw = ypr.x;
     this->pitch = ypr.y;
     this->roll = ypr.z;
+    std::cout << "yaw" << this->yaw << std::endl;
+    std::cout << "pitch" << this->pitch << std::endl;
     this->temperature = reg.temp;
 
     // -------------------------

@@ -13,6 +13,8 @@
 GimbalControl::GimbalControl()
 {
     this->state = 0;
+    this->desiredPanAngle = 27.5;
+    this->desiredTiltAngle = -80;
 }
 
 GimbalControl::~GimbalControl()
@@ -58,6 +60,21 @@ void GimbalControl::Reset(uint64_t CurrentSimNanos) {
 
     // --> 1. Reset module state
     this->state = 0;
+    this->panPID.Kp = 0.9;
+    this->panPID.Ki = 0;
+    this->panPID.Kd = 0.1;
+    this->panPID.Ci = 0;
+    this->panPID.currTime = (double) CurrentSimNanos/(1e9);
+    this->panPID.prevTime = this->panPID.currTime;
+    this->panPID.prevErr = 0;
+
+    this->tiltPID.Kp = 1;
+    this->tiltPID.Ki = 0;
+    this->tiltPID.Kd = 0;
+    this->tiltPID.Ci = 0;
+    this->tiltPID.currTime = (double) CurrentSimNanos/(1e9);
+    this->tiltPID.prevTime = this->tiltPID.currTime;
+    this->tiltPID.prevErr = 0;
 }
 
 
@@ -72,14 +89,27 @@ void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
-    int pan = open("/dev/ttyUSB2", O_RDWR);
-    int tilt = open("/dev/ttyUSB1", O_RDWR);
+    int pan = open("/dev/ttyClientP", O_RDWR);
+    int tilt = open("/dev/ttyClientT", O_RDWR);
     this->InitializePort(pan,1);
     this->InitializePort(tilt,2);
     this->MotorSetup(pan,1);
     this->MotorSetup(tilt,2);
-    this->MoveBySteps(pan,1,DegToSteps(10));
-    this->MoveBySteps(tilt,2,DegToSteps(10));
+    
+    if(this->imu_angles_msg.isLinked()) {
+        std::cout << "attempting PID" << std::endl;
+        double tiltAngle = this->tiltPID.pidUpdate(this->desiredTiltAngle - this->imu_pitch, CurrentSimNanos);
+        tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);
+        this->MoveBySteps(tilt,2,DegToSteps(tiltAngle));
+        double panAngle = this->panPID.pidUpdate(this->desiredPanAngle - this->imu_yaw, CurrentSimNanos);
+        panAngle = this->LimitAngle(panAngle, 42.5, 12.5, this->imu_yaw);
+        this->MoveBySteps(pan,1,DegToSteps(panAngle));
+    } else {
+        std::cout << "moving manually" << std::endl;
+        this->MoveBySteps(pan,1,DegToSteps(-10));
+        this->MoveBySteps(tilt,2,DegToSteps(-10));
+    }
+    
 
     // -------------------
     // ----- Logging -----
@@ -153,7 +183,7 @@ void GimbalControl::InitializePort(int serial_port, int motorID) {
 }
 
 void GimbalControl::SendCommand(int port, int motorID, char command[]) {
-    char finalCommand[100];
+    char finalCommand[1+strlen(command)];
     std::stringstream ss;
     ss << motorID;
     std::string motorStr = ss.str();
@@ -161,7 +191,7 @@ void GimbalControl::SendCommand(int port, int motorID, char command[]) {
     strcat(finalCommand,command);
     std::cout << finalCommand << std::endl;
     write(port, finalCommand, sizeof(finalCommand));
-    usleep(10000);
+    usleep(100000);
 }
 
 void GimbalControl::MoveBySteps(int port, int motorID, int nSteps) {
@@ -188,4 +218,29 @@ int GimbalControl::DegToSteps(int degrees) {
     int oneRev = 360;
     int gearRatio = 1;
     return degrees * gearRatio * stepsPerRev / oneRev;
+}
+
+double PID::pidUpdate(double error, uint64_t CurrentSimNanos) {
+    this->currTime = (double) CurrentSimNanos/(1e9);
+    double dt = this->currTime - this->prevTime;
+    double de = error - this->prevErr;
+    double Cp = error;
+    this->Ci += error * dt;
+    double Cd = 0;
+    if(dt > 0) {
+        Cd = de/dt;
+    }
+    this->prevTime = this->currTime;
+    this->prevErr = error;
+    return Cp * this->Kp + Ci * this->Ki + Cd * this->Kd;
+}
+
+double GimbalControl::LimitAngle(double angle, double upperLimit, double lowerLimit, double imuAngle) {
+    if (angle+imuAngle > upperLimit) {
+        angle = upperLimit-imuAngle;
+    }
+    if (angle+imuAngle < lowerLimit) {
+        angle = lowerLimit-imuAngle;
+    }
+    return angle;
 }
