@@ -9,7 +9,7 @@ def tilt_init():
         ser.open()         # open the serial port
         time.sleep(1)
     except Exception as e:
-        print ('error opening serial port')
+        print ('error opening tilt - serial port')
         exit()
 
     if ser.isOpen():

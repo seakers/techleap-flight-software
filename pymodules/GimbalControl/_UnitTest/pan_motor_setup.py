@@ -9,7 +9,7 @@ def pan_init():
         ser.open()         # open the serial port
         time.sleep(1)
     except Exception as e:
-        print ('error opening serial port')
+        print ('error opening PAN - serial port')
         exit()
 
     if ser.isOpen():
@@ -75,7 +75,7 @@ def panBySteps(ser, nsteps):
         This section demonstrates the drives ability to poll immediate position
         and check status to see if the move is done.
         """
-        time.sleep(5)
+        time.sleep(0.85)
         return pan_motor_send(ser, '1IP') # IP is immediate position
         #time.sleep(0.2)
         #send(ser,'2IP')
