@@ -40,6 +40,13 @@ void FineNN::LoadModel(){
     }
 }
 
+void FineNN::PerformInference(){
+    std::vector<torch::jit::IValue> inputs;
+    inputs.push_back(torch::ones({1, 4, 161, 105}));
+    at::Tensor output = this->nn_model.forward(inputs).toTensor();
+    std::cout << output.slice(1,0,5) << '\n';
+}
+
 void FineNN::ZeroOutputVariables(){
     this->mask.setZero(512, 512);
 }
@@ -47,12 +54,14 @@ void FineNN::ZeroOutputVariables(){
 void FineNN::ReadMessages(){
 
     if(this->mode_msg.isLinked()){
+        std::cout << "MODE MSG IS LINKED!" << std::endl;
         ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
         this->mode = mode_msg_payload.mode;
     }
 
     // --> VNIR Reading
     if(this->vnir_msg.isLinked()){
+        std::cout << "VNIR MSG IS LINKED!" << std::endl;
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
         this->red = vnir_msg_payload.red;
@@ -62,20 +71,20 @@ void FineNN::ReadMessages(){
     }
 
     // --> Thermal Reading
-    if(this->thermal_msg.isLinked()){
-        ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
-        this->thermal_state = thermal_msg_payload.state;
-        this->b1 = thermal_msg_payload.b1;
-        this->b2 = thermal_msg_payload.b2;
-        this->b3 = thermal_msg_payload.b3;
-        this->b4 = thermal_msg_payload.b4;
-    }
+    // if(this->thermal_msg.isLinked()){
+    //     ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
+    //     this->thermal_state = thermal_msg_payload.state;
+    //     this->b1 = thermal_msg_payload.b1;
+    //     this->b2 = thermal_msg_payload.b2;
+    //     this->b3 = thermal_msg_payload.b3;
+    //     this->b4 = thermal_msg_payload.b4;
+    // }
 
-    if(this->coarse_msg.isLinked()){
-        CoarsePredictionMsgPayload coarse_msg_payload = this->coarse_msg();
-        this->coarse_state = coarse_msg_payload.state;
-        this->coarse_prediction = coarse_msg_payload.prediction;
-    }
+    // if(this->coarse_msg.isLinked()){
+    //     CoarsePredictionMsgPayload coarse_msg_payload = this->coarse_msg();
+    //     this->coarse_state = coarse_msg_payload.state;
+    //     this->coarse_prediction = coarse_msg_payload.prediction;
+    // }
 }
 
 void FineNN::Reset(uint64_t CurrentSimNanos) {
@@ -99,6 +108,8 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // ----- Read Inputs -----
     // -----------------------
     this->ReadMessages();
+
+    this->PerformInference();
 
 
 

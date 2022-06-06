@@ -52,9 +52,6 @@ public:
 
     ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
     Eigen::MatrixXd b1;
-    Eigen::MatrixXd b2;
-    Eigen::MatrixXd b3;
-    Eigen::MatrixXd b4;
     int thermal_state;
 
     ReadFunctor<FinePredictionMsgPayload> fine_msg;

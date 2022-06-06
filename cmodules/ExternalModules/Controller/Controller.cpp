@@ -25,9 +25,8 @@ Controller::~Controller() // --> CHANGE
 
 void Controller::ZeroOutputVariables(){
     this->msg = 0;
-    this->yaw = 0.0;
-    this->pitch = 0.0;
-    this->roll = 0.0;
+    this->pan = 0.0;
+    this->tilt = 0.0;
 }
 
 
@@ -82,9 +81,8 @@ void Controller::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     controller_mode_msg_buffer.mode = this->mode;
     this->controller_mode_msg.write(&controller_mode_msg_buffer, this->moduleID, CurrentSimNanos);
 
-    controller_manual_angle_msg_buffer.yaw = this->yaw;
-    controller_manual_angle_msg_buffer.pitch = this->pitch;
-    controller_manual_angle_msg_buffer.pitch = this->roll;
+    controller_manual_angle_msg_buffer.pan = this->pan;
+    controller_manual_angle_msg_buffer.tilt = this->tilt;
     this->controller_manual_angle_msg.write(&controller_manual_angle_msg_buffer, this->moduleID, CurrentSimNanos);
 
 

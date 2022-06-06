@@ -82,9 +82,8 @@ public:
 
     ReadFunctor<ControllerManualAnglesMsgPayload> cont_angles_msg;
     int   cont_state;
-    double cont_yaw;
-    double cont_pitch;
-    double cont_roll;
+    double cont_pan;
+    double cont_tilt;
 
     ReadFunctor<InertialMeasurementUnitOutMsgPayload> imu_angles_msg;
     int   imu_state;

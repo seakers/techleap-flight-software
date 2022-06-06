@@ -8,9 +8,8 @@
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;
-    double yaw;
-    double pitch;                  // 0 if no plume detected | 1 if plume detected
-    double roll;
+    double pan;
+    double tilt;                  // 0 if no plume detected | 1 if plume detected
 }ControllerManualAnglesMsgPayload;
 
 #endif

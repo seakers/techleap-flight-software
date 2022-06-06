@@ -36,7 +36,7 @@ void InertialMeasurementUnit::ZeroOutputVariables(){
 
 void InertialMeasurementUnit::Reset(uint64_t CurrentSimNanos) // --> CHANGE
 {
-    bskLogger.bskLog(BSK_INFORMATION, "AttitudeDetermination ------ (reset)");
+    bskLogger.bskLog(BSK_INFORMATION, "InertialMeasurementUnit ------ (reset)");
     const std::string SensorPort = "/dev/ttyUSB0";
     const uint32_t SensorBaudrate = 115200;
     VnSensor vs;

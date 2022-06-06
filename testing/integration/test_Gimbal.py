@@ -69,14 +69,14 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Create modules
-    gimbal_module = GimbalControl.GimbalControl()
-    gimbal_module.ModelTag = "GimbalControl"
-
     imu_module = InertialMeasurementUnit.InertialMeasurementUnit()
     imu_module.ModelTag = "IMU"
 
-    sim_client.new_c_module(gimbal_module, priority=1)
+    gimbal_module = GimbalControl.GimbalControl()
+    gimbal_module.ModelTag = "GimbalControl"
+
     sim_client.new_c_module(imu_module, priority=1)
+    sim_client.new_c_module(gimbal_module, priority=2)
 
 
     # --> 3. Create mock messages

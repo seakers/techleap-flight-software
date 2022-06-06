@@ -88,8 +88,7 @@ def get_controller_mode_msg(mode=0):
 def get_controller_angles_msg(yaw=0.0, pitch=0.0, roll=0.0):
     angles_msg_data = messaging.ControllerManualAnglesMsgPayload()
     angles_msg_data.state = 0
-    angles_msg_data.yaw = yaw
-    angles_msg_data.pitch = pitch
-    angles_msg_data.roll = roll
+    angles_msg_data.pan = pan
+    angles_msg_data.tilt = tilt
     angles_msg = messaging.ControllerManualAnglesMsg().write(angles_msg_data)
     return angles_msg

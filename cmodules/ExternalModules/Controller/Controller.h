@@ -60,9 +60,8 @@ public:
 
     // --> OUTPUT
     int   msg;       // controller_msg
-    double yaw;       // controller_mode_msg
-    double pitch;     // controller_mode_msg
-    double roll;      // controller_mode_msg
+    double pan;       // controller_mode_msg
+    double tilt;
 
     // --> LOGGING
     BSKLogger bskLogger;

@@ -42,6 +42,7 @@ public:
     void LoadModel();
     void ZeroOutputVariables();
     void ReadMessages();
+    void PerformInference();
 
 public:
 

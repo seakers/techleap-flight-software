@@ -16,10 +16,7 @@ DataStorage::DataStorage() // --> CHANGE
     this->green.setZero(512, 512);
     this->blue.setZero(512, 512);
     this->nir.setZero(512, 512);
-    this->b1.setZero(512, 512);
-    this->b2.setZero(512, 512);
-    this->b3.setZero(512, 512);
-    this->b4.setZero(512, 512);
+    //this->b1.setZero(512, 512);
     this->fine_mask.setZero(512, 512);
 }
 
@@ -31,6 +28,7 @@ DataStorage::~DataStorage() // --> CHANGE
 void DataStorage::ReadMessages(){
     // --> VNIR Reading
     if(this->vnir_msg.isLinked()){
+        std::cout << "VNIR MSG IS LINKED!" << std::endl;
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
         this->red = vnir_msg_payload.red;
@@ -39,18 +37,19 @@ void DataStorage::ReadMessages(){
         this->nir = vnir_msg_payload.nir;
     }
 
-    // --> Thermal Reading
-    if(this->thermal_msg.isLinked()){
-        ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
-        this->thermal_state = thermal_msg_payload.state;
-        this->b1 = thermal_msg_payload.b1;
-        this->b2 = thermal_msg_payload.b2;
-        this->b3 = thermal_msg_payload.b3;
-        this->b4 = thermal_msg_payload.b4;
-    }
+    // // --> Thermal Reading
+    // if(this->thermal_msg.isLinked()){
+    //     ImagerThermalOutMsgPayload thermal_msg_payload = this->thermal_msg();
+    //     this->thermal_state = thermal_msg_payload.state;
+    //     this->b1 = thermal_msg_payload.b1;
+    //     this->b2 = thermal_msg_payload.b2;
+    //     this->b3 = thermal_msg_payload.b3;
+    //     this->b4 = thermal_msg_payload.b4;
+    // }
 
     // --> Fine Prediction
     if(this->fine_msg.isLinked()){
+        std::cout << "FINENN MSG IS LINKED!" << std::endl;
         FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
         this->fine_state = fine_msg_payload.state;
         this->fine_mask = fine_msg_payload.mask;

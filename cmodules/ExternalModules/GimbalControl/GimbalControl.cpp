@@ -39,11 +39,11 @@ void GimbalControl::ReadMessages(){
     if(this->cont_angles_msg.isLinked()){
         ControllerManualAnglesMsgPayload cont_angles_msg_payload = this->cont_angles_msg();
         this->cont_state = cont_angles_msg_payload.state;
-        this->cont_yaw = cont_angles_msg_payload.yaw;
-        this->cont_pitch = cont_angles_msg_payload.pitch;
-        this->cont_roll = cont_angles_msg_payload.roll;
+        this->cont_pan = cont_angles_msg_payload.pan;
+        this->cont_tilt = cont_angles_msg_payload.tilt;
     }
     if(this->imu_angles_msg.isLinked()){
+        std::cout << "IMU ANGLES LINKED!" << std::endl;
         InertialMeasurementUnitOutMsgPayload imu_angles_msg_payload = this->imu_angles_msg();
         this->imu_state = imu_angles_msg_payload.state;
         this->imu_yaw = imu_angles_msg_payload.yaw;

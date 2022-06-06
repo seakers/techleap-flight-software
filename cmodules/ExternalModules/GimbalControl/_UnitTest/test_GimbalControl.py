@@ -88,9 +88,8 @@ def run(param1, param2):
 
     controller_angles_msg_data = messaging.ControllerManualAnglesMsgPayload()
     controller_angles_msg_data.state = 20
-    controller_angles_msg_data.yaw = 1.0
-    controller_angles_msg_data.pitch = 1.0
-    controller_angles_msg_data.roll = 1.0
+    controller_angles_msg_data.pan = 1.0
+    controller_angles_msg_data.tilt = 1.0
     controller_angles_msg = messaging.ControllerManualAnglesMsg().write(controller_angles_msg_data)
 
     # --> 4. Subscribe to messages
