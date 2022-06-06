@@ -29,16 +29,16 @@ FineNN::~FineNN() {
     return;
 }
 
-/*void FineNN::LoadModel(){
+void FineNN::LoadModel(){
     try {
         // Deserialize the ScriptModule from a file using torch::jit::load().
-        //this->nn_model = torch::jit::load(this->nn_model_path);
+        this->nn_model = torch::jit::load(this->nn_model_path);
         bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- loaded nn model");
     }
     catch (const c10::Error& e) {
         bskLogger.bskLog(BSK_ERROR, "FineNN -------- failed to load nn model");
     }
-}*/
+}
 
 void FineNN::ZeroOutputVariables(){
     this->mask.setZero(512, 512);
@@ -85,7 +85,7 @@ void FineNN::Reset(uint64_t CurrentSimNanos) {
     this->state = 0;
 
     // --> 2. Load nn model
-    //this->LoadModel();
+    this->LoadModel();
 }
 
 void FineNN::UpdateState(uint64_t CurrentSimNanos){
@@ -99,6 +99,8 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // ----- Read Inputs -----
     // -----------------------
     this->ReadMessages();
+
+
 
     // --------------------------
     // ----- Process Inputs -----

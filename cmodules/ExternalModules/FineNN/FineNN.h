@@ -26,6 +26,9 @@
 
 #include <Eigen/Dense>
 
+#include <torch/torch.h>
+#include <torch/script.h>
+
 
 /*! @brief basic Basilisk C++ module class */
 class FineNN: public SysModel { // --> CHANGE
@@ -36,14 +39,14 @@ public:
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
-    //void LoadModel();
+    void LoadModel();
     void ZeroOutputVariables();
     void ReadMessages();
 
 public:
 
     std::string nn_model_path;
-    //torch::jit::script::Module nn_model;
+    torch::jit::script::Module nn_model;
 
     // ----------------------
     // ----- MESSAGE IN -----

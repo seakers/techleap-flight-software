@@ -19,8 +19,6 @@
 
 #include <Eigen/Dense>
 
-//#include <torch/torch.h>
-
 // Include files for using StApi.
 #include "StApi_TL.h"
 #include "StApi_IP.h"

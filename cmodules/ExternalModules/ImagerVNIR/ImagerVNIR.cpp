@@ -8,10 +8,6 @@
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
 
-// Include files for using StApi.
-#include "StApi_TL.h"
-#include "StApi_IP.h"
-
 //Namespace for using StApi.
 using namespace StApi;
 

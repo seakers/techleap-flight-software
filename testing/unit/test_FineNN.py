@@ -80,45 +80,33 @@ def run(param1, param2):
 
     # --> 3. Create mock messages
     vnir_msg_data = messaging.ImagerVNIROutMsgPayload()
-    vnir_msg_data.state = 20
-    vnir_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
+    vnir_msg_data.state = 0
+    vnir_msg_data.red = np.zeros([512, 512], dtype=float).tolist()
+    vnir_msg_data.green = np.zeros([512, 512], dtype=float).tolist()
+    vnir_msg_data.blue = np.zeros([512, 512], dtype=float).tolist()
+    vnir_msg_data.nir = np.zeros([512, 512], dtype=float).tolist()
     vnir_msg = messaging.ImagerVNIROutMsg().write(vnir_msg_data)
-
-    thermal_msg_data = messaging.ImagerThermalOutMsgPayload()
-    thermal_msg_data.state = 20
-    thermal_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
-    thermal_msg = messaging.ImagerThermalOutMsg().write(thermal_msg_data)
-
-    coarse_msg_data = messaging.CoarsePredictionMsgPayload()
-    coarse_msg_data.prediction = 1
-    coarse_msg_data.state = 1
-    coarse_msg = messaging.CoarsePredictionMsg().write(coarse_msg_data)
 
     # --> 4. Subscribe to messages
     test_module.vnir_msg.subscribeTo(vnir_msg)
-    test_module.thermal_msg.subscribeTo(thermal_msg)
-    test_module.coarse_msg.subscribeTo(coarse_msg)
+
 
     # --> 5. Set output message recording
     output_rec = test_module.fine_msg.recorder()
     sim_client.new_c_module(output_rec)
 
     # --> 6. Set variable recording
-    var1 = "FineNN.coarse_state"
-    var2 = "FineNN.coarse_prediction"
+    var1 = "FineNN.state"
     sim_client.new_logging_var(var1)
-    sim_client.new_logging_var(var2)
 
-    # --> 6. Run simulation
+    # --> 7. Run simulation
     sim_client.run()
 
-    # --> 7. Get debug output
+    # --> 8. Get debug output
     var1 = sim_client.get_var_log_data(var1)
-    var2 = sim_client.get_var_log_data(var2)
 
+    
     print(output_rec.state)
-
-
     return True
 
 
