@@ -17,7 +17,7 @@ using namespace vn::sensors;
 
 InertialMeasurementUnit::InertialMeasurementUnit() // --> CHANGE
 {
-
+    this->state = 0;
 }
 
 InertialMeasurementUnit::~InertialMeasurementUnit() // --> CHANGE
@@ -55,7 +55,7 @@ void InertialMeasurementUnit::UpdateState(uint64_t CurrentSimNanos) // --> CHNAG
     // -----------------------
 
     // --> Zero output messages
-    InertialMeasurementUnitOutMsgPayload imu_msg_buffer = this->imu_msg.zeroMsgPayload;
+    IMUOutMsgPayload imu_msg_buffer = this->imu_msg.zeroMsgPayload;
 
     // --> Zero internal output variables
     this->ZeroOutputVariables();

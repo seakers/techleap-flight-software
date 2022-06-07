@@ -54,13 +54,13 @@ def get_gps_msg(lat=0.0, lon=0.0, altitude=0.0):
     return gps_msg
 
 def get_imu_msg(yaw=0.0, pitch=0.0, roll=0.0, temperature=0.0):
-    imu_msg_data = messaging.InertialMeasurementUnitOutMsgPayload()
+    imu_msg_data = messaging.IMUOutMsgPayload()
     imu_msg_data.state = 0
     imu_msg_data.yaw = yaw
     imu_msg_data.pitch = pitch
     imu_msg_data.roll = roll
     imu_msg_data.temperature = temperature
-    imu_msg = messaging.InertialMeasurementUnitOutMsg().write(imu_msg_data)
+    imu_msg = messaging.IMUOutMsg().write(imu_msg_data)
     return imu_msg
 
 def get_adcs_msg(yaw=0.0, pitch=0.0, roll=0.0):

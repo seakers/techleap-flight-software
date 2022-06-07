@@ -34,7 +34,7 @@ void AttitudeDetermination::ReadMessages(){
     }
 
     if(this->imu_msg.isLinked()){
-        InertialMeasurementUnitOutMsgPayload imu_msg_payload = this->imu_msg();
+        IMUOutMsgPayload imu_msg_payload = this->imu_msg();
         this->imu_state = imu_msg_payload.state;
         this->imu_yaw = imu_msg_payload.yaw;
         this->imu_pitch = imu_msg_payload.pitch;

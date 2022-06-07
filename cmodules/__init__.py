@@ -5,6 +5,7 @@ from Basilisk.ExternalModules import ImagerThermal
 from Basilisk.ExternalModules import ImagerVNIR
 from Basilisk.ExternalModules import InertialMeasurementUnit
 from Basilisk.ExternalModules import Photogrammetry
+from Basilisk.ExternalModules import GimbalControl
 
 
 

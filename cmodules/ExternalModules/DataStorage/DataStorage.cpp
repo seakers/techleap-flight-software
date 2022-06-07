@@ -36,6 +36,13 @@ void DataStorage::ReadMessages(){
         this->blue = vnir_msg_payload.blue;
         this->nir = vnir_msg_payload.nir;
     }
+    
+    // --> IMU Reading
+    if(this->imu_msg.isLinked()){
+        std::cout << "IMU MSG IS LINKED!" << std::endl;
+        IMUOutMsgPayload imu_msg_payload = this->imu_msg();
+        this->imu_state = imu_msg_payload.state;
+    }
 
     // // --> Thermal Reading
     // if(this->thermal_msg.isLinked()){
@@ -61,6 +68,16 @@ void DataStorage::ReadMessages(){
         this->geo_state = geo_msg_payload.state;
         this->geo_lat = geo_msg_payload.lat;
         this->geo_lon = geo_msg_payload.lon;
+    }
+
+    // --> Balloon gps data
+    if(this->gps_msg.isLinked()){
+        std::cout << "BALLOON MSG IS LINKED!" << std::endl;
+        MessageConsumerMsgPayload gps_msg_payload = this->gps_msg();
+        this->gps_state = gps_msg_payload.state;
+        this->gps_lat = gps_msg_payload.lat;
+        this->gps_lon = gps_msg_payload.lon;
+        this->gps_alt = gps_msg_payload.alt;
     }
 }
 

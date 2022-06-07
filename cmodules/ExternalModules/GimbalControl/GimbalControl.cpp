@@ -42,13 +42,13 @@ void GimbalControl::ReadMessages(){
         this->cont_pan = cont_angles_msg_payload.pan;
         this->cont_tilt = cont_angles_msg_payload.tilt;
     }
-    if(this->imu_angles_msg.isLinked()){
+    if(this->imu_msg.isLinked()){
         std::cout << "IMU ANGLES LINKED!" << std::endl;
-        InertialMeasurementUnitOutMsgPayload imu_angles_msg_payload = this->imu_angles_msg();
-        this->imu_state = imu_angles_msg_payload.state;
-        this->imu_yaw = imu_angles_msg_payload.yaw;
-        this->imu_pitch = imu_angles_msg_payload.pitch;
-        this->imu_roll = imu_angles_msg_payload.roll;
+        IMUOutMsgPayload imu_msg_payload = this->imu_msg();
+        this->imu_state = imu_msg_payload.state;
+        this->imu_yaw = imu_msg_payload.yaw;
+        this->imu_pitch = imu_msg_payload.pitch;
+        this->imu_roll = imu_msg_payload.roll;
     }
 }
 
@@ -96,7 +96,7 @@ void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
     this->MotorSetup(pan,1);
     this->MotorSetup(tilt,2);
     
-    if(this->imu_angles_msg.isLinked()) {
+    if(this->imu_msg.isLinked()) {
         std::cout << "attempting PID" << std::endl;
         double tiltAngle = this->tiltPID.pidUpdate(this->desiredTiltAngle - this->imu_pitch, CurrentSimNanos);
         tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);

@@ -18,7 +18,7 @@
 // ---------------------------
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/GpsOutMsgPayload.h"
-#include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
+#include "msgPayloadDefC/IMUOutMsgPayload.h"
 #include "msgPayloadDefC/GeoTrackingMsgPayload.h"
 
 #include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
@@ -44,7 +44,7 @@ public:
     ReadFunctor<ControllerModeMsgPayload> mode_msg;
     int mode;
 
-    ReadFunctor<InertialMeasurementUnitOutMsgPayload> imu_msg;
+    ReadFunctor<IMUOutMsgPayload> imu_msg;
     int   imu_state;
     double imu_yaw;
     double imu_pitch;

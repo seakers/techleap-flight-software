@@ -48,6 +48,11 @@ struct FinePredictionMsg_C;
 %include "msgPayloadDefC/GeoTrackingMsgPayload.h"
 struct GeoTrackingMsg_C;
 
+%include "msgPayloadDefC/IMUOutMsgPayload.h"
+struct IMUOutMsg_C;
+
+%include "msgPayloadDefC/MessageConsumerMsgPayload.h"
+struct MessageConsumerMsg_C;
 
 
 

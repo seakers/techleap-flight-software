@@ -17,7 +17,9 @@
 #include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
 #include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
 #include "msgPayloadDefC/FinePredictionMsgPayload.h"
+#include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 #include "msgPayloadDefC/GeoTrackingMsgPayload.h"
+#include "msgPayloadDefC/IMUOutMsgPayload.h"
 
 #include <Eigen/Dense>
 
@@ -50,6 +52,13 @@ public:
     Eigen::MatrixXd nir;
     int vnir_state;
 
+    ReadFunctor<IMUOutMsgPayload> imu_msg;
+    int   imu_state;
+    double imu_yaw;
+    double imu_pitch;
+    double imu_roll;
+    double imu_temp;
+
     ReadFunctor<ImagerThermalOutMsgPayload> thermal_msg;
     Eigen::MatrixXd b1;
     int thermal_state;
@@ -63,6 +72,11 @@ public:
     double geo_lon;
     int geo_state;
 
+    ReadFunctor<MessageConsumerMsgPayload> gps_msg;
+    double gps_lat;
+    double gps_lon;
+    double gps_alt;
+    int gps_state;
 
 
     // --> LOGGING

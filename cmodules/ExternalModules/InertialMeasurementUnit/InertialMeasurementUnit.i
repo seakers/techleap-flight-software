@@ -33,8 +33,8 @@ from Basilisk.architecture.swig_common_model import *
 // ----- Messages -----
 // --------------------
 
-%include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
-struct InertialMeasurementUnitOutMsg_C;
+%include "msgPayloadDefC/IMUOutMsgPayload.h"
+struct IMUOutMsg_C;
 
 
 

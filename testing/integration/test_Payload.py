@@ -1,6 +1,7 @@
 import pytest
 import sys
 import numpy as np
+import csv
 sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 # sys.path.insert(1, '/app')
 
@@ -9,7 +10,7 @@ sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import ImagerThermal, ImagerVNIR, DataStorage, CoarseNN, FineNN
+from Basilisk.ExternalModules import ImagerVNIR, DataStorage, FineNN
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -85,16 +86,53 @@ def run(param1, param2):
     sim_client.new_c_module(fine_module,    priority=2)
     sim_client.new_c_module(storage_module, priority=3)
 
+    messages = []
 
+    with open('/home/ben/repos/techleap-flight-software/testing/operable_only.csv', mode='r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                print(f'Column names are {", ".join(row)}')
+                line_count += 1
+            messages.append(row)
+            line_count += 1
+        print(f'Processed {line_count} lines.')
+
+    increment = 0
     # --> 3. Create mock messages
-
+    def get_fine_msg():
+        fine_msg_data = messaging.FinePredictionMsgPayload()
+        fine_msg_data.state = 0
+        fine_msg_data.mask = np.zeros([512, 512], dtype=float).tolist()
+        fine_msg = messaging.FinePredictionMsg().write(fine_msg_data)
+        return fine_msg
+    def get_imu_msg(yaw=0.0, pitch=0.0, roll=0.0, temperature=0.0):
+        imu_msg_data = messaging.IMUOutMsgPayload()
+        imu_msg_data.state = 0
+        imu_msg_data.yaw = yaw
+        imu_msg_data.pitch = pitch
+        imu_msg_data.roll = roll
+        imu_msg_data.temperature = temperature
+        imu_msg = messaging.IMUOutMsg().write(imu_msg_data)
+        return imu_msg
+    def get_consumer_msg():
+        consumer_msg_data = messaging.MessageConsumerMsgPayload()
+        consumer_msg_data.state = 0
+        consumer_msg_data.lat = messages[increment]["Telemetry.INS.latitudeDecDeg"]
+        consumer_msg_data.lon = messages[increment]["Telemetry.INS.longitudeDecDeg"]
+        consumer_msg_data.alt = messages[increment]["Telemetry.INS.altitudeMeter"]
+        consumer_msg = messaging.MessageConsumerMsg().write(consumer_msg_data)
+        return consumer_msg
 
     # --> 4. Subscribe to messages
 
     fine_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
 
     storage_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
-    storage_module.fine_msg.subscribeTo(fine_module.fine_msg)
+    storage_module.fine_msg.subscribeTo(get_fine_msg())
+    storage_module.imu_msg.subscribeTo(get_imu_msg())
+    storage_module.gps_msg.subscribeTo(get_consumer_msg())
 
 
     # --> 5. Set output message recording

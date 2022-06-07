@@ -9,7 +9,7 @@ sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import InertialMeasurementUnit, GimbalControl
+from Basilisk.ExternalModules import GimbalControl
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -69,33 +69,45 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Create modules
-    imu_module = InertialMeasurementUnit.InertialMeasurementUnit()
-    imu_module.ModelTag = "IMU"
+    #imu_module = InertialMeasurementUnit.InertialMeasurementUnit()
+    #imu_module.ModelTag = "IMU"
 
     gimbal_module = GimbalControl.GimbalControl()
     gimbal_module.ModelTag = "GimbalControl"
 
-    sim_client.new_c_module(imu_module, priority=1)
+    controller_module = Controller.Controller()
+
+    #sim_client.new_c_module(imu_module, priority=1)
     sim_client.new_c_module(gimbal_module, priority=2)
+    sim_client.new_c_module(controller_module, priority=3)
 
 
     # --> 3. Create mock messages
-
+    def get_imu_msg(yaw=0.0, pitch=0.0, roll=0.0, temperature=0.0):
+        imu_msg_data = messaging.IMUOutMsgPayload()
+        imu_msg_data.state = 0
+        imu_msg_data.yaw = yaw
+        imu_msg_data.pitch = pitch
+        imu_msg_data.roll = roll
+        imu_msg_data.temperature = temperature
+        imu_msg = messaging.IMUOutMsg().write(imu_msg_data)
+        return imu_msg
 
     # --> 4. Subscribe to messages
-    gimbal_module.imu_angles_msg.subscribeTo(imu_module.imu_msg)
+    gimbal_module.imu_msg.subscribeTo(get_imu_msg())
+    gimbal_module.mode_msg.subscribeTo(controller_module.controller_mode_msg)
 
 
     # --> 5. Set output message recording
-    imu_rec = imu_module.imu_msg.recorder()
+    #imu_rec = imu_module.imu_msg.recorder()
 
-    sim_client.new_c_module(imu_rec)
+    #sim_client.new_c_module(imu_rec)
 
     # --> 6. Run simulation
     sim_client.run()
 
     # --> 7. Get debug output
-    print(imu_rec.state)
+    #print(imu_rec.state)
 
 
     return True

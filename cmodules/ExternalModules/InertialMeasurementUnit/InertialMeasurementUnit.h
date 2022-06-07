@@ -7,7 +7,7 @@
 
 
 
-#include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h" // --> CHANGE
+#include "msgPayloadDefC/IMUOutMsgPayload.h" // --> CHANGE
 
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
@@ -39,7 +39,7 @@ public:
     int state;
 
     // --> MESSAGE OUT
-    Message<InertialMeasurementUnitOutMsgPayload> imu_msg;
+    Message<IMUOutMsgPayload> imu_msg;
 
     // --> OUTPUT
     double yaw;

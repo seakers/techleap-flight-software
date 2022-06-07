@@ -28,7 +28,7 @@
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
 #include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
-#include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
+#include "msgPayloadDefC/IMUOutMsgPayload.h"
 
 class PID {
     public:
@@ -85,7 +85,7 @@ public:
     double cont_pan;
     double cont_tilt;
 
-    ReadFunctor<InertialMeasurementUnitOutMsgPayload> imu_angles_msg;
+    ReadFunctor<IMUOutMsgPayload> imu_msg;
     int   imu_state;
     double imu_yaw;
     double imu_pitch;

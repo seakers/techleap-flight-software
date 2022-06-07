@@ -36,8 +36,8 @@ from Basilisk.architecture.swig_common_model import *
 %include "msgPayloadDefC/ControllerModeMsgPayload.h"
 struct ControllerModeMsg_C;
 
-%include "msgPayloadDefC/InertialMeasurementUnitOutMsgPayload.h"
-struct InertialMeasurementUnitOutMsg_C;
+%include "msgPayloadDefC/IMUOutMsgPayload.h"
+struct IMUOutMsg_C;
 
 %include "msgPayloadDefC/GpsOutMsgPayload.h"
 struct GpsOutMsg_C;

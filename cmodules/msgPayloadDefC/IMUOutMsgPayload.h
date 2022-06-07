@@ -2,8 +2,8 @@
 // Created by gabe :)
 //
 
-#ifndef INERTIAL_MEASUREMENT_UNIT_OUT_H
-#define INERTIAL_MEASUREMENT_UNIT_OUT_H
+#ifndef IMU_OUT_H
+#define IMU_OUT_H
 
 /*! @brief Brief description of what this message contains */
 typedef struct {
@@ -12,6 +12,6 @@ typedef struct {
     double pitch;
     double roll;
     double temperature;
-}InertialMeasurementUnitOutMsgPayload;
+}IMUOutMsgPayload;
 
 #endif
