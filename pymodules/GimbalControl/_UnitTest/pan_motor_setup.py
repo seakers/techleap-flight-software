@@ -1,7 +1,7 @@
 # Init for tilt motor
 # Run at the very beginning to command the motor speed, accel, stepsize,
 
-import serial, time
+import serial, time, math
 
 def pan_init():
     try:
@@ -75,11 +75,25 @@ def panBySteps(ser, nsteps):
         This section demonstrates the drives ability to poll immediate position
         and check status to see if the move is done.
         """
-        time.sleep(0.85)
+        time.sleep(1)
         return pan_motor_send(ser, '1IP') # IP is immediate position
         #time.sleep(0.2)
         #send(ser,'2IP')
         #time.sleep(0.1)
         #send(ser,'2RS') # We end by requesting the status of the drive.
 
+def PAN_deg2steps(ndegrees):
+    # used in main()
+    steps_per_rev = 51200
+    one_rev = 360
+    gear_ratio = 1
+    steps_per_deg = gear_ratio * steps_per_rev / one_rev
+    return math.ceil(ndegrees * steps_per_deg)
 
+def PAN_steps2deg(nsteps):
+    # function used in main
+    steps_per_rev = 51200
+    one_rev = 360
+    gear_ratio = 1
+    deg_per_steps = one_rev / steps_per_rev / gear_ratio
+    return nsteps * deg_per_steps

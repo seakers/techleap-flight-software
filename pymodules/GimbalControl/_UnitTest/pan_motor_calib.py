@@ -32,7 +32,7 @@ if __name__ == "__main__":
     
     for i in range(0, 21):
 
-        current_encoder_pos = panBySteps(pan_motor, deg2steps(1))
+        current_encoder_pos = panBySteps(pan_motor, -deg2steps(2))
         current_encoder_pos = current_encoder_pos.split('=')
         current_encoder_pos = steps2deg(int(current_encoder_pos[1])) 
         encoder_log = np.append(encoder_log, current_encoder_pos)

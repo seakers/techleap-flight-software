@@ -32,7 +32,7 @@ if __name__ == "__main__":
     
     for i in range(0, 31):
 
-        current_encoder_pos = tiltBySteps(tilt_motor, deg2steps(1))
+        current_encoder_pos = tiltBySteps(tilt_motor, -deg2steps(2))
         current_encoder_pos = current_encoder_pos.split('=')
         current_encoder_pos = steps2deg(int(current_encoder_pos[1])) 
         encoder_log = np.append(encoder_log, current_encoder_pos)
@@ -49,6 +49,6 @@ if __name__ == "__main__":
     print('Gear ratio = ', gear_ratio)
     
     plt.plot(pitch_log, marker="o", label='Pitch-IMU measurements')
-    plt.plot(encoder_log/gear_ratio, marker="+", label='Tilt-encoder-angle-w/-gearRatio')
-    plt.legend(loc="center left")
+    plt.plot(encoder_log/gear_ratio, marker="+", label='Tilt-encoder-angle-w/o-gearRatio')
+    plt.legend(loc="upper left")
     plt.show()

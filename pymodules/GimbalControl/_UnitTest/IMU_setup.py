@@ -5,7 +5,7 @@ from vnpy import *
 def IMU_init(): 
     s = VnSensor()
     try:
-        s.connect('COM3', 115200)
+        s.connect('COM5', 115200)
         return s
     except Exception as e:
         print ('Error opening IMU')

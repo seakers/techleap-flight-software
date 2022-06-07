@@ -1,9 +1,8 @@
-import math
 from IMU_setup import *
 from tilt_motor_setup import *
 from pan_motor_setup import *
 from camera_setup import *
-import time
+import time, math
 from pid import PID
 
 import sys
@@ -12,38 +11,12 @@ import numpy as np
 from multiprocessing import Manager
 from multiprocessing import Process
 from imutils.video import VideoStream
-#from controller import PID
 import argparse
 import signal
 
-Kp = 0.9
-Ki = 0
-Kd = 0.1
-
-# Hard code a scan pattern for system init and reset
-
-# prior: home position (from IMU - pre-calibrated)
-# once home is identified -> enable scan until object detection
-
-# scan pattern - slowly cover the whole hemi-sphere not hitting the
-# gimbal pan/tilt limits
-# home coordinates: (pan, tilt)
-
-###################### Sequence: ###############################
-# Get to home
-# 1) tilt -> home_tilt + 45; 2) tilt -> home_tilt - 45
-# 2) get to home_tilt
-# 3) Yaw -> home_yaw + 45;
-# 4) tilt -> home_tilt + 45; 2) tilt -> home_tilt - 45
-# 5) get to home_yaw
-
-# breakpoint: object identified = True
-# return: current yaw and tilt angles
-################################################################
-
 
 def initialization():
-    # should go into setup
+    # STEP 0: INITIALIZE IMU MOTORS CAMERA and RETURN HANDLES OF EACH UNIT
     IMU = IMU_init()
     tilt_motor = tilt_init()
     pan_motor = pan_init()
@@ -51,57 +24,34 @@ def initialization():
     # return the objects
     return IMU, tilt_motor, pan_motor, st_datastream, st_device
 
-
-
 def getIMUreading(IMU):
     ypr = IMU_read(IMU)
     return ypr
 
-def getHomeLocation(IMU):
-    # should go into setup
+def register_home(IMU):
+    # STEP 1: KNOW OUR ORIENTATION AT INIT
+    # register the pan tilt angles when the system is staged for launch
     ypr = getIMUreading(IMU)
+    print("HOME COORDINATES: ", ypr)
     # Yaw: PAN axis, Pitch: Tilt axis
     return ypr.x, ypr.y
-    
-def TILT_deg2steps(ndegrees):
-    steps_per_rev = 51200
-    one_rev = 360
-    gear_ratio = 3.5866
-    steps_per_deg = gear_ratio * steps_per_rev / one_rev
-    return math.ceil(ndegrees * steps_per_deg)
 
-def TILT_steps2deg(nsteps):
-    steps_per_rev = 51200
-    one_rev = 360
-    gear_ratio = 3.5866
-    deg_per_steps = one_rev / steps_per_rev / gear_ratio
-    return nsteps * deg_per_steps
 
-def PAN_deg2steps(ndegrees):
-    steps_per_rev = 51200
-    one_rev = 360
-    gear_ratio = 1
-    steps_per_deg = gear_ratio * steps_per_rev / one_rev
-    return math.ceil(ndegrees * steps_per_deg)
+def limitPan(control_pan, acc_control_ang):
+    if acc_control_ang > -40 and acc_control_ang < 40:
+        control_pan = control_pan
+    else:
+        control_pan = 0
+    return control_pan
 
-def PAN_steps2deg(nsteps):
-    steps_per_rev = 51200
-    one_rev = 360
-    gear_ratio = 1
-    deg_per_steps = one_rev / steps_per_rev / gear_ratio
-    return nsteps * deg_per_steps
+def limitTilt(control_tilt, acc_control_ang):
+    if acc_control_ang > -40 and acc_control_ang < 40:
+        control_tilt = control_tilt
+    else:
+        control_tilt = 0
+    return control_tilt
 
-def TILTSCAN(tilt_motor, IMU):
-    for jj in range(0, 5):
-        tiltBySteps(tilt_motor, TILT_deg2steps(1))
-        print(getIMUreading(IMU))
-    for jj in range(0, 10):
-        tiltBySteps(tilt_motor, -TILT_deg2steps(1))
-        print(getIMUreading(IMU))
-    for jj in range(0, 5):
-        tiltBySteps(tilt_motor, TILT_deg2steps(1))
-        print(getIMUreading(IMU))
-
+   
 
 ## CV2 functions - DEMO purposed only
 def mark_rect(event, x, y, flags, param):
@@ -147,61 +97,76 @@ def mark_rect(event, x, y, flags, param):
         
         tracker_initialized, boxed = tracker.update(frame)
         #print('tracker.init()', tracker_initialized)
-        
 
 if __name__ == "__main__":
     
     IMU, tilt_motor, pan_motor, st_datastream, st_device = initialization()
-    pan, tilt = getHomeLocation(IMU) 
+    #IMU = initialization()
+    IMU_read(IMU)
+    pan, tilt = register_home(IMU)
 
-    HOME = [pan, tilt]
-    # HOME COORDINATES (POLAR): [64 deg, -85 deg]
-    
-    PAN_LIMITS = [HOME[0] - 34, HOME[0] + 34] # Relative Range: {30, 98} deg
-    TILT_LIMITS = [HOME[1] - 35, HOME[1] + 35] # Relative Range: {-120, -50} deg
+    HOME = [pan, tilt] # {-155, -6} degrees - current IMU readings
+    PAN_LIMITS = [HOME[0] - 60, HOME[0] + 60] # Relative Range: {30, 98} deg
+    TILT_LIMITS = [HOME[1] - 60, HOME[1] + 60] # Relative Range: {-120, -50} deg
 
+    ################################### LIMITING THE ANGLES #################
+    acc_control_ang = 0 # accumulated pan angle
+    control_ang_prev = 0
+    IMU_read(IMU)
     """
+    panBySteps(pan_motor, PAN_deg2steps(10))
     
-    # scanning mode: status_tested
-    # Scanning is programmed to always start from the home
-    # if we're not at home, get to home using IMU feedback
+    for ii in range(0, 15):
+        control_ang = 3
+        acc_control_ang += (control_ang)
+        angle_ = limitPan(control_ang, acc_control_ang)
+        panBySteps(pan_motor, PAN_deg2steps(angle_))
+        control_ang_prev = control_ang
+        print("angle_, acc_control_ang: ", angle_, acc_control_ang)
+        print("IMU: ", IMU_read(IMU))
+
+    print("test back")
     
-    objectIdentified = False
-    scanInProgress = True
+    for ii in range(0, 30):
+        control_ang = -(3)
+        acc_control_ang += control_ang
+        angle_ = limitPan(control_ang, acc_control_ang)
+        panBySteps(pan_motor, PAN_deg2steps(angle_))
+        print("angle_, acc_control_ang: ", angle_, acc_control_ang)
+        print("IMU: ", IMU_read(IMU))
 
-    while not objectIdentified and scanInProgress:
-        
-        TILTSCAN(tilt_motor, IMU) # PAN SCAN at home
-        
-        for ii in range(0, 5):
-            panBySteps(pan_motor, -PAN_deg2steps(1))
-            print(getIMUreading(IMU))
-            
-        TILTSCAN(tilt_motor, IMU)
-        
-        for ii in range(0, 10):
-            panBySteps(pan_motor, PAN_deg2steps(1))
-            print(getIMUreading(IMU))
-
-        for ii in range(0, 5):
-            panBySteps(pan_motor, -PAN_deg2steps(1))
-            print(getIMUreading(IMU))
-            
-        scanInProgress = False
-        
+    print("test successful")
+    
+    # commence scan pattern
+    #######################################################################
+    
     """
+    ####################### SET CONTROLLER GAINS ####################
+    pan_Kp = 10
+    pan_Kd = 0.1
+    pan_Ki = 0.0
+    panPID = PID(pan_Kp, pan_Kd, pan_Ki)
 
+    tilt_Kp = 3
+    tilt_Kd = 0.1
+    tilt_Ki = 0
+    tiltPID = PID(tilt_Kp, tilt_Kd, tilt_Ki)
+    ##################################################################
 
+    # COMMENCE TRACKING
     
     global x0, y0, x1, y1, drawing, mode, frame, bbox, tracker, tracker_initialized
     global MODE_MARK
 
-
-    home = [0, -75]
-    panAngle = home[0]
-    tiltAngle = home[1]
+    panAngle = pan
+    tiltAngle = tilt
     bugFlag = 1
-
+    panAcc = 0
+    tiltAcc = 0
+    px_err_log = np.array([])
+    py_err_log = np.array([])
+    pan_signal_log = np.array([])
+    tilt_signal_log = np.array([])
     
     # CV2 object tracker
     MODE_TRACK = 0          # track an object
@@ -215,7 +180,7 @@ if __name__ == "__main__":
 
     mode = MODE_SHOW
     mode_text = 'Show'
-    fps_text = '?? Fps'
+    fps_text = 'x Fps'
     cvs_title_printed = False
     drawing = False         # true if mouse is pressed
     x0, y0 = -1, -1
@@ -249,7 +214,6 @@ if __name__ == "__main__":
         tracker = cv2.TrackerMedianFlow_create()
     if tracker_type == 'GOTURN':
         tracker = cv2.TrackerGOTURN_create()
-
     
     while(True):
         frame = camRead(st_datastream, st_device)
@@ -257,13 +221,9 @@ if __name__ == "__main__":
         if mode == MODE_MARK:
             cv2.rectangle(frame, (x0, y0), (x1, y1), (255, 255, 0), 1)
         elif tracker_initialized:
-            #print('tracker_init1', tracker_initialized)
-            #
             # Update the tracker with the newly acquired frame.
-            #
             
             track_ok, bbox = tracker.update(frame)
-            
 
             if track_ok:
                 last_good_bbox = bbox
@@ -275,7 +235,6 @@ if __name__ == "__main__":
                 object_x = int(bbox[0] + bbox[2]/2)
                 object_y = int(bbox[1] + bbox[3]/2)
                 
-                
                 err_pan_i = frameCenterX - object_x
                 err_tilt_i = frameCenterY - object_y
 
@@ -283,10 +242,10 @@ if __name__ == "__main__":
 
                 if mode == MODE_TRACK_HOLD:
                     mode = MODE_TRACK
-            #
+            
             # If tracking is lost for some reason then use the last location
             # of the bounding box to mark that last location with a red box
-            #
+            
             else:
                 p1 = (int(last_good_bbox[0]), int(last_good_bbox[1]))
                 p2 = (int(last_good_bbox[0] + last_good_bbox[2]), int(last_good_bbox[1] + last_good_bbox[3]))
@@ -297,24 +256,47 @@ if __name__ == "__main__":
 
         if mode == MODE_TRACK and tracker_initialized:
             
-            err_pan = err_pan_i
-            err_tilt = err_tilt_i
+            err_pan = err_pan_i/614
+            err_tilt = err_tilt_i/614
 
-            control_pan = err_pan /(0.3*2048)
-            control_tilt = err_tilt / (0.3 * 2048)
-        
+            px_err_log = np.append(px_err_log, err_pan_i)
+            py_err_log = np.append(py_err_log, err_tilt_i)
+
+            
+            control_pan = panPID.update(err_tilt, 0)
+            control_tilt = tiltPID.update(err_pan, 0)
+
+            
             #control_pan = np.arctan2(err_pan, 0.3*2940) * 180/np.pi
             #control_tilt = np.arctan2(err_tilt, 0.3*2940) * 180/np.pi
 
-            panBySteps(pan_motor, PAN_deg2steps(control_tilt*2.5))
-            tiltBySteps(tilt_motor, TILT_deg2steps(control_pan*2.5))
+            # Because pixel errors in x -> tilt (camera is setup like that!)
+            # inversion
+
+            # Measure the angle to keep them within mechanical limits
+
+            panAcc += control_pan
+            tiltAcc += control_tilt
+
+            #print("panAngle, tiltAngle accumulates:", panAcc, tiltAcc)
+            # allow control_pan only if panAngle is in the pan limits
+                
+            control_pan = limitPan(control_pan, panAcc)
+            control_tilt = limitTilt(control_tilt, tiltAcc)
+            
+            pan_signal_log = np.append(pan_signal_log, control_pan)
+            tilt_signal_log = np.append(tilt_signal_log, control_tilt)
+
+            
+            panBySteps(pan_motor, PAN_deg2steps(control_pan))
+            tiltBySteps(tilt_motor, TILT_deg2steps(control_tilt))
             
             #panAngle += control_pan
             #tiltAngle += -control_tilt
             
-            print("Pixel errors: ", err_pan, err_tilt)
-            print("Pan/Tilt changes: ", control_pan, control_tilt)
-            # print("Pan, tilt requested: ", panAngle, tiltAngle)
+            print("Pixel errors: ", err_pan_i, err_tilt_i)
+            print("Pan/Tilt changes: ", control_tilt, control_pan)
+            #print("Pan, tilt requested: ", panAngle, tiltAngle)
              #control_pan = err_pan/float(frameWidth/2)
              #control_tilt = err_tilt/float(frameHeight/2)
         else:
@@ -351,20 +333,16 @@ if __name__ == "__main__":
             pass
 
     cv2.destroyAllWindows()
+
     
-    # get to home
-    # PID control
-    
-    # OpenCV - start preview
-    
-    #panBySteps(pan_motor, -PAN_deg2steps(10))
     
     """
-    # Image acquisition test: working
+    frame = camRead(st_datastream, st_device)
+    cv2.imshow('image', frame)
+    cv2.waitKey(1)
     
-    for ii in range(0, 10):
-        nparr = camRead(st_datastream, st_device)
-        cv2.imshow('image', nparr)
-        cv2.waitKey(1)
-        time.sleep(1)
-    """      
+    for jj in range(0, 5):
+        tiltBySteps(tilt_motor, TILT_deg2steps(1))
+        print(getIMUreading(IMU))
+    """
+

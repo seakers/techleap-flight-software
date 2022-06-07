@@ -1,7 +1,7 @@
 # Init for tilt motor
 # Run at the very beginning to command the motor speed, accel, stepsize,
 
-import serial, time
+import serial, time, math
 
 def tilt_init():
     try:
@@ -82,4 +82,18 @@ def tiltBySteps(ser, nsteps):
         #time.sleep(0.1)
         #send(ser,'2RS') # We end by requesting the status of the drive.
 
+def TILT_deg2steps(ndegrees):
+    # used in main()
+    steps_per_rev = 51200
+    one_rev = 360
+    gear_ratio = 3.75
+    steps_per_deg = gear_ratio * steps_per_rev / one_rev
+    return math.ceil(ndegrees * steps_per_deg)
 
+def TILT_steps2deg(nsteps):
+    # used in main()
+    steps_per_rev = 51200
+    one_rev = 360
+    gear_ratio = 3.5866
+    deg_per_steps = one_rev / steps_per_rev / gear_ratio
+    return nsteps * deg_per_steps
