@@ -43,6 +43,8 @@ public:
     void ZeroOutputVariables();
     void ReadMessages();
     void PerformInference();
+    torch::Tensor eigenMatrixToTorchTensor(Eigen::MatrixXd e);
+    Eigen::MatrixXd torchTensorToEigenMatrix(at::Tensor T);
 
 public:
 

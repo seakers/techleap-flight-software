@@ -44,7 +44,10 @@ void FineNN::PerformInference(){
     std::vector<torch::jit::IValue> inputs;
     inputs.push_back(torch::ones({1, 4, 161, 105}));
     at::Tensor output = this->nn_model.forward(inputs).toTensor();
-    std::cout << output.slice(1,0,5) << '\n';
+    at::Tensor outputSigmoid = at::sigmoid(output);
+    at::Tensor outputThreshold = at::gt(outputSigmoid,0.666);
+    /*at::Tensor outputGetMask = outputThreshold.index({at::indexing::Slice(at::indexing::None,1,at::indexing::None,at::indexing::None)});
+    std::cout << outputGetMask << '\n';*/
 }
 
 void FineNN::ZeroOutputVariables(){
@@ -132,3 +135,20 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // -------------------
     bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }
+
+/*torch::Tensor FineNN::eigenMatrixToTorchTensor(Eigen::MatrixXd e){
+    auto t = torch::empty({e.cols(),e.rows()});
+    float* data = t.data_ptr<float>();
+
+    Eigen::Map<Eigen::MatrixXf> ef(data,t.size(1),t.size(0));
+    ef = e.cast<float>();
+    t.requires_grad_(true);
+    return t.transpose(0,1);
+}
+
+Eigen::MatrixXd FineNN::torchTensorToEigenMatrix(at::Tensor T){
+    typedef Eigen::Matrix<float,Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixXd_rm;
+    float* data = T.data_ptr<float>();
+    Eigen::Map<MatrixXd_rm> E(data, T.size(0), T.size(1));
+    return E;
+}*/
