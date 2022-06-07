@@ -22,6 +22,10 @@
 #include "msgPayloadDefC/IMUOutMsgPayload.h"
 
 #include <Eigen/Dense>
+#include<fstream>
+#include<vector>
+#include<string>
+#include <iostream>
 
 /*! @brief basic Basilisk C++ module class */
 class DataStorage: public SysModel { // --> CHANGE
@@ -32,7 +36,9 @@ public:
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
 
-    void ReadMessages();
+    void ReadMessages(uint64_t CurrentSimNanos);
+    void saveData(std::string fileName, Eigen::MatrixXd matrix);
+    //Eigen::MatrixXd openData(std::string fileToOpen);
 
 public:
 

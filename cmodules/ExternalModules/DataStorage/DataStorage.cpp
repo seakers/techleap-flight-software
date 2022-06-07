@@ -5,6 +5,7 @@
 #include "ExternalModules/DataStorage/DataStorage.h" // --> CHANGE
 #include <iostream>
 #include <cstring>
+#include <fstream>
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
 
@@ -25,16 +26,20 @@ DataStorage::~DataStorage() // --> CHANGE
     return;
 }
 
-void DataStorage::ReadMessages(){
+void DataStorage::ReadMessages(uint64_t SimNanos){
     // --> VNIR Reading
     if(this->vnir_msg.isLinked()){
         std::cout << "VNIR MSG IS LINKED!" << std::endl;
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
         this->red = vnir_msg_payload.red;
+        saveData("/home/ben/Documents/techleap_deposit/red"+std::to_string((double) SimNanos)+".csv", this->red);
         this->green = vnir_msg_payload.green;
+        saveData("/home/ben/Documents/techleap_deposit/green"+std::to_string((double) SimNanos)+".csv", this->green);
         this->blue = vnir_msg_payload.blue;
+        saveData("/home/ben/Documents/techleap_deposit/blue"+std::to_string((double) SimNanos)+".csv", this->blue);
         this->nir = vnir_msg_payload.nir;
+        saveData("/home/ben/Documents/techleap_deposit/nir"+std::to_string((double) SimNanos)+".csv", this->nir);
     }
     
     // --> IMU Reading
@@ -60,6 +65,7 @@ void DataStorage::ReadMessages(){
         FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
         this->fine_state = fine_msg_payload.state;
         this->fine_mask = fine_msg_payload.mask;
+        saveData("/home/ben/Documents/techleap_deposit/mask"+std::to_string((double) SimNanos)+".csv", this->fine_mask);
     }
 
     // --> GeoTracking data
@@ -95,15 +101,78 @@ void DataStorage::UpdateState(uint64_t CurrentSimNanos)
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
-    this->ReadMessages();
+    this->ReadMessages(CurrentSimNanos);
 
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
-
+    
 
     // -------------------
     // ----- Logging -----
     // -------------------
     bskLogger.bskLog(BSK_INFORMATION, "DataStorage --- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }
+
+void DataStorage::saveData(std::string fileName, Eigen::MatrixXd matrix)
+{
+	//https://eigen.tuxfamily.org/dox/structEigen_1_1IOFormat.html
+	Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
+
+	std::ofstream file(fileName);
+	if (file.is_open())
+	{
+		file << matrix.format(CSVFormat);
+		file.close();
+	}
+}
+
+/*Eigen::MatrixXd DataStorage::openData(std::string fileToOpen)
+{
+
+	// the inspiration for creating this function was drawn from here (I did NOT copy and paste the code)
+	// https://stackoverflow.com/questions/34247057/how-to-read-csv-file-and-assign-to-eigen-matrix
+	
+	// the input is the file: "fileToOpen.csv":
+	// a,b,c
+	// d,e,f
+	// This function converts input file data into the Eigen matrix format
+
+
+
+	// the matrix entries are stored in this variable row-wise. For example if we have the matrix:
+	// M=[a b c 
+	//	  d e f]
+	// the entries are stored as matrixEntries=[a,b,c,d,e,f], that is the variable "matrixEntries" is a row vector
+	// later on, this vector is mapped into the Eigen matrix format
+	vector<double> matrixEntries;
+
+	// in this object we store the data from the matrix
+	ifstream matrixDataFile(fileToOpen);
+
+	// this variable is used to store the row of the matrix that contains commas 
+	std::string matrixRowString;
+
+	// this variable is used to store the matrix entry;
+	std::string matrixEntry;
+
+	// this variable is used to track the number of rows
+	int matrixRowNumber = 0;
+
+
+	while (getline(matrixDataFile, matrixRowString)) // here we read a row by row of matrixDataFile and store every line into the string variable matrixRowString
+	{
+		std::stringstream matrixRowStringStream(matrixRowString); //convert matrixRowString that is a string to a stream variable.
+
+		while (getline(matrixRowStringStream, matrixEntry, ',')) // here we read pieces of the stream matrixRowStringStream until every comma, and store the resulting character into the matrixEntry
+		{
+			matrixEntries.push_back(stod(matrixEntry));   //here we convert the string to double and fill in the row vector storing all the matrix entries
+		}
+		matrixRowNumber++; //update the column numbers
+	}
+
+	// here we convet the vector variable into the matrix and return the resulting object, 
+	// note that matrixEntries.data() is the pointer to the first memory location at which the entries of the vector matrixEntries are stored;
+	return Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(matrixEntries.data(), matrixRowNumber, matrixEntries.size() / matrixRowNumber);
+
+}*/
