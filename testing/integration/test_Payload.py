@@ -99,7 +99,6 @@ def run(param1, param2):
             line_count += 1
         print(f'Processed {line_count} lines.')
 
-    increment = 0
     # --> 3. Create mock messages
     def get_fine_msg():
         fine_msg_data = messaging.FinePredictionMsgPayload()
@@ -107,7 +106,7 @@ def run(param1, param2):
         fine_msg_data.mask = np.zeros([512, 512], dtype=float).tolist()
         fine_msg = messaging.FinePredictionMsg().write(fine_msg_data)
         return fine_msg
-    def get_imu_msg(yaw=0.0, pitch=0.0, roll=0.0, temperature=0.0):
+    def get_imu_msg(yaw=10.0, pitch=15.0, roll=20.0, temperature=0.0):
         imu_msg_data = messaging.IMUOutMsgPayload()
         imu_msg_data.state = 0
         imu_msg_data.yaw = yaw
@@ -119,9 +118,13 @@ def run(param1, param2):
     def get_consumer_msg():
         consumer_msg_data = messaging.MessageConsumerMsgPayload()
         consumer_msg_data.state = 0
-        consumer_msg_data.lat = messages[increment]["Telemetry.INS.latitudeDecDeg"]
-        consumer_msg_data.lon = messages[increment]["Telemetry.INS.longitudeDecDeg"]
-        consumer_msg_data.alt = messages[increment]["Telemetry.INS.altitudeMeter"]
+        consumer_msg_data.msg = 0
+        consumer_msg_data.lat = float(messages[0]["Telemetry.INS.latitudeDecDeg"])
+        consumer_msg_data.lon = float(messages[0]["Telemetry.INS.longitudeDecDeg"])
+        consumer_msg_data.alt = float(messages[0]["Telemetry.INS.altitudeMeter"])
+        print(consumer_msg_data.lat)
+        print(consumer_msg_data.lon)
+        print(consumer_msg_data.alt)
         consumer_msg = messaging.MessageConsumerMsg().write(consumer_msg_data)
         return consumer_msg
 
@@ -130,8 +133,8 @@ def run(param1, param2):
     fine_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
 
     storage_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
-    storage_module.fine_msg.subscribeTo(get_fine_msg())
-    storage_module.imu_msg.subscribeTo(get_imu_msg())
+    storage_module.fine_msg.subscribeTo(fine_module.fine_msg)
+    storage_module.imu_msg.subscribeTo(get_imu_msg(5,15,20,45))
     storage_module.gps_msg.subscribeTo(get_consumer_msg())
 
 

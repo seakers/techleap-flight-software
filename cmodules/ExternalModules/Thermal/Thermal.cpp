@@ -50,13 +50,13 @@ void Thermal::UpdateState(uint64_t CurrentSimNanos){
     // --------------------------
     // --> TODO: Manual heater control
 
-    int teensy = open("/dev/ttyUSB0", O_RDWR); //TODO figure out actual port
+    int teensy = open("/dev/ttyACM0", O_RDWR); //TODO figure out actual port
     initialize_port(teensy);
 
     unsigned char read_teensy[] = { "GET TEMPS\r" };
     int count = 0;
     while(count<100) {
-        write(teensy, read_teensy, sizeof(read_teensy));
+        //write(teensy, read_teensy, sizeof(read_teensy));
         char read_buf [256];
         memset(&read_buf, '\0', sizeof(read_buf));
         int num_bytes = read(teensy, &read_buf, sizeof(read_buf));
@@ -131,6 +131,4 @@ void initialize_port(int serial_port) {
     if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
       printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
     }
-    unsigned char mt_msg[] = { "MT1\r" };
-    write(serial_port,mt_msg,sizeof(mt_msg));
 }

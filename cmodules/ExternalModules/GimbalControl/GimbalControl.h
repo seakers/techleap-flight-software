@@ -18,6 +18,8 @@
 #include <string.h>
 #include <sstream>
 
+#include <Eigen/Dense>
+
 #include "architecture/_GeneralModuleFiles/sys_model.h"
 #include "architecture/utilities/bskLogging.h"
 #include "architecture/messaging/messaging.h"
@@ -28,7 +30,9 @@
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
 #include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
+#include "msgPayloadDefC/FinePredictionMsgPayload.h"
 #include "msgPayloadDefC/IMUOutMsgPayload.h"
+
 
 class PID {
     public:
@@ -54,10 +58,13 @@ public:
     void ReadMessages();
     void InitializePort(int serial_port, int motorID);
     void SendCommand(int port, int motorID, char command[]);
-    void MotorSetup(int port, int motorID);
+    void PanMotorSetup(int port, int motorID);
+    void TiltMotorSetup(int port, int motorID);
     void MoveBySteps(int port, int motorID, int nSteps);
-    int DegToSteps(int degrees);
+    int DegToSteps(int degrees, float gearRatio);
     double LimitAngle(double angle, double upperLimit, double lowerLimit, double imuAngle);
+    void ScanPattern(int tiltPort, int panPort, int tiltMotorID, int panMotorID);
+    void TiltScan(int tiltPort, int tiltMotorID);
 
 public:
 
@@ -90,6 +97,12 @@ public:
     double imu_yaw;
     double imu_pitch;
     double imu_roll;
+
+    ReadFunctor<FinePredictionMsgPayload> fine_msg;
+    int fine_state;
+    int fine_pan;
+    int fine_tilt;
+    Eigen::MatrixXd fine_mask;
 
     // --> LOGGING
     BSKLogger bskLogger;

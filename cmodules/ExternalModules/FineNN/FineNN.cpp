@@ -46,8 +46,8 @@ void FineNN::PerformInference(){
     at::Tensor output = this->nn_model.forward(inputs).toTensor();
     at::Tensor outputSigmoid = at::sigmoid(output);
     at::Tensor outputThreshold = at::gt(outputSigmoid,0.666);
-    /*at::Tensor outputGetMask = outputThreshold.index({at::indexing::Slice(at::indexing::None,1,at::indexing::None,at::indexing::None)});
-    std::cout << outputGetMask << '\n';*/
+    //at::Tensor outputGetMask = outputThreshold.index({at::indexing::Slice(at::indexing::None,1,at::indexing::None,at::indexing::None)});
+    std::cout << outputThreshold << '\n';
 }
 
 void FineNN::ZeroOutputVariables(){
@@ -128,6 +128,8 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // -------------------------
     fine_msg_buffer.state = this->state;
     fine_msg_buffer.mask  = this->mask;
+    fine_msg_buffer.pan = 0;
+    fine_msg_buffer.tilt = 0;
     this->fine_msg.write(&fine_msg_buffer, this->moduleID, CurrentSimNanos);
 
     // -------------------

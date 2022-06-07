@@ -27,19 +27,22 @@ DataStorage::~DataStorage() // --> CHANGE
 }
 
 void DataStorage::ReadMessages(uint64_t SimNanos){
+    std::ofstream telemetryFile;
+    telemetryFile.open("/media/ben/USB/telemetry"+std::to_string((double) SimNanos)+".txt");
+
     // --> VNIR Reading
     if(this->vnir_msg.isLinked()){
         std::cout << "VNIR MSG IS LINKED!" << std::endl;
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
         this->red = vnir_msg_payload.red;
-        saveData("/home/ben/Documents/techleap_deposit/red"+std::to_string((double) SimNanos)+".csv", this->red);
+        saveData("/media/ben/USB/red"+std::to_string((double) SimNanos)+".csv", this->red);
         this->green = vnir_msg_payload.green;
-        saveData("/home/ben/Documents/techleap_deposit/green"+std::to_string((double) SimNanos)+".csv", this->green);
+        saveData("/media/ben/USB/green"+std::to_string((double) SimNanos)+".csv", this->green);
         this->blue = vnir_msg_payload.blue;
-        saveData("/home/ben/Documents/techleap_deposit/blue"+std::to_string((double) SimNanos)+".csv", this->blue);
+        saveData("/media/ben/USB/blue"+std::to_string((double) SimNanos)+".csv", this->blue);
         this->nir = vnir_msg_payload.nir;
-        saveData("/home/ben/Documents/techleap_deposit/nir"+std::to_string((double) SimNanos)+".csv", this->nir);
+        saveData("/media/ben/USB/nir"+std::to_string((double) SimNanos)+".csv", this->nir);
     }
     
     // --> IMU Reading
@@ -47,6 +50,7 @@ void DataStorage::ReadMessages(uint64_t SimNanos){
         std::cout << "IMU MSG IS LINKED!" << std::endl;
         IMUOutMsgPayload imu_msg_payload = this->imu_msg();
         this->imu_state = imu_msg_payload.state;
+        telemetryFile << "Yaw: " << imu_msg_payload.yaw << ", Pitch: " << imu_msg_payload.pitch << ", Roll: " << imu_msg_payload.roll << "\n";
     }
 
     // // --> Thermal Reading
@@ -65,7 +69,8 @@ void DataStorage::ReadMessages(uint64_t SimNanos){
         FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
         this->fine_state = fine_msg_payload.state;
         this->fine_mask = fine_msg_payload.mask;
-        saveData("/home/ben/Documents/techleap_deposit/mask"+std::to_string((double) SimNanos)+".csv", this->fine_mask);
+        saveData("/media/ben/USB/mask"+std::to_string((double) SimNanos)+".csv", this->fine_mask);
+        telemetryFile << "Pan: " << fine_msg_payload.pan << ", Tilt: " << fine_msg_payload.tilt << "\n";
     }
 
     // --> GeoTracking data
@@ -82,9 +87,12 @@ void DataStorage::ReadMessages(uint64_t SimNanos){
         MessageConsumerMsgPayload gps_msg_payload = this->gps_msg();
         this->gps_state = gps_msg_payload.state;
         this->gps_lat = gps_msg_payload.lat;
+        std::cout << this->gps_lat << std::endl;
         this->gps_lon = gps_msg_payload.lon;
         this->gps_alt = gps_msg_payload.alt;
+        telemetryFile << "Lat: " << this->gps_lat << ", Lon: " << this->gps_lon << ", Alt: " << this->gps_alt << "\n";
     }
+    telemetryFile.close();
 }
 
 void DataStorage::Reset(uint64_t CurrentSimNanos) {
@@ -116,6 +124,7 @@ void DataStorage::UpdateState(uint64_t CurrentSimNanos)
 
 void DataStorage::saveData(std::string fileName, Eigen::MatrixXd matrix)
 {
+    std::cout << "trying to save!" << std::endl;
 	//https://eigen.tuxfamily.org/dox/structEigen_1_1IOFormat.html
 	Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
 

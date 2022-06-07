@@ -43,8 +43,8 @@ public:
     void ZeroOutputVariables();
     void ReadMessages();
     void PerformInference();
-    torch::Tensor eigenMatrixToTorchTensor(Eigen::MatrixXd e);
-    Eigen::MatrixXd torchTensorToEigenMatrix(at::Tensor T);
+    //torch::Tensor eigenMatrixToTorchTensor(Eigen::MatrixXd e);
+    //Eigen::MatrixXd torchTensorToEigenMatrix(at::Tensor T);
 
 public:
 
@@ -83,6 +83,8 @@ public:
 
     Message<FinePredictionMsgPayload> fine_msg;
     int state;
+    int pan;
+    int tilt;
     Eigen::MatrixXd mask;
 
 

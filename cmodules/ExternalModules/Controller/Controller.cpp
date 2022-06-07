@@ -13,7 +13,7 @@
 Controller::Controller() // --> CHANGE
 {
     // --> Always start FSW on mode 0
-    this->mode = 0;
+    this->mode = 1;
 }
 
 Controller::~Controller() // --> CHANGE

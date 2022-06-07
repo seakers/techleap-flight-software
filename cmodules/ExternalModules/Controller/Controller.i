@@ -39,6 +39,9 @@ struct ControllerOutMsg_C;
 %include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
 struct ControllerManualAnglesMsg_C;
 
+%include "msgPayloadDefC/ControllerModeMsgPayload.h"
+struct ControllerModeMsg_C;
+
 
 
 %pythoncode %{

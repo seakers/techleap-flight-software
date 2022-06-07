@@ -42,6 +42,9 @@ struct ControllerManualAnglesMsg_C;
 %include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
 struct AttitudeDeterminationAnglesMsg_C;
 
+%include "msgPayloadDefC/FinePredictionMsgPayload.h"
+struct FinePredictionMsg_C;
+
 %include "msgPayloadDefC/IMUOutMsgPayload.h"
 struct IMUOutMsg_C;
 

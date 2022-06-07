@@ -64,7 +64,6 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // --> TODO: create outputs for each module
     MessageConsumerMsgPayload balloon_msg_buffer = this->balloon_msg.zeroMsgPayload;
     balloon_msg_buffer.state = this->state;
-    balloon_msg_buffer.msg = 0;
     balloon_msg_buffer.lat = this->lat;
     balloon_msg_buffer.lon = this->lon;
     balloon_msg_buffer.alt = this->alt;

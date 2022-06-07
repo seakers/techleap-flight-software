@@ -39,7 +39,6 @@ public:
     // --> INTERNAL
     Message<MessageConsumerMsgPayload> balloon_msg;
     int state;
-    int msg;
     double lat;
     double lon;
     double alt;
