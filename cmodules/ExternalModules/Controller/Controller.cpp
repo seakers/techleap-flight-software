@@ -38,6 +38,7 @@ void Controller::Reset(uint64_t CurrentSimNanos) {
 
     // --> 1. Reset module state
     this->state = 0;
+    this->mode = 1;
 }
 
 
@@ -56,7 +57,7 @@ void Controller::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     ControllerManualAnglesMsgPayload controller_manual_angle_msg_buffer = this->controller_manual_angle_msg.zeroMsgPayload;
 
     // --> Zero internal output variables
-    this->ZeroOutputVariables();
+    //this->ZeroOutputVariables();
 
 
     // -----------------------

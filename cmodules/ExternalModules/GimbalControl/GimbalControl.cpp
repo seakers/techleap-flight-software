@@ -116,6 +116,7 @@ void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
         this->MoveBySteps(pan,1,this->DegToSteps(this->fine_pan,1));
         this->MoveBySteps(tilt,2,this->DegToSteps(this->fine_tilt,3.5866));
     }
+    this->ScanPattern(tilt,pan,2,1);
     
 
     /*if(this->imu_msg.isLinked()) {

@@ -34,7 +34,7 @@ from Basilisk.architecture import bskLogging
 @pytest.mark.parametrize(
     'param1, param2',
     [
-        (1.0, 2.0),
+        (1.0, 0.0),
     ]
 )
 def test_function(param1, param2):
