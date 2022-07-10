@@ -16,6 +16,7 @@
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
 #include "msgPayloadDefC/MessageConsumerMsgPayload.h"
+#include <zmq.hpp>
 
 
 /*! @brief basic Basilisk C++ module class */
@@ -26,8 +27,9 @@ public:
 
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
-
+    void FCUinsSubscriber();
     void ZeroOutputVariables();
+    std::string s_recv (zmq::socket_t& socket, int flags);
 
 public:
 

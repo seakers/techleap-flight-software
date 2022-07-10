@@ -9,6 +9,7 @@
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
 
+using namespace torch::indexing;
 
 
 FineNN::FineNN() {
@@ -40,9 +41,7 @@ void FineNN::LoadModel(){
     }
 }
 
-void FineNN::PerformInference(){
-    std::vector<torch::jit::IValue> inputs;
-    inputs.push_back(torch::ones({1, 4, 161, 105}));
+Eigen::MatrixXd  FineNN::PerformInference(std::vector<torch::jit::IValue> inputs){
     at::Tensor output = this->nn_model.forward(inputs).toTensor();
     at::Tensor outputSigmoid = at::sigmoid(output);
     at::Tensor outputThreshold = at::gt(outputSigmoid,0.666);
@@ -90,6 +89,36 @@ void FineNN::ReadMessages(){
     // }
 }
 
+std::vector<Eigen::MatrixXd> FineNN::TileImages(Eigen::MatrixXd largeImage) {
+    std::vector<Eigen::MatrixXd> smallImages;
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 3; j++) {
+            smallImages.push_back(largeImage.block<161,105>(j*161,i*105));
+        }
+        smallImages.push_back(largeImage.block<161,105>(512-161,i*105));
+    }
+    smallImages.push_back(largeImage.block<161,105>(0,512-105));
+    smallImages.push_back(largeImage.block<161,105>(161,512-105));
+    smallImages.push_back(largeImage.block<161,105>(322,512-105));
+    smallImages.push_back(largeImage.block<161,105>(512-161,512-105));
+    return smallImages;
+}
+
+Eigen::MatrixXd FineNN::UnTileMask(std::vector<Eigen::MatrixXd> maskTiles) {
+    Eigen::MatrixXd fullMask = Eigen::MatrixXd::Zero(512,512);
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            fullMask.block<161,105>(j*161,i*105) = maskTiles[3*i+j];
+        }
+        fullMask.block<29,105>(483,i*105) = maskTiles[3*i+3].block<29,105>(132,0);
+    }
+    fullMask.block<161,92>(0,420) = maskTiles[16].block<161,92>(0,13);
+    fullMask.block<161,92>(161,420) = maskTiles[17].block<161,92>(0,13);
+    fullMask.block<161,92>(322,420) = maskTiles[18].block<161,92>(0,13);
+    fullMask.block<29,92>(483,420) = maskTiles[19].block<29,92>(132,13);
+    return fullMask;
+}
+
 void FineNN::Reset(uint64_t CurrentSimNanos) {
     bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- (reset)");
 
@@ -110,12 +139,31 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
-    this->ReadMessages();
+    //this->ReadMessages();
 
-    this->PerformInference();
+    
 
+    std::vector<Eigen::MatrixXd> redTiles = this->TileImages(this->red);
+    std::vector<Eigen::MatrixXd> greenTiles = this->TileImages(this->green);
+    std::vector<Eigen::MatrixXd> blueTiles = this->TileImages(this->blue);
+    std::vector<Eigen::MatrixXd> nirTiles = this->TileImages(this->nir);
 
-
+    std::cout << redTiles.size() << std::endl;
+    for(int i = 0; i < 20; i++) {
+        torch::Tensor redTensor = this->eigenMatrixToTorchTensor(redTiles[i]);
+        torch::Tensor greenTensor = this->eigenMatrixToTorchTensor(greenTiles[i]);
+        torch::Tensor blueTensor = this->eigenMatrixToTorchTensor(blueTiles[i]);
+        torch::Tensor nirTensor = this->eigenMatrixToTorchTensor(nirTiles[i]);
+        torch::Tensor stackedTensor = torch::stack({redTensor,greenTensor,blueTensor,nirTensor});
+        torch::Tensor finalTensor = torch::stack({stackedTensor});
+        std::cout << "dim 0: " << finalTensor.sizes()[0] << std::endl;
+        std::cout << "dim 1: " << finalTensor.sizes()[1] << std::endl;
+        std::cout << "dim 2: " << finalTensor.sizes()[2] << std::endl;
+        std::cout << "dim 3: " << finalTensor.sizes()[3] << std::endl;
+        std::vector<torch::jit::IValue> input_image;
+        input_image.push_back(finalTensor);
+        this->PerformInference(input_image);
+    }
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
@@ -138,7 +186,7 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
 }
 
-/*torch::Tensor FineNN::eigenMatrixToTorchTensor(Eigen::MatrixXd e){
+torch::Tensor FineNN::eigenMatrixToTorchTensor(Eigen::MatrixXd e){
     auto t = torch::empty({e.cols(),e.rows()});
     float* data = t.data_ptr<float>();
 
@@ -148,9 +196,8 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     return t.transpose(0,1);
 }
 
-Eigen::MatrixXd FineNN::torchTensorToEigenMatrix(at::Tensor T){
-    typedef Eigen::Matrix<float,Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixXd_rm;
+Eigen::MatrixXf FineNN::torchTensorToEigenMatrix(torch::Tensor T){
     float* data = T.data_ptr<float>();
-    Eigen::Map<MatrixXd_rm> E(data, T.size(0), T.size(1));
-    return E;
-}*/
+    Eigen::Map<Eigen::MatrixXf> e(data, T.size(0), T.size(1));
+    return e;
+}

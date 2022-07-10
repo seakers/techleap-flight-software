@@ -42,9 +42,11 @@ public:
     void LoadModel();
     void ZeroOutputVariables();
     void ReadMessages();
-    void PerformInference();
-    //torch::Tensor eigenMatrixToTorchTensor(Eigen::MatrixXd e);
-    //Eigen::MatrixXd torchTensorToEigenMatrix(at::Tensor T);
+    Eigen::MatrixXd PerformInference(std::vector<torch::jit::IValue> inputs);
+    std::vector<Eigen::MatrixXd> TileImages(Eigen::MatrixXd largeImage);
+    Eigen::MatrixXd UnTileMask(std::vector<Eigen::MatrixXd> maskTiles);
+    torch::Tensor eigenMatrixToTorchTensor(Eigen::MatrixXd e);
+    Eigen::MatrixXf torchTensorToEigenMatrix(torch::Tensor T);
 
 public:
 
