@@ -64,13 +64,27 @@ void Controller::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // ----- Read Inputs -----
     // -----------------------
     // --> TODO:
+    if(this->fine_msg.isLinked()){
+        std::cout << "Fine angles linked to controller!" << std::endl;
+        FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
+        this->fine_state = fine_msg_payload.state;
+        this->pan = fine_msg_payload.pan;
+        this->tilt = fine_msg_payload.tilt;
+    }
 
     // --------------------------
     // ----- Process Inputs -----
     // --------------------------
     // --> TODO:
+    if(this->fine_state == 1) {
+        std::cout << "Tracking mode" << std::endl;
+        this->mode = 1;
+    } else {
+        std::cout << "Scanning mode" << std::endl;
+        this->mode = 2;
+    }
 
-
+    
     // -------------------------
     // ----- Write Outputs -----
     // -------------------------

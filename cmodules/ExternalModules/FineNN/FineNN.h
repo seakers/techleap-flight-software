@@ -46,7 +46,9 @@ public:
     std::vector<Eigen::MatrixXd> TileImages(Eigen::MatrixXd largeImage);
     Eigen::MatrixXd UnTileMask(std::vector<Eigen::MatrixXd> maskTiles);
     torch::Tensor eigenMatrixToTorchTensor(Eigen::MatrixXd e);
-    Eigen::MatrixXf torchTensorToEigenMatrix(torch::Tensor T);
+    Eigen::MatrixXd torchTensorToEigenMatrix(torch::Tensor T);
+    std::vector<float> GetCentroid(Eigen::MatrixXd e);
+    std::vector<float> CentroidToDegrees(std::vector<float> centroid);
 
 public:
 
@@ -85,8 +87,8 @@ public:
 
     Message<FinePredictionMsgPayload> fine_msg;
     int state;
-    int pan;
-    int tilt;
+    float pan;
+    float tilt;
     Eigen::MatrixXd mask;
 
 

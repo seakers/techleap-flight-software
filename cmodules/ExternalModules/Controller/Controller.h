@@ -19,6 +19,7 @@
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ControllerOutMsgPayload.h"
 #include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
+#include "msgPayloadDefC/FinePredictionMsgPayload.h"
 
 
 
@@ -39,9 +40,9 @@ public:
     // ----- FSW MODEs -----
     // ---------------------
     // 0 - Standby
-    // 1 - ManualPoint
+    // 1 - TrackPlume
     // 2 - Scan
-    // 3 - TrackPlume
+    // 3 - ManualPoint
     int mode;
 
 
@@ -52,6 +53,9 @@ public:
     // --> INTERNAL
     int state;
 
+    ReadFunctor<FinePredictionMsgPayload> fine_msg;
+    int fine_state;
+    Eigen::MatrixXd fine_mask;
 
     // --> MESSAGE OUT
     Message<ControllerOutMsgPayload>          controller_msg;

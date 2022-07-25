@@ -41,12 +41,15 @@ void FineNN::LoadModel(){
     }
 }
 
-Eigen::MatrixXd  FineNN::PerformInference(std::vector<torch::jit::IValue> inputs){
+Eigen::MatrixXd FineNN::PerformInference(std::vector<torch::jit::IValue> inputs){
     at::Tensor output = this->nn_model.forward(inputs).toTensor();
     at::Tensor outputSigmoid = at::sigmoid(output);
     at::Tensor outputThreshold = at::gt(outputSigmoid,0.666);
-    //at::Tensor outputGetMask = outputThreshold.index({at::indexing::Slice(at::indexing::None,1,at::indexing::None,at::indexing::None)});
-    std::cout << outputThreshold << '\n';
+    at::Tensor outputGetMask = outputThreshold.index({0});
+    outputGetMask = outputGetMask.index({1});
+    // std::cout << outputGetMask << std::endl;
+    outputGetMask = outputGetMask.to(torch::kFloat);
+    return this->torchTensorToEigenMatrix(outputGetMask);
 }
 
 void FineNN::ZeroOutputVariables(){
@@ -134,12 +137,12 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // ----- Zero Output -----
     // -----------------------
     FinePredictionMsgPayload fine_msg_buffer = this->fine_msg.zeroMsgPayload;
-    this->ZeroOutputVariables();
+    //this->ZeroOutputVariables();
 
     // -----------------------
     // ----- Read Inputs -----
     // -----------------------
-    //this->ReadMessages();
+    this->ReadMessages();
 
     
 
@@ -147,8 +150,8 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     std::vector<Eigen::MatrixXd> greenTiles = this->TileImages(this->green);
     std::vector<Eigen::MatrixXd> blueTiles = this->TileImages(this->blue);
     std::vector<Eigen::MatrixXd> nirTiles = this->TileImages(this->nir);
-
-    std::cout << redTiles.size() << std::endl;
+    std::vector<Eigen::MatrixXd> maskTiles;
+    //std::cout << redTiles.size() << std::endl;
     for(int i = 0; i < 20; i++) {
         torch::Tensor redTensor = this->eigenMatrixToTorchTensor(redTiles[i]);
         torch::Tensor greenTensor = this->eigenMatrixToTorchTensor(greenTiles[i]);
@@ -156,34 +159,63 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
         torch::Tensor nirTensor = this->eigenMatrixToTorchTensor(nirTiles[i]);
         torch::Tensor stackedTensor = torch::stack({redTensor,greenTensor,blueTensor,nirTensor});
         torch::Tensor finalTensor = torch::stack({stackedTensor});
-        std::cout << "dim 0: " << finalTensor.sizes()[0] << std::endl;
-        std::cout << "dim 1: " << finalTensor.sizes()[1] << std::endl;
-        std::cout << "dim 2: " << finalTensor.sizes()[2] << std::endl;
-        std::cout << "dim 3: " << finalTensor.sizes()[3] << std::endl;
+        // std::cout << "dim 0: " << finalTensor.sizes()[0] << std::endl;
+        // std::cout << "dim 1: " << finalTensor.sizes()[1] << std::endl;
+        // std::cout << "dim 2: " << finalTensor.sizes()[2] << std::endl;
+        // std::cout << "dim 3: " << finalTensor.sizes()[3] << std::endl;
         std::vector<torch::jit::IValue> input_image;
         input_image.push_back(finalTensor);
-        this->PerformInference(input_image);
+        maskTiles.push_back(this->PerformInference(input_image));
     }
-    // --------------------------
-    // ----- Process Inputs -----
-    // --------------------------
-    // --> TODO: Implement pytorch model to classify input from thermal and vnir cameras
-    // --> TODO: Copy mask prediction values over to local mask output variable
-
+    this->mask = this->UnTileMask(maskTiles);
 
     // -------------------------
     // ----- Write Outputs -----
     // -------------------------
     fine_msg_buffer.state = this->state;
     fine_msg_buffer.mask  = this->mask;
-    fine_msg_buffer.pan = 0;
-    fine_msg_buffer.tilt = 0;
+    std::vector<float> controlDegrees = this->CentroidToDegrees(this->GetCentroid(this->mask));
+    fine_msg_buffer.pan = controlDegrees.at(0);
+    fine_msg_buffer.tilt = controlDegrees.at(1);
     this->fine_msg.write(&fine_msg_buffer, this->moduleID, CurrentSimNanos);
 
     // -------------------
     // ----- Logging -----
     // -------------------
     bskLogger.bskLog(BSK_INFORMATION, "FineNN -------- ran update at %fs", this->moduleID, (double) CurrentSimNanos/(1e9));
+}
+
+std::vector<float> FineNN::GetCentroid(Eigen::MatrixXd e) {
+    int xSum = 0;
+    int ySum = 0;
+    int count = 0;
+    for(int i = 0; i < e.rows(); i++) {
+        for(int j = 0; j < e.cols(); j++) {
+            if(e(i,j) > 0.5) {
+                //std::cout << i << "," << j << std::endl;
+                xSum = xSum + j;
+                ySum = ySum + i;
+                count = count + 1;
+            }
+        }
+    }
+    if(count > 0){
+        std::cout << "PLUME DETECTED!" << std::endl;
+        this->state = 1; // plume detected
+    }
+    std::vector<float> centroidLocation;
+    centroidLocation.push_back((float)xSum/(float)count);
+    centroidLocation.push_back((float)ySum/(float)count);
+    return centroidLocation;
+}
+
+std::vector<float> FineNN::CentroidToDegrees(std::vector<float> centroid) {
+    float pan = (centroid.at(0) - 256.0) * 0.0167;
+    float tilt = (centroid.at(1) - 256.0) * 0.0167;
+    std::vector<float> controlDegrees;
+    controlDegrees.push_back(pan);
+    controlDegrees.push_back(tilt);
+    return controlDegrees;
 }
 
 torch::Tensor FineNN::eigenMatrixToTorchTensor(Eigen::MatrixXd e){
@@ -196,8 +228,9 @@ torch::Tensor FineNN::eigenMatrixToTorchTensor(Eigen::MatrixXd e){
     return t.transpose(0,1);
 }
 
-Eigen::MatrixXf FineNN::torchTensorToEigenMatrix(torch::Tensor T){
+Eigen::MatrixXd FineNN::torchTensorToEigenMatrix(torch::Tensor T){
     float* data = T.data_ptr<float>();
     Eigen::Map<Eigen::MatrixXf> e(data, T.size(0), T.size(1));
-    return e;
+    return e.cast <double> ();
 }
+

@@ -2,14 +2,14 @@ import pytest
 import sys
 import numpy as np
 sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
-#sys.path.insert(1, '/app')
+# sys.path.insert(1, '/app')
 
 
 # --> Simulation Import
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import FineNN
+from Basilisk.ExternalModules import MessageConsumer
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -38,6 +38,7 @@ from Basilisk.architecture import bskLogging
     ]
 )
 def test_function(param1, param2):
+
     # --> 1. Run test function
     result = run(param1, param2)
 
@@ -61,11 +62,6 @@ def test_function(param1, param2):
 #
 # """
 
-def get_test_data():
-    image_file = '/app/images/test_dataset_'
-    return None
-
-
 
 def run(param1, param2):
 
@@ -73,47 +69,30 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Create module
-    test_module = FineNN.FineNN()
-    test_module.ModelTag = "FineNN"
+    test_module = MessageConsumer.MessageConsumer()
+    test_module.ModelTag = "MessageConsumer"
     sim_client.new_c_module(test_module)
 
-    # --> 3. Create mock messages
-    vnir_msg_data = messaging.ImagerVNIROutMsgPayload()
-    vnir_msg_data.state = 0
-    # vnir_msg_data.red = np.zeros([512, 512], dtype=float).tolist()
-    # vnir_msg_data.green = np.zeros([512, 512], dtype=float).tolist()
-    # vnir_msg_data.blue = np.zeros([512, 512], dtype=float).tolist()
-    # vnir_msg_data.nir = np.zeros([512, 512], dtype=float).tolist()
-    red = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_red.csv', delimiter=',', dtype=float)
-    blue = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_blue.csv', delimiter=',', dtype=float)
-    green = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_green.csv', delimiter=',', dtype=float)
-    nir = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_nir.csv', delimiter=',', dtype=float)
-    vnir_msg_data.red = red.tolist()
-    vnir_msg_data.green = green.tolist()
-    vnir_msg_data.blue = blue.tolist()
-    vnir_msg_data.nir = nir.tolist()
-    vnir_msg = messaging.ImagerVNIROutMsg().write(vnir_msg_data)
-
-    # --> 4. Subscribe to messages
-    test_module.vnir_msg.subscribeTo(vnir_msg)
-
-
-    # --> 5. Set output message recording
-    output_rec = test_module.fine_msg.recorder()
+    # --> 3. Set output message recording
+    output_rec = test_module.balloon_msg.recorder()
     sim_client.new_c_module(output_rec)
 
-    # --> 6. Set variable recording
-    var1 = "FineNN.state"
+    # --> 4. Set variable recording
+    var1 = "MessageConsumer.state"
+    var2 = "MessageConsumer.lat"
     sim_client.new_logging_var(var1)
+    sim_client.new_logging_var(var2)
 
-    # --> 7. Run simulation
+    # --> 5. Run simulation
     sim_client.run()
 
-    # --> 8. Get debug output
+    # --> 6. Get debug output
     var1 = sim_client.get_var_log_data(var1)
+    var2 = sim_client.get_var_log_data(var2)
 
-    
     print(output_rec.state)
+
+
     return True
 
 

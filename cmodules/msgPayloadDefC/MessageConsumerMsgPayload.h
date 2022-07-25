@@ -11,6 +11,9 @@ typedef struct {
     double lat;
     double lon;
     double alt;
+    double yaw;
+    double pitch;
+    double roll;
 }MessageConsumerMsgPayload;
 
 #endif

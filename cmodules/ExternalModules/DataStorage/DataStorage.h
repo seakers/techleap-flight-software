@@ -82,6 +82,9 @@ public:
     double gps_lat;
     double gps_lon;
     double gps_alt;
+    double gps_yaw;
+    double gps_pitch;
+    double gps_roll;
     int gps_state;
 
 

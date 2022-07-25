@@ -39,11 +39,11 @@ class PID {
         int Kp;
         int Ki;
         int Kd;
-        double currTime;
-        double prevTime;
-        double prevErr;
-        double Ci;
-    double pidUpdate(double error, uint64_t CurrentSimNanos);
+        float currTime;
+        float prevTime;
+        float prevErr;
+        float Ci;
+    float pidUpdate(float error, uint64_t CurrentSimNanos);
 };
 
 /*! @brief basic Basilisk C++ module class */
@@ -62,17 +62,20 @@ public:
     void TiltMotorSetup(int port, int motorID);
     void MoveBySteps(int port, int motorID, int nSteps);
     int DegToSteps(int degrees, float gearRatio);
-    double LimitAngle(double angle, double upperLimit, double lowerLimit, double imuAngle);
-    void ScanPattern(int tiltPort, int panPort, int tiltMotorID, int panMotorID);
-    void TiltScan(int tiltPort, int tiltMotorID);
+    float LimitAngle(float angle, float upperLimit, float lowerLimit, float imuAngle);
+    void ScanPattern();
+    void TiltScan();
 
 public:
 
     int state;
-    double desiredPanAngle;
-    double desiredTiltAngle;
+    float desiredPanAngle;
+    float desiredTiltAngle;
     PID panPID;
     PID tiltPID;
+    std::vector<std::string> motorVector;
+    std::vector<int> degreeVector;
+    int count;
 
     // ----------------------
     // ----- MESSAGE IN -----
@@ -83,25 +86,25 @@ public:
 
     ReadFunctor<AttitudeDeterminationAnglesMsgPayload> adcs_angles_msg;
     int   adcs_state;
-    double adcs_yaw;
-    double adcs_pitch;
-    double adcs_roll;
+    float adcs_yaw;
+    float adcs_pitch;
+    float adcs_roll;
 
     ReadFunctor<ControllerManualAnglesMsgPayload> cont_angles_msg;
     int   cont_state;
-    double cont_pan;
-    double cont_tilt;
+    float cont_pan;
+    float cont_tilt;
 
     ReadFunctor<IMUOutMsgPayload> imu_msg;
     int   imu_state;
-    double imu_yaw;
-    double imu_pitch;
-    double imu_roll;
+    float imu_yaw;
+    float imu_pitch;
+    float imu_roll;
 
     ReadFunctor<FinePredictionMsgPayload> fine_msg;
     int fine_state;
-    int fine_pan;
-    int fine_tilt;
+    float fine_pan;
+    float fine_tilt;
     Eigen::MatrixXd fine_mask;
 
     // --> LOGGING

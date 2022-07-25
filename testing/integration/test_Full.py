@@ -1,15 +1,14 @@
 import pytest
 import sys
 import numpy as np
-# sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
-sys.path.insert(1, '/app')
+sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 
 
 # --> Simulation Import
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import ImagerThermal, ImagerVNIR, DataStorage, CoarseNN, FineNN, Controller, GimbalControl, InertialMeasurementUnit, MessageConsumer, Gps, Photogrammetry, AttitudeDetermination
+from Basilisk.ExternalModules import ImagerVNIR, DataStorage, FineNN, Controller, GimbalControl, InertialMeasurementUnit
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -62,12 +61,6 @@ def test_function(param1, param2):
 #
 # """
 
-def get_test_data():
-    image_file = '/app/images/test_dataset_'
-    return None
-
-
-
 def run(param1, param2):
 
     # --> 1. Create simulation client + tasks
@@ -80,22 +73,16 @@ def run(param1, param2):
     cont_module = Controller.Controller()
     cont_module.ModelTag = "Controller"
 
-    msg_module = MessageConsumer.MessageConsumer()
-    msg_module.ModelTag = "MessageConsumer"
+    # msg_module = MessageConsumer.MessageConsumer()
+    # msg_module.ModelTag = "MessageConsumer"
 
-    sim_client.new_c_module(cont_module, task_name='A', priority=1)
-    sim_client.new_c_module(msg_module, task_name='A', priority=2)
+    sim_client.new_c_module(cont_module, task_name='A', priority=4)
+    # sim_client.new_c_module(msg_module, task_name='A', priority=2)
 
 
     # --> 3. Task B
     vnir_module = ImagerVNIR.ImagerVNIR()
     vnir_module.ModelTag = "ImagerVNIR"
-
-    thermal_module = ImagerThermal.ImagerThermal()
-    thermal_module.ModelTag = "ImagerThermal"
-
-    coarse_module = CoarseNN.CoarseNN()
-    coarse_module.ModelTag = "CoarseNN"
 
     fine_module = FineNN.FineNN()
     fine_module.ModelTag = "FineNN"
@@ -104,71 +91,55 @@ def run(param1, param2):
     storage_module.ModelTag = "DataStorage"
 
     sim_client.new_c_module(vnir_module, task_name='B', priority=1)
-    sim_client.new_c_module(thermal_module, task_name='B', priority=2)
-    sim_client.new_c_module(coarse_module, task_name='B', priority=3)
-    sim_client.new_c_module(fine_module, task_name='B', priority=4)
-    sim_client.new_c_module(storage_module, task_name='B', priority=5)
+    sim_client.new_c_module(fine_module, task_name='B', priority=2)
+    sim_client.new_c_module(storage_module, task_name='B', priority=3)
 
     # --> 4. Task C
-    imu_module = InertialMeasurementUnit.InertialMeasurementUnit()
-    imu_module.ModelTag = "InertialMeasurementUnit"
-
-    gps_module = Gps.Gps()
-    gps_module.ModelTag = "Gps"
-
-    photo_module = Photogrammetry.Photogrammetry()
-    photo_module.ModelTag = "Photogrammetry"
-
-    ad_module = AttitudeDetermination.AttitudeDetermination()
-    ad_module.ModelTag = "AttitudeDetermination"
+    # imu_module = InertialMeasurementUnit.InertialMeasurementUnit()
+    # imu_module.ModelTag = "InertialMeasurementUnit"
 
     gc_module = GimbalControl.GimbalControl()
     gc_module.ModelTag = "GimbalControl"
 
-    sim_client.new_c_module(imu_module, task_name='C', priority=1)
-    sim_client.new_c_module(gps_module, task_name='C', priority=2)
-    sim_client.new_c_module(photo_module, task_name='C', priority=3)
-    sim_client.new_c_module(ad_module, task_name='C', priority=4)
+    # sim_client.new_c_module(imu_module, task_name='C', priority=1)
     sim_client.new_c_module(gc_module, task_name='C', priority=5)
 
 
     # --> 3. Create mock messages
     vnir_msg_data = messaging.ImagerVNIROutMsgPayload()
     vnir_msg_data.state = 0
-    vnir_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
+    # vnir_msg_data.red = np.zeros([512, 512], dtype=float).tolist()
+    # vnir_msg_data.green = np.zeros([512, 512], dtype=float).tolist()
+    # vnir_msg_data.blue = np.zeros([512, 512], dtype=float).tolist()
+    # vnir_msg_data.nir = np.zeros([512, 512], dtype=float).tolist()
+    red = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_red.csv', delimiter=',', dtype=float)
+    blue = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_blue.csv', delimiter=',', dtype=float)
+    green = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_green.csv', delimiter=',', dtype=float)
+    nir = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_nir.csv', delimiter=',', dtype=float)
+    vnir_msg_data.red = red.tolist()
+    vnir_msg_data.green = green.tolist()
+    vnir_msg_data.blue = blue.tolist()
+    vnir_msg_data.nir = nir.tolist()
     vnir_msg = messaging.ImagerVNIROutMsg().write(vnir_msg_data)
-
-    thermal_msg_data = messaging.ImagerThermalOutMsgPayload()
-    thermal_msg_data.state = 0
-    thermal_msg_data.imageTensor = np.zeros([20, 20], dtype=int).tolist()
-    thermal_msg = messaging.ImagerThermalOutMsg().write(thermal_msg_data)
 
 
     # --> 4. Subscribe to messages
-    vnir_module.mock_msg.subscribeTo(vnir_msg)
-    thermal_module.mock_msg.subscribeTo(thermal_msg)
+    fine_module.vnir_msg.subscribeTo(vnir_msg)
 
-    coarse_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
-    coarse_module.thermal_msg.subscribeTo(thermal_module.thermal_msg)
-
-    fine_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
-    fine_module.thermal_msg.subscribeTo(thermal_module.thermal_msg)
-    fine_module.coarse_msg.subscribeTo(coarse_module.coarse_msg)
-
-    storage_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
-    storage_module.thermal_msg.subscribeTo(thermal_module.thermal_msg)
+    storage_module.vnir_msg.subscribeTo(vnir_msg)
     storage_module.fine_msg.subscribeTo(fine_module.fine_msg)
+
+    gc_module.fine_msg.subscribeTo(fine_module.fine_msg)
+    gc_module.mode_msg.subscribeTo(cont_module.controller_mode_msg)
+
+    cont_module.fine_msg.subscribeTo(fine_module.fine_msg)
 
 
     # --> 5. Set output message recording
     vnir_rec = vnir_module.vnir_msg.recorder()
-    thermal_rec = thermal_module.thermal_msg.recorder()
-    coarse_rec = coarse_module.coarse_msg.recorder()
     fine_rec = fine_module.fine_msg.recorder()
 
     sim_client.new_c_module(vnir_rec)
-    sim_client.new_c_module(thermal_rec)
-    sim_client.new_c_module(coarse_rec)
     sim_client.new_c_module(fine_rec)
 
     # --> 6. Run simulation
@@ -179,19 +150,6 @@ def run(param1, param2):
 
 
     return True
-
-
-
-
-
-def get_tensor(value, rows=20, cols=20):
-    tensor = []
-    for x in range(rows):
-        row = []
-        for y in range(cols):
-            row.append(value)
-        tensor.append(row)
-    return tensor
 
 
 

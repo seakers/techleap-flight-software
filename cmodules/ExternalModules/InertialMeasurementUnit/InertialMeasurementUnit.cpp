@@ -37,7 +37,7 @@ void InertialMeasurementUnit::ZeroOutputVariables(){
 void InertialMeasurementUnit::Reset(uint64_t CurrentSimNanos) // --> CHANGE
 {
     bskLogger.bskLog(BSK_INFORMATION, "InertialMeasurementUnit ------ (reset)");
-    const std::string SensorPort = "/dev/ttyUSB0";
+    const std::string SensorPort = "/dev/ttyClientV";
     const uint32_t SensorBaudrate = 115200;
     VnSensor vs;
 	vs.connect(SensorPort, SensorBaudrate);
@@ -65,7 +65,7 @@ void InertialMeasurementUnit::UpdateState(uint64_t CurrentSimNanos) // --> CHNAG
     // ----- Read Inputs -----
     // -----------------------
     VnSensor vs;
-    const std::string SensorPort = "/dev/ttyUSB0";
+    const std::string SensorPort = "/dev/ttyClientV";
     const uint32_t SensorBaudrate = 115200;
 	vs.connect(SensorPort, SensorBaudrate);
     // --> Read yaw pitch roll

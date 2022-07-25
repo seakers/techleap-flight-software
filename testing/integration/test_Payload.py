@@ -10,7 +10,7 @@ sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import ImagerVNIR, DataStorage, FineNN
+from Basilisk.ExternalModules import ImagerVNIR, DataStorage, FineNN, MessageConsumer
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -81,10 +81,13 @@ def run(param1, param2):
     storage_module = DataStorage.DataStorage()
     storage_module.ModelTag = "DataStorage"
 
+    msg_module = MessageConsumer.MessageConsumer()
+    msg_module.ModelTag = "MessageConsumer"
 
     sim_client.new_c_module(vnir_module,    priority=1)
     sim_client.new_c_module(fine_module,    priority=2)
     sim_client.new_c_module(storage_module, priority=3)
+    sim_client.new_c_module(msg_module, priority = 2)
 
     messages = []
 
@@ -135,7 +138,7 @@ def run(param1, param2):
     storage_module.vnir_msg.subscribeTo(vnir_module.vnir_msg)
     storage_module.fine_msg.subscribeTo(fine_module.fine_msg)
     storage_module.imu_msg.subscribeTo(get_imu_msg(5,15,20,45))
-    storage_module.gps_msg.subscribeTo(get_consumer_msg())
+    storage_module.gps_msg.subscribeTo(msg_module.balloon_msg)
 
 
     # --> 5. Set output message recording

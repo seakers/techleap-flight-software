@@ -36,7 +36,8 @@ from Basilisk.architecture.swig_common_model import *
 %include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 struct MessageConsumerMsg_C;
 
-
+%include "msgPayloadDefC/MessageConsumerManualMsgPayload.h"
+struct MessageConsumerManualMsg_C;
 
 %pythoncode %{
 import sys

@@ -42,7 +42,8 @@ struct ControllerManualAnglesMsg_C;
 %include "msgPayloadDefC/ControllerModeMsgPayload.h"
 struct ControllerModeMsg_C;
 
-
+%include "msgPayloadDefC/FinePredictionMsgPayload.h"
+struct FinePredictionMsg_C;
 
 %pythoncode %{
 import sys

@@ -16,6 +16,7 @@
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
 #include "msgPayloadDefC/MessageConsumerMsgPayload.h"
+#include "msgPayloadDefC/MessageConsumerManualMsgPayload.h"
 #include <zmq.hpp>
 
 
@@ -29,6 +30,9 @@ public:
     void UpdateState(uint64_t CurrentSimNanos);
     void FCUinsSubscriber();
     void ZeroOutputVariables();
+    void FCUpayloadSend(std::string payloadStr);
+    void FCUpayloadReceiverListener();
+    bool ConnectToPayloadServer(int pPayload);
     std::string s_recv (zmq::socket_t& socket, int flags);
 
 public:
@@ -44,6 +48,14 @@ public:
     double lat;
     double lon;
     double alt;
+    double yaw;
+    double pitch;
+    double roll;
+
+    Message<MessageConsumerManualMsgPayload> manual_msg;
+    double manual_lat;
+    double manual_lon;
+    double manual_alt;
 
     // --> LOGGING
     BSKLogger bskLogger;
