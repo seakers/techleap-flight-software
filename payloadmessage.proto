@@ -1,0 +1,8 @@
+syntax = "proto3";
+package raven.fcu.swicd;
+
+message RavenFCU_SWICD_PayloadMessage {
+	double messageSentTS = 1;
+	double messageReceivedTS = 2;
+	bytes data = 3;
+}
