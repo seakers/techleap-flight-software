@@ -2,7 +2,7 @@ import pytest
 import sys
 import numpy as np
 import csv
-sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 
 
 # --> Simulation Import
@@ -34,7 +34,7 @@ from Basilisk.architecture import bskLogging
 @pytest.mark.parametrize(
     'param1, param2, param3',
     [
-        (1.0, 2.0, 1),
+        (1.0, 100.0, 1),
     ]
 )
 def test_function(param1, param2, param3):
@@ -113,10 +113,10 @@ def run(param1, param2, param3):
     # vnir_msg_data.green = np.zeros([512, 512], dtype=float).tolist()
     # vnir_msg_data.blue = np.zeros([512, 512], dtype=float).tolist()
     # vnir_msg_data.nir = np.zeros([512, 512], dtype=float).tolist()
-    red = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_red.csv', delimiter=',', dtype=float)
-    blue = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_blue.csv', delimiter=',', dtype=float)
-    green = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_green.csv', delimiter=',', dtype=float)
-    nir = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_nir.csv', delimiter=',', dtype=float)
+    red = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_red.csv', delimiter=',', dtype=float)
+    blue = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_blue.csv', delimiter=',', dtype=float)
+    green = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_green.csv', delimiter=',', dtype=float)
+    nir = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_nir.csv', delimiter=',', dtype=float)
     vnir_msg_data.red = red.tolist()
     vnir_msg_data.green = green.tolist()
     vnir_msg_data.blue = blue.tolist()
@@ -125,7 +125,7 @@ def run(param1, param2, param3):
 
     messages = []
 
-    with open('/home/ben/repos/techleap-flight-software/testing/operable_only.csv', mode='r') as csv_file:
+    with open('/home/ben/nvme/repos/techleap-flight-software/testing/operable_only.csv', mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
         for row in csv_reader:

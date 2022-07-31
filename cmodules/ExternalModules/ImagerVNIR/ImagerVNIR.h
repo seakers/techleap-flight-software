@@ -18,6 +18,7 @@
 #include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
 
 #include <Eigen/Dense>
+#include <string>
 
 // Include files for using StApi.
 #include "StApi_TL.h"
@@ -49,6 +50,7 @@ public:
     // --> MESSAGE OUT
     Message<ImagerVNIROutMsgPayload> vnir_msg;
     int state;
+    std::string status_msg;
     Eigen::MatrixXd red;
     Eigen::MatrixXd green;
     Eigen::MatrixXd blue;

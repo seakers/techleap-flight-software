@@ -8,7 +8,7 @@ from Basilisk import __path__
 bskPath = __path__[0]
 
 # --> Module Imports
-sys.path.insert(1, '/app')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 from pymodules.Template.Module import Template
 
 

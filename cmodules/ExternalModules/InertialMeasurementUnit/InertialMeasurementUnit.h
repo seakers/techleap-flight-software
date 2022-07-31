@@ -8,6 +8,7 @@
 
 
 #include "msgPayloadDefC/IMUOutMsgPayload.h" // --> CHANGE
+#include <string>
 
 
 #include "architecture/_GeneralModuleFiles/sys_model.h"
@@ -42,6 +43,7 @@ public:
     Message<IMUOutMsgPayload> imu_msg;
 
     // --> OUTPUT
+    std::string status_msg;
     double yaw;
     double pitch;
     double roll;

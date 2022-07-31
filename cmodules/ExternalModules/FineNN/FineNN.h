@@ -42,6 +42,7 @@ public:
     void LoadModel();
     void ZeroOutputVariables();
     void ReadMessages();
+    void PreProcessImages();
     Eigen::MatrixXd PerformInference(std::vector<torch::jit::IValue> inputs);
     std::vector<Eigen::MatrixXd> TileImages(Eigen::MatrixXd largeImage);
     Eigen::MatrixXd UnTileMask(std::vector<Eigen::MatrixXd> maskTiles);

@@ -13,7 +13,7 @@ using namespace torch::indexing;
 
 
 FineNN::FineNN() {
-    this->nn_model_path = "/home/ben/repos/techleap-flight-software/neuralnet/trainednet.pt";
+    this->nn_model_path = "/home/ben/nvme/repos/techleap-flight-software/neuralnet/trainednet.pt";
     this->state = 0;
     this->red.setZero(512, 512);
     this->green.setZero(512, 512);
@@ -59,14 +59,14 @@ void FineNN::ZeroOutputVariables(){
 void FineNN::ReadMessages(){
 
     if(this->mode_msg.isLinked()){
-        std::cout << "MODE MSG IS LINKED!" << std::endl;
+        //std::cout << "MODE MSG IS LINKED!" << std::endl;
         ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
         this->mode = mode_msg_payload.mode;
     }
 
     // --> VNIR Reading
     if(this->vnir_msg.isLinked()){
-        std::cout << "VNIR MSG IS LINKED!" << std::endl;
+        //std::cout << "VNIR MSG IS LINKED!" << std::endl;
         ImagerVNIROutMsgPayload vnir_msg_payload = this->vnir_msg();
         this->vnir_state = vnir_msg_payload.state;
         this->red = vnir_msg_payload.red;
@@ -90,6 +90,25 @@ void FineNN::ReadMessages(){
     //     this->coarse_state = coarse_msg_payload.state;
     //     this->coarse_prediction = coarse_msg_payload.prediction;
     // }
+}
+
+void FineNN::PreProcessImages() {
+    if(this->vnir_msg.isLinked()) {
+        Eigen::MatrixXd r = this->red;
+        Eigen::MatrixXd g = this->blue;
+        Eigen::MatrixXd b = this->green;
+        Eigen::MatrixXd n = this->nir;
+        float rStd = sqrt((r.array() - r.mean()).square().sum() / r.size());
+        float gStd = sqrt((g.array() - g.mean()).square().sum() / g.size());
+        float bStd = sqrt((g.array() - g.mean()).square().sum() / g.size());
+        float nStd = sqrt((g.array() - g.mean()).square().sum() / g.size());
+        this->red = (r.array() - r.mean())/rStd;
+        this->blue = (g.array() - g.mean())/gStd;
+        this->green = (b.array() - b.mean())/bStd;
+        this->nir = (n.array() - n.mean())/nStd;
+        std::cout << "Preprocessed images" << std::endl;
+        //std::cout << this->red << std::endl;
+    }
 }
 
 std::vector<Eigen::MatrixXd> FineNN::TileImages(Eigen::MatrixXd largeImage) {
@@ -143,6 +162,7 @@ void FineNN::UpdateState(uint64_t CurrentSimNanos){
     // ----- Read Inputs -----
     // -----------------------
     this->ReadMessages();
+    this->PreProcessImages();
 
     
 
@@ -192,20 +212,21 @@ std::vector<float> FineNN::GetCentroid(Eigen::MatrixXd e) {
     for(int i = 0; i < e.rows(); i++) {
         for(int j = 0; j < e.cols(); j++) {
             if(e(i,j) > 0.5) {
-                //std::cout << i << "," << j << std::endl;
                 xSum = xSum + j;
                 ySum = ySum + i;
                 count = count + 1;
             }
         }
     }
-    if(count > 0){
+    if(count > 0 && count < 1000){
         std::cout << "PLUME DETECTED!" << std::endl;
+        std::cout << "Num pixels in plume: " << count << std::endl;
         this->state = 1; // plume detected
     }
     std::vector<float> centroidLocation;
     centroidLocation.push_back((float)xSum/(float)count);
     centroidLocation.push_back((float)ySum/(float)count);
+    std::cout << "Centroid location: " << centroidLocation.at(0) << centroidLocation.at(1) << std::endl;
     return centroidLocation;
 }
 
@@ -215,6 +236,7 @@ std::vector<float> FineNN::CentroidToDegrees(std::vector<float> centroid) {
     std::vector<float> controlDegrees;
     controlDegrees.push_back(pan);
     controlDegrees.push_back(tilt);
+    std::cout << "Centroid to degrees: " << controlDegrees.at(0) << controlDegrees.at(1) << std::endl;
     return controlDegrees;
 }
 

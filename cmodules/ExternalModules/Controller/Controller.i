@@ -51,6 +51,12 @@ struct MessageConsumerManualMsg_C;
 %include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 struct MessageConsumerMsg_C;
 
+%include "msgPayloadDefC/IMUOutMsgPayload.h"
+struct IMUOutMsg_C;
+
+%include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
+struct ImagerVNIROutMsg_C;
+
 %pythoncode %{
 import sys
 protectAllClasses(sys.modules[__name__])

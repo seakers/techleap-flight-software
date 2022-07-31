@@ -5,10 +5,12 @@
 #ifndef CONTROLLER_OUT_H
 #define CONTROLLER_OUT_H
 
+#include <string>
+
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;
-    int msg;
+    std::string msg;
 }ControllerOutMsgPayload;
 
 #endif

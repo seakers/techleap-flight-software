@@ -1,7 +1,7 @@
 import pytest
 import sys
 import numpy as np
-sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 # sys.path.insert(1, '/app')
 
 

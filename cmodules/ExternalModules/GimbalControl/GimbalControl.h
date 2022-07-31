@@ -36,9 +36,9 @@
 
 class PID {
     public:
-        int Kp;
-        int Ki;
-        int Kd;
+        float Kp;
+        float Ki;
+        float Kd;
         float currTime;
         float prevTime;
         float prevErr;
@@ -61,13 +61,16 @@ public:
     void PanMotorSetup(int port, int motorID);
     void TiltMotorSetup(int port, int motorID);
     void MoveBySteps(int port, int motorID, int nSteps);
-    int DegToSteps(int degrees, float gearRatio);
+    int DegToSteps(float degrees, float gearRatio);
     float LimitAngle(float angle, float upperLimit, float lowerLimit, float imuAngle);
     void ScanPattern();
     void TiltScan();
-    double* ecef_to_ned( double* point, double* ref, double* refGeo );
-    double* geo_to_ecef( double* geo );
+    void CheckTiltLimits(int tiltPort);
+    std::vector<double> ecef_to_ned( std::vector<double> point, std::vector<double> ref, std::vector<double> refGeo );
+    std::vector<double> geo_to_ecef( std::vector<double> geo );
     std::vector<double> GetManualAngles();
+    void ResetPosition(int panPort, int tiltPort);
+    void ResetPanPosition(int panPort, int motorID);
 
 public:
 
@@ -79,6 +82,9 @@ public:
     std::vector<std::string> motorVector;
     std::vector<int> degreeVector;
     int count;
+    int lastMode;
+    bool movedToPlume;
+    bool resetAfterPlume;
 
     // ----------------------
     // ----- MESSAGE IN -----

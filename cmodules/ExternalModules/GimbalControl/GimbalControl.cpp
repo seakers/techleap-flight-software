@@ -28,13 +28,12 @@ GimbalControl::~GimbalControl()
 
 void GimbalControl::ReadMessages(){
     if(this->mode_msg.isLinked()){
-        std::cout << "Mode message linked!" << std::endl;
+        //std::cout << "Mode message linked!" << std::endl;
         ControllerModeMsgPayload mode_msg_payload = this->mode_msg();
         this->mode = mode_msg_payload.mode;
-        std::cout << this->mode << std::endl;
+        //std::cout << this->mode << std::endl;
     }
     if(this->ins_msg.isLinked()){
-        std::cout << "IMU ANGLES LINKED!" << std::endl;
         MessageConsumerMsgPayload ins_msg_payload = this->ins_msg();
         this->ins_state = ins_msg_payload.ins_state;
         this->ins_yaw = ins_msg_payload.yaw;
@@ -44,8 +43,7 @@ void GimbalControl::ReadMessages(){
         this->ins_lon = ins_msg_payload.lon;
         this->ins_alt = ins_msg_payload.alt;
     }
-    if(this->imu_msg.isLinked()){
-        std::cout << "IMU ANGLES LINKED!" << std::endl;
+    if(this->manual_msg.isLinked()){
         MessageConsumerManualMsgPayload manual_msg_payload = this->manual_msg();
         this->manual_plume = manual_msg_payload.manual_plume;
         this->manual_lat = manual_msg_payload.manual_lat;
@@ -53,7 +51,7 @@ void GimbalControl::ReadMessages(){
         this->manual_alt = manual_msg_payload.manual_alt;
     }
     if(this->imu_msg.isLinked()){
-        std::cout << "IMU ANGLES LINKED!" << std::endl;
+        //std::cout << "IMU ANGLES LINKED!" << std::endl;
         IMUOutMsgPayload imu_msg_payload = this->imu_msg();
         this->imu_state = imu_msg_payload.state;
         this->imu_yaw = imu_msg_payload.yaw;
@@ -61,7 +59,7 @@ void GimbalControl::ReadMessages(){
         this->imu_roll = imu_msg_payload.roll;
     }
     if(this->fine_msg.isLinked()){
-        std::cout << "Fine angles LINKED!" << std::endl;
+        //std::cout << "Fine angles LINKED!" << std::endl;
         FinePredictionMsgPayload fine_msg_payload = this->fine_msg();
         this->fine_state = fine_msg_payload.state;
         this->fine_pan = fine_msg_payload.pan;
@@ -77,7 +75,7 @@ void GimbalControl::Reset(uint64_t CurrentSimNanos) {
 
     // --> 1. Reset module state
     this->state = 0;
-    this->panPID.Kp = 0.9;
+    this->panPID.Kp = 0.1;
     this->panPID.Ki = 0;
     this->panPID.Kd = 0.1;
     this->panPID.Ci = 0;
@@ -85,7 +83,7 @@ void GimbalControl::Reset(uint64_t CurrentSimNanos) {
     this->panPID.prevTime = this->panPID.currTime;
     this->panPID.prevErr = 0;
 
-    this->tiltPID.Kp = 1;
+    this->tiltPID.Kp = 0.1;
     this->tiltPID.Ki = 0;
     this->tiltPID.Kd = 0;
     this->tiltPID.Ci = 0;
@@ -97,11 +95,14 @@ void GimbalControl::Reset(uint64_t CurrentSimNanos) {
     int tilt = open("/dev/ttyClientT", O_RDWR);
 
     this->count = 0;
+    this->lastMode = 0;
     this->InitializePort(pan,1);
     this->InitializePort(tilt,2);
     this->PanMotorSetup(pan,1);
     this->TiltMotorSetup(tilt,2);
     this->ScanPattern();
+    this->resetAfterPlume = false;
+    this->movedToPlume = false;
 }
 
 
@@ -119,7 +120,10 @@ void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
     // --------------------------
     int pan = open("/dev/ttyClientP", O_RDWR);
     int tilt = open("/dev/ttyClientT", O_RDWR);
-
+    if(this->lastMode == 1 && this->mode == 2) {
+        std::cout << "Resetting after track" << std::endl;
+        this->ResetPosition(pan,tilt);
+    }
     if(this->mode == 2) {
         std::cout << "Scanning!" << std::endl;
         if(motorVector.at(count) == "pan") {
@@ -129,32 +133,53 @@ void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
             this->MoveBySteps(tilt,2,degreeVector.at(count));
         }
         this->count = count + 1;
-        if(this->count > 90) {
+        if(this->count > degreeVector.size()) {
+            this->ResetPosition(pan,tilt);
             this->count = 0;
         }
+        this->lastMode = 2;
     }
-    if(this->mode == 1 && this->fine_msg.isLinked()) {
+    if(this->mode == 1) {
         std::cout << "Tracking plume!" << std::endl;
+        std::cout << "Fine pan: " << this->fine_pan << std::endl;
         float panAngle = this->panPID.pidUpdate(this->fine_pan, CurrentSimNanos);
-        panAngle = this->LimitAngle(panAngle, 42.5, 12.5, this->imu_pitch);
+        //panAngle = this->LimitAngle(panAngle, 42.5, 12.5, this->imu_pitch);
+        std::cout << "panPID output: " << panAngle << std::endl;
         this->MoveBySteps(pan,1,this->DegToSteps(panAngle,1));
+        std::cout << "Fine tilt: " << this->fine_tilt << std::endl;
         float tiltAngle = this->tiltPID.pidUpdate(this->fine_tilt, CurrentSimNanos);
-        tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);
-        this->MoveBySteps(tilt,2,this->DegToSteps(tiltAngle,3.5866));
+        std::cout << "tiltPID output: " << tiltAngle << std::endl;
+        //tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);
+        this->MoveBySteps(tilt,2,this->DegToSteps(tiltAngle,1.5));
+        this->lastMode = 1;
     }
     if(this->mode == 3) {
-        std::cout << "Moving manually!" << std::endl;
-        std::vector<double> angles = this->GetManualAngles();
-        float panAngle = this->panPID.pidUpdate((float)angles.at(0), CurrentSimNanos);
-        panAngle = this->LimitAngle(panAngle, 42.5, 12.5, this->imu_pitch);
-        this->MoveBySteps(pan,1,this->DegToSteps(panAngle,1));
-        float tiltAngle = this->tiltPID.pidUpdate((float)angles.at(1), CurrentSimNanos);
-        tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);
-        this->MoveBySteps(tilt,2,this->DegToSteps(tiltAngle,3.5866));
+        if(this->movedToPlume == false) {
+            std::cout << "Moving manually!" << std::endl;
+            std::vector<double> angles = this->GetManualAngles();
+            //float panAngle = this->LimitAngle((float)angles.at(0), 42.5, 12.5, this->imu_pitch);
+            this->MoveBySteps(pan,1,this->DegToSteps((float)angles.at(0)-112.0,1));
+            //float tiltAngle = this->tiltPID.pidUpdate((float)angles.at(1), CurrentSimNanos);
+            //tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);
+            this->MoveBySteps(tilt,2,this->DegToSteps((float)angles.at(1),1.5));
+            this->movedToPlume = true;
+        }
+        this->lastMode = 3;
     }
     if(this->mode == 0) {
         std::cout << "Not moving!" << std::endl;
+        this->lastMode = 0;
     }
+    std::cout << "Mode in GC: " << this->mode << std::endl;
+    std::cout << "resetAfterPlume in GC: " << this->resetAfterPlume << std::endl;
+    if(this->mode != 3 && this->resetAfterPlume == false && this->movedToPlume == true) {
+        std::cout << "Resetting after plume" << std::endl;
+        this->ResetPosition(pan,tilt);
+        this->resetAfterPlume = true;
+    }
+
+
+    this->CheckTiltLimits(tilt);
 
     // -------------------
     // ----- Logging -----
@@ -162,52 +187,79 @@ void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
     bskLogger.bskLog(BSK_INFORMATION, "GimbalControl ------ ran update at %fs", this->moduleID, (float) CurrentSimNanos/(1e9));
 }
 
+void GimbalControl::CheckTiltLimits(int tiltPort) {
+    if(abs(this->imu_pitch) > 45.0) {
+        this->MoveBySteps(tiltPort,2,this->DegToSteps(-this->imu_pitch,2.0));
+    }
+}
+
+void GimbalControl::ResetPosition(int panPort, int tiltPort) {
+    std::cout << "Resetting position!" << std::endl;
+    this->MoveBySteps(tiltPort,2,this->DegToSteps(-this->imu_pitch,2.0));
+    this->ResetPanPosition(panPort,1);
+    //this->MoveBySteps(panPort,1,this->DegToSteps(-(this->imu_yaw-112.0),1.0));
+}
+
 std::vector<double> GimbalControl::GetManualAngles(){
     std::vector<double> angles;
-    double plume_geo[3] = {this->manual_lat*PI/180,this->manual_lon*PI/180,this->manual_alt};
-    double* plume_ecef = this->geo_to_ecef(plume_geo);
-    double balloon_geo[3] = {this->ins_lat*PI/180,this->ins_lon*PI/180,this->ins_alt};
-    double* balloon_ecef = this->geo_to_ecef(balloon_geo);
-    double* plume_ned = this->ecef_to_ned(plume_ecef,balloon_ecef,balloon_geo);
-    double phi = atan2(plume_ned[1],plume_ned[0]) * 180 / PI;
-    double theta = atan2(hypot(plume_ned[0],plume_ned[1]),plume_ned[2]) * 180 / PI;
+    std::vector<double> plume_geo;
+    std::vector<double> balloon_geo;
+    plume_geo.push_back(this->manual_lat*PI/180);
+    plume_geo.push_back(this->manual_lon*PI/180);
+    plume_geo.push_back(this->manual_alt);
+    std::cout << "Starting geo to ecef" << std::endl;
+    std::vector<double> plume_ecef = this->geo_to_ecef(plume_geo);
+    balloon_geo.push_back(this->ins_lat*PI/180);
+    balloon_geo.push_back(this->ins_lon*PI/180);
+    balloon_geo.push_back(this->ins_alt);
+    std::vector<double> balloon_ecef = this->geo_to_ecef(balloon_geo);
+    std::cout << "Starting ecef to ned" << std::endl;
+    std::vector<double> plume_ned = this->ecef_to_ned(plume_ecef,balloon_ecef,balloon_geo);
+    std::cout << "Starting ned to pan/tilt" << std::endl;
+    double phi = atan2(plume_ned.at(1),plume_ned.at(0)) * 180 / PI;
+    double theta = atan2(hypot(plume_ned.at(0),plume_ned.at(1)),plume_ned.at(2)) * 180 / PI;
     angles.push_back(phi);
     angles.push_back(theta);
+    std::cout << "Manual angles: " << phi << ", " << theta << std::endl;
     return angles;
 }
 
-double* GimbalControl::geo_to_ecef( double* geo ) {
-    double ecef[3];  //Results go here (x, y, z)
+std::vector<double> GimbalControl::geo_to_ecef( std::vector<double> geo ) {
+    std::vector<double> ecef;  //Results go here (x, y, z)
     double lat = geo[0];
     double lon = geo[1];
     double alt = geo[2];
     double a = 6378137.0;
     double e2 = 6.6943799901377997e-3;
     double n = a/sqrt( 1 - e2*sin( lat )*sin( lat ) );
-    ecef[0] = ( n + alt )*cos( lat )*cos( lon );    //ECEF x
-    ecef[1] = ( n + alt )*cos( lat )*sin( lon );    //ECEF y
-    ecef[2] = ( n*(1 - e2 ) + alt )*sin( lat );          //ECEF z
+    ecef.push_back(( n + alt )*cos( lat )*cos( lon ));    //ECEF x
+    ecef.push_back(( n + alt )*cos( lat )*sin( lon ));    //ECEF y
+    ecef.push_back(( n*(1 - e2 ) + alt )*sin( lat ));          //ECEF z
     return( ecef );     //Return x, y, z in ECEF
 }
 
-double* GimbalControl::ecef_to_ned( double* point, double* ref, double* ref_geo ) {
-    double enu[3];  //Results go here (x, y, z)
-    double ned[3];
-    double x_diff = point[0] - ref[0];
-    double y_diff = point[1] - ref[1];
-    double z_diff = point[2] - ref[2];
-    enu[0] = -sin(ref_geo[1])*x_diff + cos(ref_geo[1])*y_diff;
-    enu[1] = -sin(ref_geo[0])*cos(ref_geo[1])*x_diff + -sin(ref_geo[0])*sin(ref_geo[1])*y_diff + cos(ref_geo[0])*z_diff;
-    enu[2] = cos(ref_geo[0])*cos(ref_geo[1])*x_diff + cos(ref_geo[0])*sin(ref_geo[1])*y_diff + sin(ref_geo[0])*z_diff;
-    ned[0] = enu[1];
-    ned[1] = enu[0];
-    ned[2] = -enu[2];
+ std::vector<double> GimbalControl::ecef_to_ned( std::vector<double> point,  std::vector<double> ref,  std::vector<double> ref_geo ) {
+    std::vector<double> enu;  //Results go here (x, y, z)
+    std::vector<double> ned;
+    double x_diff = 0.0;
+    double y_diff = 0.0;
+    double z_diff = 0.0;
+    x_diff = point.at(0) - ref.at(0);
+    y_diff = point.at(1) - ref.at(1);
+    z_diff = point.at(2) - ref.at(2);
+    enu.push_back(-sin(ref_geo.at(1))*x_diff + cos(ref_geo.at(1))*y_diff);
+    enu.push_back(sin(ref_geo.at(0))*cos(ref_geo.at(1))*x_diff + -sin(ref_geo.at(0))*sin(ref_geo.at(1))*y_diff + cos(ref_geo.at(0))*z_diff);
+    enu.push_back(cos(ref_geo.at(0))*cos(ref_geo.at(1))*x_diff + cos(ref_geo.at(0))*sin(ref_geo.at(1))*y_diff + sin(ref_geo.at(0))*z_diff);
+    ned.push_back(enu.at(1));
+    ned.push_back(enu.at(0));
+    ned.push_back(-enu.at(2));
     return( ned );     //Return x, y, z in NED
 }
 
 void GimbalControl::PanMotorSetup(int port, int motorID) {
     char set_reset_msg[] = {"RE\r"};
     this->SendCommand(port, motorID, set_reset_msg);
+    usleep(1000000);
     char set_steps_msg[] = { "EG51200\r" };
     this->SendCommand(port, motorID, set_steps_msg);
     char stall_detect_msg[] = { "EF1\r" };
@@ -235,6 +287,7 @@ void GimbalControl::PanMotorSetup(int port, int motorID) {
 void GimbalControl::TiltMotorSetup(int port, int motorID) {
     char set_reset_msg[] = {"RE\r"};
     this->SendCommand(port, motorID, set_reset_msg);
+    usleep(1000000);
     char set_steps_msg[] = { "EG51200\r" };
     this->SendCommand(port, motorID, set_steps_msg);
     char stall_detect_msg[] = { "EF1\r" };
@@ -306,7 +359,7 @@ void GimbalControl::SendCommand(int port, int motorID, char command[]) {
     std::string motorStr = ss.str();
     strcpy(finalCommand,motorStr.c_str());
     strcat(finalCommand,command);
-    //std::cout << finalCommand << std::endl;
+    std::cout << finalCommand << std::endl;
     write(port, finalCommand, sizeof(finalCommand));
     usleep(100000);
 }
@@ -328,47 +381,63 @@ void GimbalControl::MoveBySteps(int port, int motorID, int nSteps) {
     strcat(moveCommand,stepsStr.c_str());
     strcat(moveCommand,r);
     this->SendCommand(port, motorID, moveCommand);
-    //char read_buf [256];
-    //memset(&read_buf, '\0', sizeof(read_buf));
-    //char ip_msg[] = { "IP\r" };
-    //this->SendCommand(port, motorID, ip_msg);
-    //int num_bytes = read(port, &read_buf, sizeof(read_buf));
-    //printf("Read %i bytes. Received message: %s", num_bytes, read_buf);
+}
+
+void GimbalControl::ResetPanPosition(int port, int motorID) {
+    int length = 0;
+    int nSteps = 0;
+    if(nSteps < 0) {
+        length = 4;
+    } else {
+        length = 3;
+    }
+    char moveCommand[4+length];
+    char* fp = "FP";
+    char* r = "\r";
+    std::stringstream ss;
+    ss << nSteps;
+    std::string stepsStr = ss.str();
+    strcpy(moveCommand,fp);
+    strcat(moveCommand,stepsStr.c_str());
+    strcat(moveCommand,r);
+    this->SendCommand(port, motorID, moveCommand);
 }
 
 void GimbalControl::ScanPattern() {
     this->TiltScan();
 
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 15; i=i+5) {
         this->motorVector.push_back("pan");
-        this->degreeVector.push_back(this->DegToSteps(-1,1));
+        this->degreeVector.push_back(this->DegToSteps(-5,1));
     }
 
     this->TiltScan();
 
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 30; i=i+5) {
         this->motorVector.push_back("pan");
-        this->degreeVector.push_back(this->DegToSteps(1,1));
+        this->degreeVector.push_back(this->DegToSteps(5,1));
     }
 
-    for (int i = 0; i < 15; i++) {
+    this->TiltScan();
+
+    for (int i = 0; i < 15; i=i+5) {
         this->motorVector.push_back("pan");
-        this->degreeVector.push_back(this->DegToSteps(-1,1));
+        this->degreeVector.push_back(this->DegToSteps(-5,1));
     }
 }
 
 void GimbalControl::TiltScan() {
     for (int i = 0; i < 15; i++) {
         this->motorVector.push_back("tilt");
-        this->degreeVector.push_back(this->DegToSteps(1,3.5866));
+        this->degreeVector.push_back(this->DegToSteps(1,1.5));
     }
     for (int i = 0; i < 30; i++) {
         this->motorVector.push_back("tilt");
-        this->degreeVector.push_back(this->DegToSteps(-1,3.5866));
+        this->degreeVector.push_back(this->DegToSteps(-1,1.5));
     }
     for (int i = 0; i < 15; i++) {
         this->motorVector.push_back("tilt");
-        this->degreeVector.push_back(this->DegToSteps(1,3.5866));
+        this->degreeVector.push_back(this->DegToSteps(1,1.5));
     }
 }
 
@@ -382,7 +451,7 @@ void GimbalControl::TiltScan() {
  std::cout << ypr << std::endl;
 }*/
 
-int GimbalControl::DegToSteps(int degrees, float gearRatio) {
+int GimbalControl::DegToSteps(float degrees, float gearRatio) {
     int stepsPerRev = 51200;
     int oneRev = 360;
     float prod = degrees * gearRatio * stepsPerRev / oneRev;

@@ -1,7 +1,7 @@
 import pytest
 import sys
 import numpy as np
-sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 # sys.path.insert(1, '/app')
 
 
@@ -9,7 +9,7 @@ sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import GimbalControl, Controller, FineNN
+from Basilisk.ExternalModules import GimbalControl, Controller, InertialMeasurementUnit
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -34,7 +34,7 @@ from Basilisk.architecture import bskLogging
 @pytest.mark.parametrize(
     'param1, param2',
     [
-        (1.0, 0.0),
+        (1.0, 100.0),
     ]
 )
 def test_function(param1, param2):
@@ -69,8 +69,8 @@ def run(param1, param2):
     sim_client = SimulationClient(time_step=param1, duration=param2)
 
     # --> 2. Create modules
-    #imu_module = InertialMeasurementUnit.InertialMeasurementUnit()
-    #imu_module.ModelTag = "IMU"
+    imu_module = InertialMeasurementUnit.InertialMeasurementUnit()
+    imu_module.ModelTag = "IMU"
 
     gimbal_module = GimbalControl.GimbalControl()
     gimbal_module.ModelTag = "GimbalControl"
@@ -93,7 +93,7 @@ def run(param1, param2):
         fine_msg = messaging.FinePredictionMsg().write(fine_msg_data)
         return fine_msg
 
-    def get_controller_mode_msg(mode=1):
+    def get_controller_mode_msg(mode=2):
         mode_msg_data = messaging.ControllerModeMsgPayload()
         mode_msg_data.mode = mode
         mode_msg = messaging.ControllerModeMsg().write(mode_msg_data)
@@ -102,7 +102,7 @@ def run(param1, param2):
 
     # --> 4. Subscribe to messages
     #gimbal_module.fine_msg.subscribeTo(get_fine_msg())
-    gimbal_module.mode_msg.subscribeTo(get_controller_mode_msg(245))
+    gimbal_module.mode_msg.subscribeTo(get_controller_mode_msg(2))
 
 
     # --> 5. Set output message recording

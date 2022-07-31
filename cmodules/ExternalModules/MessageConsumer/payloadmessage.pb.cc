@@ -14,56 +14,50 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-
-PROTOBUF_PRAGMA_INIT_SEG
-
-namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = _pb::internal;
-
 namespace raven {
 namespace fcu {
 namespace swicd {
-PROTOBUF_CONSTEXPR RavenFCU_SWICD_PayloadMessage::RavenFCU_SWICD_PayloadMessage(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.messagesentts_)*/0
-  , /*decltype(_impl_.messagereceivedts_)*/0
-  , /*decltype(_impl_._cached_size_)*/{}} {}
-struct RavenFCU_SWICD_PayloadMessageDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR RavenFCU_SWICD_PayloadMessageDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~RavenFCU_SWICD_PayloadMessageDefaultTypeInternal() {}
-  union {
-    RavenFCU_SWICD_PayloadMessage _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RavenFCU_SWICD_PayloadMessageDefaultTypeInternal _RavenFCU_SWICD_PayloadMessage_default_instance_;
+class RavenFCU_SWICD_PayloadMessageDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RavenFCU_SWICD_PayloadMessage> _instance;
+} _RavenFCU_SWICD_PayloadMessage_default_instance_;
 }  // namespace swicd
 }  // namespace fcu
 }  // namespace raven
-static ::_pb::Metadata file_level_metadata_payloadmessage_2eproto[1];
-static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_payloadmessage_2eproto = nullptr;
-static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_payloadmessage_2eproto = nullptr;
+static void InitDefaultsscc_info_RavenFCU_SWICD_PayloadMessage_payloadmessage_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-const uint32_t TableStruct_payloadmessage_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  {
+    void* ptr = &::raven::fcu::swicd::_RavenFCU_SWICD_PayloadMessage_default_instance_;
+    new (ptr) ::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RavenFCU_SWICD_PayloadMessage_payloadmessage_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_RavenFCU_SWICD_PayloadMessage_payloadmessage_2eproto}, {}};
+
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_payloadmessage_2eproto[1];
+static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_payloadmessage_2eproto = nullptr;
+static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_payloadmessage_2eproto = nullptr;
+
+const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_payloadmessage_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _split_
-  ~0u,  // no sizeof(Split)
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage, _impl_.messagesentts_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage, _impl_.messagereceivedts_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage, _impl_.data_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage, messagesentts_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage, messagereceivedts_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage, data_),
 };
-static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage)},
+static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  { 0, -1, sizeof(::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage)},
 };
 
-static const ::_pb::Message* const file_default_instances[] = {
-  &::raven::fcu::swicd::_RavenFCU_SWICD_PayloadMessage_default_instance_._instance,
+static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::raven::fcu::swicd::_RavenFCU_SWICD_PayloadMessage_default_instance_),
 };
 
 const char descriptor_table_protodef_payloadmessage_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -72,196 +66,178 @@ const char descriptor_table_protodef_payloadmessage_2eproto[] PROTOBUF_SECTION_V
   "ageSentTS\030\001 \001(\001\022\031\n\021messageReceivedTS\030\002 \001"
   "(\001\022\014\n\004data\030\003 \001(\014b\006proto3"
   ;
-static ::_pbi::once_flag descriptor_table_payloadmessage_2eproto_once;
-const ::_pbi::DescriptorTable descriptor_table_payloadmessage_2eproto = {
-    false, false, 144, descriptor_table_protodef_payloadmessage_2eproto,
-    "payloadmessage.proto",
-    &descriptor_table_payloadmessage_2eproto_once, nullptr, 0, 1,
-    schemas, file_default_instances, TableStruct_payloadmessage_2eproto::offsets,
-    file_level_metadata_payloadmessage_2eproto, file_level_enum_descriptors_payloadmessage_2eproto,
-    file_level_service_descriptors_payloadmessage_2eproto,
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_payloadmessage_2eproto_deps[1] = {
 };
-PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_payloadmessage_2eproto_getter() {
-  return &descriptor_table_payloadmessage_2eproto;
-}
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_payloadmessage_2eproto_sccs[1] = {
+  &scc_info_RavenFCU_SWICD_PayloadMessage_payloadmessage_2eproto.base,
+};
+static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_payloadmessage_2eproto_once;
+const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_payloadmessage_2eproto = {
+  false, false, descriptor_table_protodef_payloadmessage_2eproto, "payloadmessage.proto", 144,
+  &descriptor_table_payloadmessage_2eproto_once, descriptor_table_payloadmessage_2eproto_sccs, descriptor_table_payloadmessage_2eproto_deps, 1, 0,
+  schemas, file_default_instances, TableStruct_payloadmessage_2eproto::offsets,
+  file_level_metadata_payloadmessage_2eproto, 1, file_level_enum_descriptors_payloadmessage_2eproto, file_level_service_descriptors_payloadmessage_2eproto,
+};
 
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_payloadmessage_2eproto(&descriptor_table_payloadmessage_2eproto);
+static bool dynamic_init_dummy_payloadmessage_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_payloadmessage_2eproto)), true);
 namespace raven {
 namespace fcu {
 namespace swicd {
 
 // ===================================================================
 
+void RavenFCU_SWICD_PayloadMessage::InitAsDefaultInstance() {
+}
 class RavenFCU_SWICD_PayloadMessage::_Internal {
  public:
 };
 
-RavenFCU_SWICD_PayloadMessage::RavenFCU_SWICD_PayloadMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+RavenFCU_SWICD_PayloadMessage::RavenFCU_SWICD_PayloadMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
   // @@protoc_insertion_point(arena_constructor:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
 }
 RavenFCU_SWICD_PayloadMessage::RavenFCU_SWICD_PayloadMessage(const RavenFCU_SWICD_PayloadMessage& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  RavenFCU_SWICD_PayloadMessage* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.data_){}
-    , decltype(_impl_.messagesentts_){}
-    , decltype(_impl_.messagereceivedts_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.data_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.data_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_data().empty()) {
-    _this->_impl_.data_.Set(from._internal_data(), 
-      _this->GetArenaForAllocation());
+    data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_data(),
+      GetArena());
   }
-  ::memcpy(&_impl_.messagesentts_, &from._impl_.messagesentts_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.messagereceivedts_) -
-    reinterpret_cast<char*>(&_impl_.messagesentts_)) + sizeof(_impl_.messagereceivedts_));
+  ::memcpy(&messagesentts_, &from.messagesentts_,
+    static_cast<size_t>(reinterpret_cast<char*>(&messagereceivedts_) -
+    reinterpret_cast<char*>(&messagesentts_)) + sizeof(messagereceivedts_));
   // @@protoc_insertion_point(copy_constructor:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
 }
 
-inline void RavenFCU_SWICD_PayloadMessage::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_.data_){}
-    , decltype(_impl_.messagesentts_){0}
-    , decltype(_impl_.messagereceivedts_){0}
-    , /*decltype(_impl_._cached_size_)*/{}
-  };
-  _impl_.data_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.data_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+void RavenFCU_SWICD_PayloadMessage::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_RavenFCU_SWICD_PayloadMessage_payloadmessage_2eproto.base);
+  data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&messagesentts_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&messagereceivedts_) -
+      reinterpret_cast<char*>(&messagesentts_)) + sizeof(messagereceivedts_));
 }
 
 RavenFCU_SWICD_PayloadMessage::~RavenFCU_SWICD_PayloadMessage() {
   // @@protoc_insertion_point(destructor:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
   SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void RavenFCU_SWICD_PayloadMessage::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.data_.Destroy();
+void RavenFCU_SWICD_PayloadMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  data_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
+void RavenFCU_SWICD_PayloadMessage::ArenaDtor(void* object) {
+  RavenFCU_SWICD_PayloadMessage* _this = reinterpret_cast< RavenFCU_SWICD_PayloadMessage* >(object);
+  (void)_this;
+}
+void RavenFCU_SWICD_PayloadMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
 void RavenFCU_SWICD_PayloadMessage::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _cached_size_.Set(size);
 }
+const RavenFCU_SWICD_PayloadMessage& RavenFCU_SWICD_PayloadMessage::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RavenFCU_SWICD_PayloadMessage_payloadmessage_2eproto.base);
+  return *internal_default_instance();
+}
+
 
 void RavenFCU_SWICD_PayloadMessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
-  uint32_t cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.data_.ClearToEmpty();
-  ::memset(&_impl_.messagesentts_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.messagereceivedts_) -
-      reinterpret_cast<char*>(&_impl_.messagesentts_)) + sizeof(_impl_.messagereceivedts_));
+  data_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::memset(&messagesentts_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&messagereceivedts_) -
+      reinterpret_cast<char*>(&messagesentts_)) + sizeof(messagereceivedts_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* RavenFCU_SWICD_PayloadMessage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* RavenFCU_SWICD_PayloadMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
     switch (tag >> 3) {
       // double messageSentTS = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 9)) {
-          _impl_.messagesentts_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
+          messagesentts_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // double messageReceivedTS = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 17)) {
-          _impl_.messagereceivedts_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
+          messagereceivedts_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // bytes data = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_data();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
-      default:
-        goto handle_unusual;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
     }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
   }  // while
-message_done:
+success:
   return ptr;
 failure:
   ptr = nullptr;
-  goto message_done;
+  goto success;
 #undef CHK_
 }
 
-uint8_t* RavenFCU_SWICD_PayloadMessage::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+::PROTOBUF_NAMESPACE_ID::uint8* RavenFCU_SWICD_PayloadMessage::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
-  uint32_t cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   // double messageSentTS = 1;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_messagesentts = this->_internal_messagesentts();
-  uint64_t raw_messagesentts;
-  memcpy(&raw_messagesentts, &tmp_messagesentts, sizeof(tmp_messagesentts));
-  if (raw_messagesentts != 0) {
+  if (!(this->messagesentts() <= 0 && this->messagesentts() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(1, this->_internal_messagesentts(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_messagesentts(), target);
   }
 
   // double messageReceivedTS = 2;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_messagereceivedts = this->_internal_messagereceivedts();
-  uint64_t raw_messagereceivedts;
-  memcpy(&raw_messagereceivedts, &tmp_messagereceivedts, sizeof(tmp_messagereceivedts));
-  if (raw_messagereceivedts != 0) {
+  if (!(this->messagereceivedts() <= 0 && this->messagereceivedts() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(2, this->_internal_messagereceivedts(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_messagereceivedts(), target);
   }
 
   // bytes data = 3;
-  if (!this->_internal_data().empty()) {
+  if (this->data().size() > 0) {
     target = stream->WriteBytesMaybeAliased(
         3, this->_internal_data(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
@@ -272,71 +248,74 @@ size_t RavenFCU_SWICD_PayloadMessage::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
   size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // bytes data = 3;
-  if (!this->_internal_data().empty()) {
+  if (this->data().size() > 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_data());
   }
 
   // double messageSentTS = 1;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_messagesentts = this->_internal_messagesentts();
-  uint64_t raw_messagesentts;
-  memcpy(&raw_messagesentts, &tmp_messagesentts, sizeof(tmp_messagesentts));
-  if (raw_messagesentts != 0) {
+  if (!(this->messagesentts() <= 0 && this->messagesentts() >= 0)) {
     total_size += 1 + 8;
   }
 
   // double messageReceivedTS = 2;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_messagereceivedts = this->_internal_messagereceivedts();
-  uint64_t raw_messagereceivedts;
-  memcpy(&raw_messagereceivedts, &tmp_messagereceivedts, sizeof(tmp_messagereceivedts));
-  if (raw_messagereceivedts != 0) {
+  if (!(this->messagereceivedts() <= 0 && this->messagereceivedts() >= 0)) {
     total_size += 1 + 8;
   }
 
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RavenFCU_SWICD_PayloadMessage::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    RavenFCU_SWICD_PayloadMessage::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RavenFCU_SWICD_PayloadMessage::GetClassData() const { return &_class_data_; }
+void RavenFCU_SWICD_PayloadMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RavenFCU_SWICD_PayloadMessage* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<RavenFCU_SWICD_PayloadMessage>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
+    MergeFrom(*source);
+  }
+}
 
-
-void RavenFCU_SWICD_PayloadMessage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<RavenFCU_SWICD_PayloadMessage*>(&to_msg);
-  auto& from = static_cast<const RavenFCU_SWICD_PayloadMessage&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+void RavenFCU_SWICD_PayloadMessage::MergeFrom(const RavenFCU_SWICD_PayloadMessage& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_data().empty()) {
-    _this->_internal_set_data(from._internal_data());
+  if (from.data().size() > 0) {
+    _internal_set_data(from._internal_data());
   }
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_messagesentts = from._internal_messagesentts();
-  uint64_t raw_messagesentts;
-  memcpy(&raw_messagesentts, &tmp_messagesentts, sizeof(tmp_messagesentts));
-  if (raw_messagesentts != 0) {
-    _this->_internal_set_messagesentts(from._internal_messagesentts());
+  if (!(from.messagesentts() <= 0 && from.messagesentts() >= 0)) {
+    _internal_set_messagesentts(from._internal_messagesentts());
   }
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_messagereceivedts = from._internal_messagereceivedts();
-  uint64_t raw_messagereceivedts;
-  memcpy(&raw_messagereceivedts, &tmp_messagereceivedts, sizeof(tmp_messagereceivedts));
-  if (raw_messagereceivedts != 0) {
-    _this->_internal_set_messagereceivedts(from._internal_messagereceivedts());
+  if (!(from.messagereceivedts() <= 0 && from.messagereceivedts() >= 0)) {
+    _internal_set_messagereceivedts(from._internal_messagereceivedts());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RavenFCU_SWICD_PayloadMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:raven.fcu.swicd.RavenFCU_SWICD_PayloadMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
 }
 
 void RavenFCU_SWICD_PayloadMessage::CopyFrom(const RavenFCU_SWICD_PayloadMessage& from) {
@@ -352,34 +331,27 @@ bool RavenFCU_SWICD_PayloadMessage::IsInitialized() const {
 
 void RavenFCU_SWICD_PayloadMessage::InternalSwap(RavenFCU_SWICD_PayloadMessage* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.data_, lhs_arena,
-      &other->_impl_.data_, rhs_arena
-  );
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  data_.Swap(&other->data_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_PayloadMessage, _impl_.messagereceivedts_)
-      + sizeof(RavenFCU_SWICD_PayloadMessage::_impl_.messagereceivedts_)
-      - PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_PayloadMessage, _impl_.messagesentts_)>(
-          reinterpret_cast<char*>(&_impl_.messagesentts_),
-          reinterpret_cast<char*>(&other->_impl_.messagesentts_));
+      PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_PayloadMessage, messagereceivedts_)
+      + sizeof(RavenFCU_SWICD_PayloadMessage::messagereceivedts_)
+      - PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_PayloadMessage, messagesentts_)>(
+          reinterpret_cast<char*>(&messagesentts_),
+          reinterpret_cast<char*>(&other->messagesentts_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata RavenFCU_SWICD_PayloadMessage::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_payloadmessage_2eproto_getter, &descriptor_table_payloadmessage_2eproto_once,
-      file_level_metadata_payloadmessage_2eproto[0]);
+  return GetMetadataStatic();
 }
+
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace swicd
 }  // namespace fcu
 }  // namespace raven
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage*
-Arena::CreateMaybeMessage< ::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage* Arena::CreateMaybeMessage< ::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE

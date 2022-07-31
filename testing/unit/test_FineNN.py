@@ -1,7 +1,7 @@
 import pytest
 import sys
 import numpy as np
-sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 #sys.path.insert(1, '/app')
 
 
@@ -84,10 +84,10 @@ def run(param1, param2):
     # vnir_msg_data.green = np.zeros([512, 512], dtype=float).tolist()
     # vnir_msg_data.blue = np.zeros([512, 512], dtype=float).tolist()
     # vnir_msg_data.nir = np.zeros([512, 512], dtype=float).tolist()
-    red = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_red.csv', delimiter=',', dtype=float)
-    blue = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_blue.csv', delimiter=',', dtype=float)
-    green = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_green.csv', delimiter=',', dtype=float)
-    nir = np.genfromtxt('/home/ben/repos/techleap-flight-software/images/0_nir.csv', delimiter=',', dtype=float)
+    red = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_red.csv', delimiter=',', dtype=float)
+    blue = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_blue.csv', delimiter=',', dtype=float)
+    green = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_green.csv', delimiter=',', dtype=float)
+    nir = np.genfromtxt('/home/ben/nvme/repos/techleap-flight-software/images/0_nir.csv', delimiter=',', dtype=float)
     vnir_msg_data.red = red.tolist()
     vnir_msg_data.green = green.tolist()
     vnir_msg_data.blue = blue.tolist()

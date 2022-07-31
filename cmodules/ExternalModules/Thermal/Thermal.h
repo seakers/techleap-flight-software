@@ -4,15 +4,10 @@
 
 #ifndef THERMAL_H
 #define THERMAL_H
-
+#include "msgPayloadDefC/ThermalMsgPayload.h"
 #include "architecture/_GeneralModuleFiles/sys_model.h"
 #include "architecture/utilities/bskLogging.h"
 #include "architecture/messaging/messaging.h"
-
-// ---------------------------
-// ----- MESSAGE IMPORTS -----
-// ---------------------------
-#include "msgPayloadDefC/ThermalMsgPayload.h"
 
 
 /*! @brief basic Basilisk C++ module class */

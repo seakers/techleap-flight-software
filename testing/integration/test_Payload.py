@@ -2,7 +2,7 @@ import pytest
 import sys
 import numpy as np
 import csv
-sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 # sys.path.insert(1, '/app')
 
 
@@ -91,7 +91,7 @@ def run(param1, param2):
 
     messages = []
 
-    with open('/home/ben/repos/techleap-flight-software/testing/operable_only.csv', mode='r') as csv_file:
+    with open('/home/ben/nvme/repos/techleap-flight-software/testing/operable_only.csv', mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
         for row in csv_reader:

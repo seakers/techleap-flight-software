@@ -10,8 +10,8 @@
 /*! @brief Brief description of what this message contains */
 typedef struct {
     int state;
-    int pan;
-    int tilt;
+    float pan;
+    float tilt;
     Eigen::MatrixXd mask;
 }FinePredictionMsgPayload;
 

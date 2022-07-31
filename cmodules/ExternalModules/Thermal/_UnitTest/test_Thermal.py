@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import os
 # sys.path.insert(1, '/home/gabe/repos/techleap/techleap-flight-software')
-sys.path.insert(1, '/app')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 
 
 # --> Simulation Import

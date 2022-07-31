@@ -39,6 +39,9 @@ struct MessageConsumerMsg_C;
 %include "msgPayloadDefC/MessageConsumerManualMsgPayload.h"
 struct MessageConsumerManualMsg_C;
 
+%include "msgPayloadDefC/TelemetryMsgPayload.h"
+struct TelemetryMsg_C;
+
 %pythoncode %{
 import sys
 protectAllClasses(sys.modules[__name__])

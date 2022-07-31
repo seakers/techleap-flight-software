@@ -14,12 +14,14 @@
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
+#include "msgPayloadDefC/ControllerOutMsgPayload.h"
 #include "msgPayloadDefC/ImagerThermalOutMsgPayload.h"
 #include "msgPayloadDefC/ImagerVNIROutMsgPayload.h"
 #include "msgPayloadDefC/FinePredictionMsgPayload.h"
 #include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 #include "msgPayloadDefC/GeoTrackingMsgPayload.h"
 #include "msgPayloadDefC/IMUOutMsgPayload.h"
+#include "msgPayloadDefC/TelemetryMsgPayload.h"
 
 #include <Eigen/Dense>
 #include<fstream>
@@ -38,11 +40,15 @@ public:
 
     void ReadMessages(uint64_t CurrentSimNanos);
     void saveData(std::string fileName, Eigen::MatrixXd matrix);
+    void InitializePort(int serial_port);
     //Eigen::MatrixXd openData(std::string fileToOpen);
 
 public:
 
     int state;
+    int directoryCount;
+    std::string temps;
+    std::string telemetry;
 
     // ----------------------
     // ----- MESSAGE IN -----
@@ -50,6 +56,10 @@ public:
 
     ReadFunctor<ControllerModeMsgPayload> mode_msg;
     int mode;
+
+    ReadFunctor<ControllerOutMsgPayload> controller_msg;
+    int cont_state;
+    std::string cont_msg;
 
     ReadFunctor<ImagerVNIROutMsgPayload> vnir_msg;
     Eigen::MatrixXd red;
@@ -86,6 +96,8 @@ public:
     double ins_pitch;
     double ins_roll;
     int ins_state;
+
+    Message<TelemetryMsgPayload> telemetry_msg;
 
 
     // --> LOGGING

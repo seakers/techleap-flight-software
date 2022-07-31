@@ -1,6 +1,6 @@
 import pytest
 import sys
-sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
+sys.path.insert(1, '/home/ben/nvme/repos/techleap-flight-software')
 
 
 # --> Simulation Import
@@ -27,7 +27,7 @@ from Basilisk.ExternalModules import InertialMeasurementUnit
 @pytest.mark.parametrize(
     'param1, param2',
     [
-        (1.0, 1.0),
+        (1.0, 60.0),
     ]
 )
 def test_function(param1, param2):

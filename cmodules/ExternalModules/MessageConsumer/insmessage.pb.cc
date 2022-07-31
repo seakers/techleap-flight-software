@@ -14,88 +14,66 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-
-PROTOBUF_PRAGMA_INIT_SEG
-
-namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = _pb::internal;
-
 namespace raven {
 namespace fcu {
 namespace swicd {
-PROTOBUF_CONSTEXPR RavenFCU_SWICD_INSmessage::RavenFCU_SWICD_INSmessage(
-    ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.timestamp_)*/0
-  , /*decltype(_impl_.latitude_)*/0
-  , /*decltype(_impl_.longitude_)*/0
-  , /*decltype(_impl_.altitude_)*/0
-  , /*decltype(_impl_.roll_)*/0
-  , /*decltype(_impl_.pitch_)*/0
-  , /*decltype(_impl_.yaw_)*/0
-  , /*decltype(_impl_.accel_x_)*/0
-  , /*decltype(_impl_.accel_y_)*/0
-  , /*decltype(_impl_.accel_z_)*/0
-  , /*decltype(_impl_.barometer_)*/0
-  , /*decltype(_impl_.course_)*/0
-  , /*decltype(_impl_.speed_)*/0
-  , /*decltype(_impl_.velocityn_)*/0
-  , /*decltype(_impl_.velocitye_)*/0
-  , /*decltype(_impl_.velocityd_)*/0
-  , /*decltype(_impl_.numsats_)*/0
-  , /*decltype(_impl_.declination_)*/0
-  , /*decltype(_impl_.gpsfix_)*/0
-  , /*decltype(_impl_._cached_size_)*/{}} {}
-struct RavenFCU_SWICD_INSmessageDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR RavenFCU_SWICD_INSmessageDefaultTypeInternal()
-      : _instance(::_pbi::ConstantInitialized{}) {}
-  ~RavenFCU_SWICD_INSmessageDefaultTypeInternal() {}
-  union {
-    RavenFCU_SWICD_INSmessage _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RavenFCU_SWICD_INSmessageDefaultTypeInternal _RavenFCU_SWICD_INSmessage_default_instance_;
+class RavenFCU_SWICD_INSmessageDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RavenFCU_SWICD_INSmessage> _instance;
+} _RavenFCU_SWICD_INSmessage_default_instance_;
 }  // namespace swicd
 }  // namespace fcu
 }  // namespace raven
-static ::_pb::Metadata file_level_metadata_insmessage_2eproto[1];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_insmessage_2eproto[1];
-static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_insmessage_2eproto = nullptr;
+static void InitDefaultsscc_info_RavenFCU_SWICD_INSmessage_insmessage_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-const uint32_t TableStruct_insmessage_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  {
+    void* ptr = &::raven::fcu::swicd::_RavenFCU_SWICD_INSmessage_default_instance_;
+    new (ptr) ::raven::fcu::swicd::RavenFCU_SWICD_INSmessage();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::raven::fcu::swicd::RavenFCU_SWICD_INSmessage::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RavenFCU_SWICD_INSmessage_insmessage_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_RavenFCU_SWICD_INSmessage_insmessage_2eproto}, {}};
+
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_insmessage_2eproto[1];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_insmessage_2eproto[1];
+static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_insmessage_2eproto = nullptr;
+
+const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_insmessage_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  ~0u,  // no _split_
-  ~0u,  // no sizeof(Split)
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.timestamp_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.latitude_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.longitude_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.altitude_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.roll_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.pitch_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.yaw_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.accel_x_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.accel_y_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.accel_z_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.barometer_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.course_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.speed_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.velocityn_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.velocitye_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.velocityd_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.numsats_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.declination_),
-  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, _impl_.gpsfix_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, timestamp_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, latitude_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, longitude_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, altitude_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, roll_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, pitch_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, yaw_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, accel_x_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, accel_y_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, accel_z_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, barometer_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, course_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, speed_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, velocityn_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, velocitye_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, velocityd_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, numsats_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, declination_),
+  PROTOBUF_FIELD_OFFSET(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage, gpsfix_),
 };
-static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage)},
+static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  { 0, -1, sizeof(::raven::fcu::swicd::RavenFCU_SWICD_INSmessage)},
 };
 
-static const ::_pb::Message* const file_default_instances[] = {
-  &::raven::fcu::swicd::_RavenFCU_SWICD_INSmessage_default_instance_._instance,
+static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::raven::fcu::swicd::_RavenFCU_SWICD_INSmessage_default_instance_),
 };
 
 const char descriptor_table_protodef_insmessage_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -115,21 +93,21 @@ const char descriptor_table_protodef_insmessage_2eproto[] PROTOBUF_SECTION_VARIA
   "\022\026\n\022GPS_GNSS_DEAD_RECK\020\004\022\021\n\rGPS_TIME_ONL"
   "Y\020\005b\006proto3"
   ;
-static ::_pbi::once_flag descriptor_table_insmessage_2eproto_once;
-const ::_pbi::DescriptorTable descriptor_table_insmessage_2eproto = {
-    false, false, 571, descriptor_table_protodef_insmessage_2eproto,
-    "insmessage.proto",
-    &descriptor_table_insmessage_2eproto_once, nullptr, 0, 1,
-    schemas, file_default_instances, TableStruct_insmessage_2eproto::offsets,
-    file_level_metadata_insmessage_2eproto, file_level_enum_descriptors_insmessage_2eproto,
-    file_level_service_descriptors_insmessage_2eproto,
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_insmessage_2eproto_deps[1] = {
 };
-PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_insmessage_2eproto_getter() {
-  return &descriptor_table_insmessage_2eproto;
-}
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_insmessage_2eproto_sccs[1] = {
+  &scc_info_RavenFCU_SWICD_INSmessage_insmessage_2eproto.base,
+};
+static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_insmessage_2eproto_once;
+const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_insmessage_2eproto = {
+  false, false, descriptor_table_protodef_insmessage_2eproto, "insmessage.proto", 571,
+  &descriptor_table_insmessage_2eproto_once, descriptor_table_insmessage_2eproto_sccs, descriptor_table_insmessage_2eproto_deps, 1, 0,
+  schemas, file_default_instances, TableStruct_insmessage_2eproto::offsets,
+  file_level_metadata_insmessage_2eproto, 1, file_level_enum_descriptors_insmessage_2eproto, file_level_service_descriptors_insmessage_2eproto,
+};
 
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_insmessage_2eproto(&descriptor_table_insmessage_2eproto);
+static bool dynamic_init_dummy_insmessage_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_insmessage_2eproto)), true);
 namespace raven {
 namespace fcu {
 namespace swicd {
@@ -151,7 +129,7 @@ bool RavenFCU_SWICD_INSmessage_FixType_IsValid(int value) {
   }
 }
 
-#if (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
+#if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
 constexpr RavenFCU_SWICD_INSmessage_FixType RavenFCU_SWICD_INSmessage::GPS_NO_FIX;
 constexpr RavenFCU_SWICD_INSmessage_FixType RavenFCU_SWICD_INSmessage::GPS_DEAD_RECKONING;
 constexpr RavenFCU_SWICD_INSmessage_FixType RavenFCU_SWICD_INSmessage::GPS_2D;
@@ -161,482 +139,361 @@ constexpr RavenFCU_SWICD_INSmessage_FixType RavenFCU_SWICD_INSmessage::GPS_TIME_
 constexpr RavenFCU_SWICD_INSmessage_FixType RavenFCU_SWICD_INSmessage::FixType_MIN;
 constexpr RavenFCU_SWICD_INSmessage_FixType RavenFCU_SWICD_INSmessage::FixType_MAX;
 constexpr int RavenFCU_SWICD_INSmessage::FixType_ARRAYSIZE;
-#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
+#endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
 
 // ===================================================================
 
+void RavenFCU_SWICD_INSmessage::InitAsDefaultInstance() {
+}
 class RavenFCU_SWICD_INSmessage::_Internal {
  public:
 };
 
-RavenFCU_SWICD_INSmessage::RavenFCU_SWICD_INSmessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
-  SharedCtor(arena, is_message_owned);
+RavenFCU_SWICD_INSmessage::RavenFCU_SWICD_INSmessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
   // @@protoc_insertion_point(arena_constructor:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
 }
 RavenFCU_SWICD_INSmessage::RavenFCU_SWICD_INSmessage(const RavenFCU_SWICD_INSmessage& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  RavenFCU_SWICD_INSmessage* const _this = this; (void)_this;
-  new (&_impl_) Impl_{
-      decltype(_impl_.timestamp_){}
-    , decltype(_impl_.latitude_){}
-    , decltype(_impl_.longitude_){}
-    , decltype(_impl_.altitude_){}
-    , decltype(_impl_.roll_){}
-    , decltype(_impl_.pitch_){}
-    , decltype(_impl_.yaw_){}
-    , decltype(_impl_.accel_x_){}
-    , decltype(_impl_.accel_y_){}
-    , decltype(_impl_.accel_z_){}
-    , decltype(_impl_.barometer_){}
-    , decltype(_impl_.course_){}
-    , decltype(_impl_.speed_){}
-    , decltype(_impl_.velocityn_){}
-    , decltype(_impl_.velocitye_){}
-    , decltype(_impl_.velocityd_){}
-    , decltype(_impl_.numsats_){}
-    , decltype(_impl_.declination_){}
-    , decltype(_impl_.gpsfix_){}
-    , /*decltype(_impl_._cached_size_)*/{}};
-
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&_impl_.timestamp_, &from._impl_.timestamp_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.gpsfix_) -
-    reinterpret_cast<char*>(&_impl_.timestamp_)) + sizeof(_impl_.gpsfix_));
+  ::memcpy(&timestamp_, &from.timestamp_,
+    static_cast<size_t>(reinterpret_cast<char*>(&gpsfix_) -
+    reinterpret_cast<char*>(&timestamp_)) + sizeof(gpsfix_));
   // @@protoc_insertion_point(copy_constructor:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
 }
 
-inline void RavenFCU_SWICD_INSmessage::SharedCtor(
-    ::_pb::Arena* arena, bool is_message_owned) {
-  (void)arena;
-  (void)is_message_owned;
-  new (&_impl_) Impl_{
-      decltype(_impl_.timestamp_){0}
-    , decltype(_impl_.latitude_){0}
-    , decltype(_impl_.longitude_){0}
-    , decltype(_impl_.altitude_){0}
-    , decltype(_impl_.roll_){0}
-    , decltype(_impl_.pitch_){0}
-    , decltype(_impl_.yaw_){0}
-    , decltype(_impl_.accel_x_){0}
-    , decltype(_impl_.accel_y_){0}
-    , decltype(_impl_.accel_z_){0}
-    , decltype(_impl_.barometer_){0}
-    , decltype(_impl_.course_){0}
-    , decltype(_impl_.speed_){0}
-    , decltype(_impl_.velocityn_){0}
-    , decltype(_impl_.velocitye_){0}
-    , decltype(_impl_.velocityd_){0}
-    , decltype(_impl_.numsats_){0}
-    , decltype(_impl_.declination_){0}
-    , decltype(_impl_.gpsfix_){0}
-    , /*decltype(_impl_._cached_size_)*/{}
-  };
+void RavenFCU_SWICD_INSmessage::SharedCtor() {
+  ::memset(&timestamp_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&gpsfix_) -
+      reinterpret_cast<char*>(&timestamp_)) + sizeof(gpsfix_));
 }
 
 RavenFCU_SWICD_INSmessage::~RavenFCU_SWICD_INSmessage() {
   // @@protoc_insertion_point(destructor:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
-  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
-  (void)arena;
-    return;
-  }
   SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void RavenFCU_SWICD_INSmessage::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+void RavenFCU_SWICD_INSmessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
 }
 
+void RavenFCU_SWICD_INSmessage::ArenaDtor(void* object) {
+  RavenFCU_SWICD_INSmessage* _this = reinterpret_cast< RavenFCU_SWICD_INSmessage* >(object);
+  (void)_this;
+}
+void RavenFCU_SWICD_INSmessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
 void RavenFCU_SWICD_INSmessage::SetCachedSize(int size) const {
-  _impl_._cached_size_.Set(size);
+  _cached_size_.Set(size);
 }
+const RavenFCU_SWICD_INSmessage& RavenFCU_SWICD_INSmessage::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RavenFCU_SWICD_INSmessage_insmessage_2eproto.base);
+  return *internal_default_instance();
+}
+
 
 void RavenFCU_SWICD_INSmessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
-  uint32_t cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&_impl_.timestamp_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.gpsfix_) -
-      reinterpret_cast<char*>(&_impl_.timestamp_)) + sizeof(_impl_.gpsfix_));
+  ::memset(&timestamp_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&gpsfix_) -
+      reinterpret_cast<char*>(&timestamp_)) + sizeof(gpsfix_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* RavenFCU_SWICD_INSmessage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* RavenFCU_SWICD_INSmessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::_pbi::ReadTag(ptr, &tag);
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
     switch (tag >> 3) {
       // double timestamp = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 9)) {
-          _impl_.timestamp_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 9)) {
+          timestamp_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // double latitude = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 17)) {
-          _impl_.latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
+          latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // double longitude = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 25)) {
-          _impl_.longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 25)) {
+          longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // double altitude = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 33)) {
-          _impl_.altitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 33)) {
+          altitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float roll = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
-          _impl_.roll_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 45)) {
+          roll_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float pitch = 6;
       case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
-          _impl_.pitch_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 53)) {
+          pitch_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float yaw = 7;
       case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
-          _impl_.yaw_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 61)) {
+          yaw_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float accel_x = 8;
       case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
-          _impl_.accel_x_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 69)) {
+          accel_x_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float accel_y = 9;
       case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
-          _impl_.accel_y_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 77)) {
+          accel_y_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float accel_z = 10;
       case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
-          _impl_.accel_z_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 85)) {
+          accel_z_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float barometer = 11;
       case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 93)) {
-          _impl_.barometer_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 93)) {
+          barometer_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float course = 12;
       case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 101)) {
-          _impl_.course_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 101)) {
+          course_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float speed = 13;
       case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 109)) {
-          _impl_.speed_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 109)) {
+          speed_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float velocityN = 14;
       case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 117)) {
-          _impl_.velocityn_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 117)) {
+          velocityn_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float velocityE = 15;
       case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 125)) {
-          _impl_.velocitye_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 125)) {
+          velocitye_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float velocityD = 16;
       case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 133)) {
-          _impl_.velocityd_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 133)) {
+          velocityd_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // int32 numSats = 17;
       case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 136)) {
-          _impl_.numsats_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 136)) {
+          numsats_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // float declination = 18;
       case 18:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 149)) {
-          _impl_.declination_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 149)) {
+          declination_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
       // .raven.fcu.swicd.RavenFCU_SWICD_INSmessage.FixType gpsFix = 19;
       case 19:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
-          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 152)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_gpsfix(static_cast<::raven::fcu::swicd::RavenFCU_SWICD_INSmessage_FixType>(val));
-        } else
-          goto handle_unusual;
+        } else goto handle_unusual;
         continue;
-      default:
-        goto handle_unusual;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
     }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
   }  // while
-message_done:
+success:
   return ptr;
 failure:
   ptr = nullptr;
-  goto message_done;
+  goto success;
 #undef CHK_
 }
 
-uint8_t* RavenFCU_SWICD_INSmessage::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+::PROTOBUF_NAMESPACE_ID::uint8* RavenFCU_SWICD_INSmessage::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
-  uint32_t cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   // double timestamp = 1;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_timestamp = this->_internal_timestamp();
-  uint64_t raw_timestamp;
-  memcpy(&raw_timestamp, &tmp_timestamp, sizeof(tmp_timestamp));
-  if (raw_timestamp != 0) {
+  if (!(this->timestamp() <= 0 && this->timestamp() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(1, this->_internal_timestamp(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(1, this->_internal_timestamp(), target);
   }
 
   // double latitude = 2;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_latitude = this->_internal_latitude();
-  uint64_t raw_latitude;
-  memcpy(&raw_latitude, &tmp_latitude, sizeof(tmp_latitude));
-  if (raw_latitude != 0) {
+  if (!(this->latitude() <= 0 && this->latitude() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(2, this->_internal_latitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_latitude(), target);
   }
 
   // double longitude = 3;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_longitude = this->_internal_longitude();
-  uint64_t raw_longitude;
-  memcpy(&raw_longitude, &tmp_longitude, sizeof(tmp_longitude));
-  if (raw_longitude != 0) {
+  if (!(this->longitude() <= 0 && this->longitude() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(3, this->_internal_longitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_longitude(), target);
   }
 
   // double altitude = 4;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_altitude = this->_internal_altitude();
-  uint64_t raw_altitude;
-  memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
-  if (raw_altitude != 0) {
+  if (!(this->altitude() <= 0 && this->altitude() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(4, this->_internal_altitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(4, this->_internal_altitude(), target);
   }
 
   // float roll = 5;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_roll = this->_internal_roll();
-  uint32_t raw_roll;
-  memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
-  if (raw_roll != 0) {
+  if (!(this->roll() <= 0 && this->roll() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_roll(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(5, this->_internal_roll(), target);
   }
 
   // float pitch = 6;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_pitch = this->_internal_pitch();
-  uint32_t raw_pitch;
-  memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
-  if (raw_pitch != 0) {
+  if (!(this->pitch() <= 0 && this->pitch() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(6, this->_internal_pitch(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->_internal_pitch(), target);
   }
 
   // float yaw = 7;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_yaw = this->_internal_yaw();
-  uint32_t raw_yaw;
-  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
-  if (raw_yaw != 0) {
+  if (!(this->yaw() <= 0 && this->yaw() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_yaw(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(7, this->_internal_yaw(), target);
   }
 
   // float accel_x = 8;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_x = this->_internal_accel_x();
-  uint32_t raw_accel_x;
-  memcpy(&raw_accel_x, &tmp_accel_x, sizeof(tmp_accel_x));
-  if (raw_accel_x != 0) {
+  if (!(this->accel_x() <= 0 && this->accel_x() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_accel_x(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(8, this->_internal_accel_x(), target);
   }
 
   // float accel_y = 9;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_y = this->_internal_accel_y();
-  uint32_t raw_accel_y;
-  memcpy(&raw_accel_y, &tmp_accel_y, sizeof(tmp_accel_y));
-  if (raw_accel_y != 0) {
+  if (!(this->accel_y() <= 0 && this->accel_y() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_accel_y(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(9, this->_internal_accel_y(), target);
   }
 
   // float accel_z = 10;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_z = this->_internal_accel_z();
-  uint32_t raw_accel_z;
-  memcpy(&raw_accel_z, &tmp_accel_z, sizeof(tmp_accel_z));
-  if (raw_accel_z != 0) {
+  if (!(this->accel_z() <= 0 && this->accel_z() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_accel_z(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(10, this->_internal_accel_z(), target);
   }
 
   // float barometer = 11;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_barometer = this->_internal_barometer();
-  uint32_t raw_barometer;
-  memcpy(&raw_barometer, &tmp_barometer, sizeof(tmp_barometer));
-  if (raw_barometer != 0) {
+  if (!(this->barometer() <= 0 && this->barometer() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(11, this->_internal_barometer(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(11, this->_internal_barometer(), target);
   }
 
   // float course = 12;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_course = this->_internal_course();
-  uint32_t raw_course;
-  memcpy(&raw_course, &tmp_course, sizeof(tmp_course));
-  if (raw_course != 0) {
+  if (!(this->course() <= 0 && this->course() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(12, this->_internal_course(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(12, this->_internal_course(), target);
   }
 
   // float speed = 13;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_speed = this->_internal_speed();
-  uint32_t raw_speed;
-  memcpy(&raw_speed, &tmp_speed, sizeof(tmp_speed));
-  if (raw_speed != 0) {
+  if (!(this->speed() <= 0 && this->speed() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(13, this->_internal_speed(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(13, this->_internal_speed(), target);
   }
 
   // float velocityN = 14;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocityn = this->_internal_velocityn();
-  uint32_t raw_velocityn;
-  memcpy(&raw_velocityn, &tmp_velocityn, sizeof(tmp_velocityn));
-  if (raw_velocityn != 0) {
+  if (!(this->velocityn() <= 0 && this->velocityn() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(14, this->_internal_velocityn(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(14, this->_internal_velocityn(), target);
   }
 
   // float velocityE = 15;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocitye = this->_internal_velocitye();
-  uint32_t raw_velocitye;
-  memcpy(&raw_velocitye, &tmp_velocitye, sizeof(tmp_velocitye));
-  if (raw_velocitye != 0) {
+  if (!(this->velocitye() <= 0 && this->velocitye() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(15, this->_internal_velocitye(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(15, this->_internal_velocitye(), target);
   }
 
   // float velocityD = 16;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocityd = this->_internal_velocityd();
-  uint32_t raw_velocityd;
-  memcpy(&raw_velocityd, &tmp_velocityd, sizeof(tmp_velocityd));
-  if (raw_velocityd != 0) {
+  if (!(this->velocityd() <= 0 && this->velocityd() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(16, this->_internal_velocityd(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(16, this->_internal_velocityd(), target);
   }
 
   // int32 numSats = 17;
-  if (this->_internal_numsats() != 0) {
+  if (this->numsats() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(17, this->_internal_numsats(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(17, this->_internal_numsats(), target);
   }
 
   // float declination = 18;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_declination = this->_internal_declination();
-  uint32_t raw_declination;
-  memcpy(&raw_declination, &tmp_declination, sizeof(tmp_declination));
-  if (raw_declination != 0) {
+  if (!(this->declination() <= 0 && this->declination() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(18, this->_internal_declination(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(18, this->_internal_declination(), target);
   }
 
   // .raven.fcu.swicd.RavenFCU_SWICD_INSmessage.FixType gpsFix = 19;
-  if (this->_internal_gpsfix() != 0) {
+  if (this->gpsfix() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       19, this->_internal_gpsfix(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
@@ -647,320 +504,203 @@ size_t RavenFCU_SWICD_INSmessage::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
   size_t total_size = 0;
 
-  uint32_t cached_has_bits = 0;
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   // double timestamp = 1;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_timestamp = this->_internal_timestamp();
-  uint64_t raw_timestamp;
-  memcpy(&raw_timestamp, &tmp_timestamp, sizeof(tmp_timestamp));
-  if (raw_timestamp != 0) {
+  if (!(this->timestamp() <= 0 && this->timestamp() >= 0)) {
     total_size += 1 + 8;
   }
 
   // double latitude = 2;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_latitude = this->_internal_latitude();
-  uint64_t raw_latitude;
-  memcpy(&raw_latitude, &tmp_latitude, sizeof(tmp_latitude));
-  if (raw_latitude != 0) {
+  if (!(this->latitude() <= 0 && this->latitude() >= 0)) {
     total_size += 1 + 8;
   }
 
   // double longitude = 3;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_longitude = this->_internal_longitude();
-  uint64_t raw_longitude;
-  memcpy(&raw_longitude, &tmp_longitude, sizeof(tmp_longitude));
-  if (raw_longitude != 0) {
+  if (!(this->longitude() <= 0 && this->longitude() >= 0)) {
     total_size += 1 + 8;
   }
 
   // double altitude = 4;
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_altitude = this->_internal_altitude();
-  uint64_t raw_altitude;
-  memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
-  if (raw_altitude != 0) {
+  if (!(this->altitude() <= 0 && this->altitude() >= 0)) {
     total_size += 1 + 8;
   }
 
   // float roll = 5;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_roll = this->_internal_roll();
-  uint32_t raw_roll;
-  memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
-  if (raw_roll != 0) {
+  if (!(this->roll() <= 0 && this->roll() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float pitch = 6;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_pitch = this->_internal_pitch();
-  uint32_t raw_pitch;
-  memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
-  if (raw_pitch != 0) {
+  if (!(this->pitch() <= 0 && this->pitch() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float yaw = 7;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_yaw = this->_internal_yaw();
-  uint32_t raw_yaw;
-  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
-  if (raw_yaw != 0) {
+  if (!(this->yaw() <= 0 && this->yaw() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float accel_x = 8;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_x = this->_internal_accel_x();
-  uint32_t raw_accel_x;
-  memcpy(&raw_accel_x, &tmp_accel_x, sizeof(tmp_accel_x));
-  if (raw_accel_x != 0) {
+  if (!(this->accel_x() <= 0 && this->accel_x() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float accel_y = 9;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_y = this->_internal_accel_y();
-  uint32_t raw_accel_y;
-  memcpy(&raw_accel_y, &tmp_accel_y, sizeof(tmp_accel_y));
-  if (raw_accel_y != 0) {
+  if (!(this->accel_y() <= 0 && this->accel_y() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float accel_z = 10;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_z = this->_internal_accel_z();
-  uint32_t raw_accel_z;
-  memcpy(&raw_accel_z, &tmp_accel_z, sizeof(tmp_accel_z));
-  if (raw_accel_z != 0) {
+  if (!(this->accel_z() <= 0 && this->accel_z() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float barometer = 11;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_barometer = this->_internal_barometer();
-  uint32_t raw_barometer;
-  memcpy(&raw_barometer, &tmp_barometer, sizeof(tmp_barometer));
-  if (raw_barometer != 0) {
+  if (!(this->barometer() <= 0 && this->barometer() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float course = 12;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_course = this->_internal_course();
-  uint32_t raw_course;
-  memcpy(&raw_course, &tmp_course, sizeof(tmp_course));
-  if (raw_course != 0) {
+  if (!(this->course() <= 0 && this->course() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float speed = 13;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_speed = this->_internal_speed();
-  uint32_t raw_speed;
-  memcpy(&raw_speed, &tmp_speed, sizeof(tmp_speed));
-  if (raw_speed != 0) {
+  if (!(this->speed() <= 0 && this->speed() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float velocityN = 14;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocityn = this->_internal_velocityn();
-  uint32_t raw_velocityn;
-  memcpy(&raw_velocityn, &tmp_velocityn, sizeof(tmp_velocityn));
-  if (raw_velocityn != 0) {
+  if (!(this->velocityn() <= 0 && this->velocityn() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float velocityE = 15;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocitye = this->_internal_velocitye();
-  uint32_t raw_velocitye;
-  memcpy(&raw_velocitye, &tmp_velocitye, sizeof(tmp_velocitye));
-  if (raw_velocitye != 0) {
+  if (!(this->velocitye() <= 0 && this->velocitye() >= 0)) {
     total_size += 1 + 4;
   }
 
   // float velocityD = 16;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocityd = this->_internal_velocityd();
-  uint32_t raw_velocityd;
-  memcpy(&raw_velocityd, &tmp_velocityd, sizeof(tmp_velocityd));
-  if (raw_velocityd != 0) {
+  if (!(this->velocityd() <= 0 && this->velocityd() >= 0)) {
     total_size += 2 + 4;
   }
 
   // int32 numSats = 17;
-  if (this->_internal_numsats() != 0) {
+  if (this->numsats() != 0) {
     total_size += 2 +
-      ::_pbi::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_numsats());
   }
 
   // float declination = 18;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_declination = this->_internal_declination();
-  uint32_t raw_declination;
-  memcpy(&raw_declination, &tmp_declination, sizeof(tmp_declination));
-  if (raw_declination != 0) {
+  if (!(this->declination() <= 0 && this->declination() >= 0)) {
     total_size += 2 + 4;
   }
 
   // .raven.fcu.swicd.RavenFCU_SWICD_INSmessage.FixType gpsFix = 19;
-  if (this->_internal_gpsfix() != 0) {
+  if (this->gpsfix() != 0) {
     total_size += 2 +
-      ::_pbi::WireFormatLite::EnumSize(this->_internal_gpsfix());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_gpsfix());
   }
 
-  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RavenFCU_SWICD_INSmessage::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    RavenFCU_SWICD_INSmessage::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RavenFCU_SWICD_INSmessage::GetClassData() const { return &_class_data_; }
+void RavenFCU_SWICD_INSmessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RavenFCU_SWICD_INSmessage* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<RavenFCU_SWICD_INSmessage>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
+    MergeFrom(*source);
+  }
+}
 
-
-void RavenFCU_SWICD_INSmessage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<RavenFCU_SWICD_INSmessage*>(&to_msg);
-  auto& from = static_cast<const RavenFCU_SWICD_INSmessage&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
-  GOOGLE_DCHECK_NE(&from, _this);
-  uint32_t cached_has_bits = 0;
+void RavenFCU_SWICD_INSmessage::MergeFrom(const RavenFCU_SWICD_INSmessage& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_timestamp = from._internal_timestamp();
-  uint64_t raw_timestamp;
-  memcpy(&raw_timestamp, &tmp_timestamp, sizeof(tmp_timestamp));
-  if (raw_timestamp != 0) {
-    _this->_internal_set_timestamp(from._internal_timestamp());
+  if (!(from.timestamp() <= 0 && from.timestamp() >= 0)) {
+    _internal_set_timestamp(from._internal_timestamp());
   }
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_latitude = from._internal_latitude();
-  uint64_t raw_latitude;
-  memcpy(&raw_latitude, &tmp_latitude, sizeof(tmp_latitude));
-  if (raw_latitude != 0) {
-    _this->_internal_set_latitude(from._internal_latitude());
+  if (!(from.latitude() <= 0 && from.latitude() >= 0)) {
+    _internal_set_latitude(from._internal_latitude());
   }
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_longitude = from._internal_longitude();
-  uint64_t raw_longitude;
-  memcpy(&raw_longitude, &tmp_longitude, sizeof(tmp_longitude));
-  if (raw_longitude != 0) {
-    _this->_internal_set_longitude(from._internal_longitude());
+  if (!(from.longitude() <= 0 && from.longitude() >= 0)) {
+    _internal_set_longitude(from._internal_longitude());
   }
-  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
-  double tmp_altitude = from._internal_altitude();
-  uint64_t raw_altitude;
-  memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
-  if (raw_altitude != 0) {
-    _this->_internal_set_altitude(from._internal_altitude());
+  if (!(from.altitude() <= 0 && from.altitude() >= 0)) {
+    _internal_set_altitude(from._internal_altitude());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_roll = from._internal_roll();
-  uint32_t raw_roll;
-  memcpy(&raw_roll, &tmp_roll, sizeof(tmp_roll));
-  if (raw_roll != 0) {
-    _this->_internal_set_roll(from._internal_roll());
+  if (!(from.roll() <= 0 && from.roll() >= 0)) {
+    _internal_set_roll(from._internal_roll());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_pitch = from._internal_pitch();
-  uint32_t raw_pitch;
-  memcpy(&raw_pitch, &tmp_pitch, sizeof(tmp_pitch));
-  if (raw_pitch != 0) {
-    _this->_internal_set_pitch(from._internal_pitch());
+  if (!(from.pitch() <= 0 && from.pitch() >= 0)) {
+    _internal_set_pitch(from._internal_pitch());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_yaw = from._internal_yaw();
-  uint32_t raw_yaw;
-  memcpy(&raw_yaw, &tmp_yaw, sizeof(tmp_yaw));
-  if (raw_yaw != 0) {
-    _this->_internal_set_yaw(from._internal_yaw());
+  if (!(from.yaw() <= 0 && from.yaw() >= 0)) {
+    _internal_set_yaw(from._internal_yaw());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_x = from._internal_accel_x();
-  uint32_t raw_accel_x;
-  memcpy(&raw_accel_x, &tmp_accel_x, sizeof(tmp_accel_x));
-  if (raw_accel_x != 0) {
-    _this->_internal_set_accel_x(from._internal_accel_x());
+  if (!(from.accel_x() <= 0 && from.accel_x() >= 0)) {
+    _internal_set_accel_x(from._internal_accel_x());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_y = from._internal_accel_y();
-  uint32_t raw_accel_y;
-  memcpy(&raw_accel_y, &tmp_accel_y, sizeof(tmp_accel_y));
-  if (raw_accel_y != 0) {
-    _this->_internal_set_accel_y(from._internal_accel_y());
+  if (!(from.accel_y() <= 0 && from.accel_y() >= 0)) {
+    _internal_set_accel_y(from._internal_accel_y());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_accel_z = from._internal_accel_z();
-  uint32_t raw_accel_z;
-  memcpy(&raw_accel_z, &tmp_accel_z, sizeof(tmp_accel_z));
-  if (raw_accel_z != 0) {
-    _this->_internal_set_accel_z(from._internal_accel_z());
+  if (!(from.accel_z() <= 0 && from.accel_z() >= 0)) {
+    _internal_set_accel_z(from._internal_accel_z());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_barometer = from._internal_barometer();
-  uint32_t raw_barometer;
-  memcpy(&raw_barometer, &tmp_barometer, sizeof(tmp_barometer));
-  if (raw_barometer != 0) {
-    _this->_internal_set_barometer(from._internal_barometer());
+  if (!(from.barometer() <= 0 && from.barometer() >= 0)) {
+    _internal_set_barometer(from._internal_barometer());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_course = from._internal_course();
-  uint32_t raw_course;
-  memcpy(&raw_course, &tmp_course, sizeof(tmp_course));
-  if (raw_course != 0) {
-    _this->_internal_set_course(from._internal_course());
+  if (!(from.course() <= 0 && from.course() >= 0)) {
+    _internal_set_course(from._internal_course());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_speed = from._internal_speed();
-  uint32_t raw_speed;
-  memcpy(&raw_speed, &tmp_speed, sizeof(tmp_speed));
-  if (raw_speed != 0) {
-    _this->_internal_set_speed(from._internal_speed());
+  if (!(from.speed() <= 0 && from.speed() >= 0)) {
+    _internal_set_speed(from._internal_speed());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocityn = from._internal_velocityn();
-  uint32_t raw_velocityn;
-  memcpy(&raw_velocityn, &tmp_velocityn, sizeof(tmp_velocityn));
-  if (raw_velocityn != 0) {
-    _this->_internal_set_velocityn(from._internal_velocityn());
+  if (!(from.velocityn() <= 0 && from.velocityn() >= 0)) {
+    _internal_set_velocityn(from._internal_velocityn());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocitye = from._internal_velocitye();
-  uint32_t raw_velocitye;
-  memcpy(&raw_velocitye, &tmp_velocitye, sizeof(tmp_velocitye));
-  if (raw_velocitye != 0) {
-    _this->_internal_set_velocitye(from._internal_velocitye());
+  if (!(from.velocitye() <= 0 && from.velocitye() >= 0)) {
+    _internal_set_velocitye(from._internal_velocitye());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_velocityd = from._internal_velocityd();
-  uint32_t raw_velocityd;
-  memcpy(&raw_velocityd, &tmp_velocityd, sizeof(tmp_velocityd));
-  if (raw_velocityd != 0) {
-    _this->_internal_set_velocityd(from._internal_velocityd());
+  if (!(from.velocityd() <= 0 && from.velocityd() >= 0)) {
+    _internal_set_velocityd(from._internal_velocityd());
   }
-  if (from._internal_numsats() != 0) {
-    _this->_internal_set_numsats(from._internal_numsats());
+  if (from.numsats() != 0) {
+    _internal_set_numsats(from._internal_numsats());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_declination = from._internal_declination();
-  uint32_t raw_declination;
-  memcpy(&raw_declination, &tmp_declination, sizeof(tmp_declination));
-  if (raw_declination != 0) {
-    _this->_internal_set_declination(from._internal_declination());
+  if (!(from.declination() <= 0 && from.declination() >= 0)) {
+    _internal_set_declination(from._internal_declination());
   }
-  if (from._internal_gpsfix() != 0) {
-    _this->_internal_set_gpsfix(from._internal_gpsfix());
+  if (from.gpsfix() != 0) {
+    _internal_set_gpsfix(from._internal_gpsfix());
   }
-  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RavenFCU_SWICD_INSmessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:raven.fcu.swicd.RavenFCU_SWICD_INSmessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
 }
 
 void RavenFCU_SWICD_INSmessage::CopyFrom(const RavenFCU_SWICD_INSmessage& from) {
@@ -976,28 +716,26 @@ bool RavenFCU_SWICD_INSmessage::IsInitialized() const {
 
 void RavenFCU_SWICD_INSmessage::InternalSwap(RavenFCU_SWICD_INSmessage* other) {
   using std::swap;
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_INSmessage, _impl_.gpsfix_)
-      + sizeof(RavenFCU_SWICD_INSmessage::_impl_.gpsfix_)
-      - PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_INSmessage, _impl_.timestamp_)>(
-          reinterpret_cast<char*>(&_impl_.timestamp_),
-          reinterpret_cast<char*>(&other->_impl_.timestamp_));
+      PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_INSmessage, gpsfix_)
+      + sizeof(RavenFCU_SWICD_INSmessage::gpsfix_)
+      - PROTOBUF_FIELD_OFFSET(RavenFCU_SWICD_INSmessage, timestamp_)>(
+          reinterpret_cast<char*>(&timestamp_),
+          reinterpret_cast<char*>(&other->timestamp_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata RavenFCU_SWICD_INSmessage::GetMetadata() const {
-  return ::_pbi::AssignDescriptors(
-      &descriptor_table_insmessage_2eproto_getter, &descriptor_table_insmessage_2eproto_once,
-      file_level_metadata_insmessage_2eproto[0]);
+  return GetMetadataStatic();
 }
+
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace swicd
 }  // namespace fcu
 }  // namespace raven
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::raven::fcu::swicd::RavenFCU_SWICD_INSmessage*
-Arena::CreateMaybeMessage< ::raven::fcu::swicd::RavenFCU_SWICD_INSmessage >(Arena* arena) {
+template<> PROTOBUF_NOINLINE ::raven::fcu::swicd::RavenFCU_SWICD_INSmessage* Arena::CreateMaybeMessage< ::raven::fcu::swicd::RavenFCU_SWICD_INSmessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::raven::fcu::swicd::RavenFCU_SWICD_INSmessage >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE

@@ -17,6 +17,7 @@
 // ---------------------------
 #include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 #include "msgPayloadDefC/MessageConsumerManualMsgPayload.h"
+#include "msgPayloadDefC/TelemetryMsgPayload.h"
 #include <zmq.hpp>
 
 
@@ -28,6 +29,7 @@ public:
 
     void Reset(uint64_t CurrentSimNanos);
     void UpdateState(uint64_t CurrentSimNanos);
+    void ReadMessages();
     void FCUinsSubscriber();
     void ZeroOutputVariables();
     void FCUpayloadSend(std::string payloadStr);
@@ -56,6 +58,9 @@ public:
     double manual_lat;
     double manual_lon;
     double manual_alt;
+
+    ReadFunctor<TelemetryMsgPayload> telemetry_msg;
+    std::string tel_msg;
 
     // --> LOGGING
     BSKLogger bskLogger;

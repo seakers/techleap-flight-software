@@ -5,6 +5,7 @@
 #include "ExternalModules/ImagerVNIR/ImagerVNIR.h" // --> CHANGE
 #include <iostream>
 #include <cstring>
+#include <unistd.h>
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
 
@@ -83,7 +84,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // ----- Process Inputs -----
     // --------------------------
     // --> TODO: Implement SDK reading vnir sensor and copy values over to image_tensor
-    this->state += 1;
+    this->state = 0;
     try{
              // Initialize StApi before using.
         CStApiAutoInit objStApiAutoInit;
@@ -95,7 +96,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
         CIStDevicePtr pIStDevice(pIStSystem->CreateFirstIStDevice());
 
         // Displays the DisplayName of the device.
-        cout << "Device=" << pIStDevice->GetIStDeviceInfo()->GetDisplayName() << endl;
+        //cout << "Device=" << pIStDevice->GetIStDeviceInfo()->GetDisplayName() << endl;
 
         // Create a DataStream object for handling image stream data.
         CIStDataStreamPtr pIStDataStream(pIStDevice->CreateIStDataStream(0));
@@ -108,7 +109,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
 
         // Retrieve the buffer pointer of image data with a timeout of 5000ms.
         // Note that we don't use a while loop here because we only retrieve one image for saving.
-        CIStStreamBufferPtr pIStStreamBuffer(pIStDataStream->RetrieveBuffer(5000));
+        CIStStreamBufferPtr pIStStreamBuffer(pIStDataStream->RetrieveBuffer(500));
 
         // Check if the acquired data contains image data.
         if(pIStStreamBuffer->GetIStStreamBufferInfo()->IsImagePresent())
@@ -119,7 +120,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
             // Display the information of the acquired image data.
             cout << "\r BlockId=" << pIStStreamBuffer->GetIStStreamBufferInfo()->GetFrameID()
                 << " Size:" << pIStImage->GetImageWidth() << " x " << pIStImage->GetImageHeight()
-                << " First byte =" << (uint32_t)*(uint8_t*)pIStImage->GetImageBuffer();
+                << " First byte =" << (uint32_t)*(uint8_t*)pIStImage->GetImageBuffer() << endl;
 
             // demosaicing code
             Band redBand;
@@ -296,11 +297,14 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
                     this->nir(tr,tc) = (uint8_t)avg;
                 }
             }
+            this->status_msg = "Image captured.";
         }
         else
         {
             // If the acquired data contains no image data...
-            cout << "Image data does not exist" << endl;
+            cout << "Image data does not exist." << endl;
+            this->state = 1;
+            this->status_msg = "Image data does not exist.";
         }
 
         // Stop the image acquisition of the camera side.
@@ -313,6 +317,8 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     {
         // Display a description of the error.
         cerr << endl << "An exception occurred." << endl << e.GetDescription() << endl;
+        this->state = 1;
+        this->status_msg = "Camera exception occurred.";
     }
        
     
@@ -341,6 +347,7 @@ void ImagerVNIR::UpdateState(uint64_t CurrentSimNanos) {
     // -------------------------
     // --> TODO: Write correct image dimensions
     vnir_msg_buffer.state = this->state;
+    vnir_msg_buffer.status_msg = this->status_msg;
     vnir_msg_buffer.red = this->red;
     vnir_msg_buffer.green = this->green;
     vnir_msg_buffer.blue = this->blue;

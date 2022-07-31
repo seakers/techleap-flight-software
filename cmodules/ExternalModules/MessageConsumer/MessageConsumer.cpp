@@ -4,6 +4,7 @@
 
 #include "ExternalModules/MessageConsumer/MessageConsumer.h" // --> CHANGE
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
@@ -15,7 +16,7 @@ zmq::context_t gContext(1);
 zmq::socket_t gZMQpayloadSocket(gContext, ZMQ_PAIR);
 int32_t gHWM = 0;
 int32_t gLingerMilliseconds = 0;
-int32_t gTimeoutMilliseconds = 1000;
+int32_t gTimeoutMilliseconds = 500;
 int Payload1ServerPort = 5561;
 
 MessageConsumer::MessageConsumer() // --> CHANGE
@@ -26,6 +27,15 @@ MessageConsumer::MessageConsumer() // --> CHANGE
 MessageConsumer::~MessageConsumer() // --> CHANGE
 {
     return;
+}
+
+void MessageConsumer::ReadMessages(){
+    if(this->telemetry_msg.isLinked()){
+        //std::cout << "Mode message linked!" << std::endl;
+        TelemetryMsgPayload tel_msg_payload = this->telemetry_msg();
+        this->tel_msg = tel_msg_payload.tel_msg;
+        //std::cout << this->mode << std::endl;
+    }
 }
 
 bool MessageConsumer::ConnectToPayloadServer(int pPayload)
@@ -46,7 +56,13 @@ bool MessageConsumer::ConnectToPayloadServer(int pPayload)
         }
     }
 
-    url << "tcp://" << "10.42.0.154" << ":" << payloadPortNumber;
+    std::fstream ipFile;
+    ipFile.open("/home/ben/nvme/repos/techleap-flight-software/fcu_ins_ip.txt",std::ios::in);
+    std::string ip;
+    if(ipFile.is_open()){
+        getline(ipFile,ip);
+    }
+    url << "tcp://" << ip << ":" << payloadPortNumber;
     std::cout << "Connecting payload to FCU on " << url.str() << std::endl;
 
     try {
@@ -75,7 +91,13 @@ void MessageConsumer::FCUinsSubscriber(){
     zmq::socket_t subscriber(context, ZMQ_SUB);
 
     std::stringstream url;
-    url << "tcp://" << "10.42.0.154" << ":" << "5555";
+    std::fstream ipFile;
+    ipFile.open("/home/ben/nvme/repos/techleap-flight-software/fcu_ins_ip.txt",std::ios::in);
+    std::string ip;
+    if(ipFile.is_open()){
+        getline(ipFile,ip);
+    }
+    url << "tcp://" << ip << ":" << "5555";
     std::cout << "Subscribing to FCU message on " << url.str() << std::endl;
 
     try {
@@ -87,7 +109,7 @@ void MessageConsumer::FCUinsSubscriber(){
     }
 
     std::string insFilter("ins");
-    std::cout << "Setting subscription filter for "<< insFilter << " messages" << std::endl;
+    //std::cout << "Setting subscription filter for "<< insFilter << " messages" << std::endl;
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "ins", 3);
     subscriber.setsockopt(ZMQ_LINGER, &gLingerMilliseconds, sizeof(gLingerMilliseconds));
     subscriber.setsockopt(ZMQ_RCVTIMEO, &gTimeoutMilliseconds, sizeof(gTimeoutMilliseconds));
@@ -108,7 +130,7 @@ void MessageConsumer::FCUinsSubscriber(){
         swicdINSmsg.pitch(),
         swicdINSmsg.yaw()
     );
-    this->ins_state = 0;
+    this->ins_state = 1;
     this->lat = (double)swicdINSmsg.latitude();
     this->lon = (double)swicdINSmsg.longitude();
     this->alt = (double)swicdINSmsg.altitude();
@@ -223,6 +245,8 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // ----- Read Inputs -----
     // -----------------------
     // --> TODO: read balloon messaging system here
+    this->ReadMessages();
+    this->FCUpayloadSend(this->tel_msg);
 
     // --------------------------
     // ----- Process Inputs -----
@@ -244,13 +268,17 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     }
 
     res.push_back (payloadMsg.substr (pos_start));
-    if(res.at(0) == "LAT") {
+    if(res.at(0) == "PLUME") {
         this->manual_plume = 1;
         this->manual_lat = std::stod(res.at(1));
-        this->manual_lon = std::stod(res.at(3));
-        this->manual_alt = std::stod(res.at(5));
+        this->manual_lon = std::stod(res.at(2));
+        this->manual_alt = std::stod(res.at(3));
     } else {
         this->manual_plume = 0;
+        this->manual_lat = 45.5;
+        this->manual_lon = -96.7;
+        this->manual_alt = 109.0;
+        //this->manual_plume = 0;
     }
     
 
@@ -269,10 +297,12 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     this->balloon_msg.write(&balloon_msg_buffer, this->moduleID, CurrentSimNanos);
 
     MessageConsumerManualMsgPayload manual_msg_buffer = this->manual_msg.zeroMsgPayload;
+    std::cout << "Manual plume in msgcon: " << this->manual_plume << std::endl;
+    manual_msg_buffer.manual_plume = this->manual_plume;
     manual_msg_buffer.manual_lat = this->manual_lat;
     manual_msg_buffer.manual_lon = this->manual_lon;
     manual_msg_buffer.manual_alt = this->manual_alt;
-
+    this->manual_msg.write(&manual_msg_buffer, this->moduleID, CurrentSimNanos);
     // -------------------
     // ----- Logging -----
     // -------------------
