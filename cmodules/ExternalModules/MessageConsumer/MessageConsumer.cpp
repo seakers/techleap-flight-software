@@ -108,6 +108,7 @@ void MessageConsumer::FCUinsSubscriber(){
         swicdINSmsg.pitch(),
         swicdINSmsg.yaw()
     );
+    this->ins_state = 0;
     this->lat = (double)swicdINSmsg.latitude();
     this->lon = (double)swicdINSmsg.longitude();
     this->alt = (double)swicdINSmsg.altitude();
@@ -161,7 +162,6 @@ std::string MessageConsumer::FCUpayloadReceiverListener()
     std::string payloadStr;
     std::cout << "FCU Payload Receiver Testing starting" << std::endl;
 
-    // Send the FCU a payload message to relay to the ground
     raven::fcu::swicd::RavenFCU_SWICD_PayloadMessage swicdPayloadMsg;
 
     //
@@ -199,6 +199,7 @@ std::string MessageConsumer::FCUpayloadReceiverListener()
     }
 
     std::cout << "FCU Payload Receiver Testing finished" << std::endl;
+    return payloadStr;
 }
 
 void MessageConsumer::Reset(uint64_t CurrentSimNanos) {
@@ -206,8 +207,6 @@ void MessageConsumer::Reset(uint64_t CurrentSimNanos) {
     if (!this->ConnectToPayloadServer(1)) {
         fprintf(stderr, "Failed to connect to payload server\n");
     }
-    // --> 1. Reset module state
-    this->state = 0;
 }
 
 
@@ -231,14 +230,36 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     // --> TODO: determine which module to send the message to
 
     this->FCUinsSubscriber();
-    this->FCUpayloadReceiverListener();
+    std::string payloadMsg = this->FCUpayloadReceiverListener();
+
+    std::string delimiter = " ";
+    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    std::string token;
+    std::vector<std::string> res;
+
+    while ((pos_end = payloadMsg.find (delimiter, pos_start)) != std::string::npos) {
+        token = payloadMsg.substr (pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+        res.push_back (token);
+    }
+
+    res.push_back (payloadMsg.substr (pos_start));
+    if(res.at(0) == "LAT") {
+        this->manual_plume = 1;
+        this->manual_lat = std::stod(res.at(1));
+        this->manual_lon = std::stod(res.at(3));
+        this->manual_alt = std::stod(res.at(5));
+    } else {
+        this->manual_plume = 0;
+    }
+    
 
     // -------------------------
     // ----- Write Outputs -----
     // -------------------------
     // --> TODO: create outputs for each module
     MessageConsumerMsgPayload balloon_msg_buffer = this->balloon_msg.zeroMsgPayload;
-    balloon_msg_buffer.state = this->state;
+    balloon_msg_buffer.ins_state = this->ins_state;
     balloon_msg_buffer.lat = this->lat;
     balloon_msg_buffer.lon = this->lon;
     balloon_msg_buffer.alt = this->alt;
@@ -246,6 +267,11 @@ void MessageConsumer::UpdateState(uint64_t CurrentSimNanos) // --> CHNAGE
     balloon_msg_buffer.pitch = this->pitch;
     balloon_msg_buffer.roll = this->roll;
     this->balloon_msg.write(&balloon_msg_buffer, this->moduleID, CurrentSimNanos);
+
+    MessageConsumerManualMsgPayload manual_msg_buffer = this->manual_msg.zeroMsgPayload;
+    manual_msg_buffer.manual_lat = this->manual_lat;
+    manual_msg_buffer.manual_lon = this->manual_lon;
+    manual_msg_buffer.manual_alt = this->manual_alt;
 
     // -------------------
     // ----- Logging -----

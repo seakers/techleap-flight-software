@@ -7,7 +7,7 @@
 
 /*! @brief Brief description of what this message contains */
 typedef struct {
-    int state;
+    int ins_state;
     double lat;
     double lon;
     double alt;

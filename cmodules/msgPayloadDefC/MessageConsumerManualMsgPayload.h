@@ -7,6 +7,7 @@
 
 /*! @brief Brief description of what this message contains */
 typedef struct {
+    int manual_plume;
     double manual_lat;
     double manual_lon;
     double manual_alt;

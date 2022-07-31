@@ -36,14 +36,20 @@ from Basilisk.architecture.swig_common_model import *
 %include "msgPayloadDefC/ControllerOutMsgPayload.h"
 struct ControllerOutMsg_C;
 
-%include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
-struct ControllerManualAnglesMsg_C;
+%include "msgPayloadDefC/ControllerManualMsgPayload.h"
+struct ControllerManualMsg_C;
 
 %include "msgPayloadDefC/ControllerModeMsgPayload.h"
 struct ControllerModeMsg_C;
 
 %include "msgPayloadDefC/FinePredictionMsgPayload.h"
 struct FinePredictionMsg_C;
+
+%include "msgPayloadDefC/MessageConsumerManualMsgPayload.h"
+struct MessageConsumerManualMsg_C;
+
+%include "msgPayloadDefC/MessageConsumerMsgPayload.h"
+struct MessageConsumerMsg_C;
 
 %pythoncode %{
 import sys

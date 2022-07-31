@@ -78,14 +78,14 @@ public:
     double geo_lon;
     int geo_state;
 
-    ReadFunctor<MessageConsumerMsgPayload> gps_msg;
-    double gps_lat;
-    double gps_lon;
-    double gps_alt;
-    double gps_yaw;
-    double gps_pitch;
-    double gps_roll;
-    int gps_state;
+    ReadFunctor<MessageConsumerMsgPayload> ins_msg;
+    double ins_lat;
+    double ins_lon;
+    double ins_alt;
+    double ins_yaw;
+    double ins_pitch;
+    double ins_roll;
+    int ins_state;
 
 
     // --> LOGGING

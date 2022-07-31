@@ -1,6 +1,7 @@
 import pytest
 import sys
 import numpy as np
+import csv
 sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 
 
@@ -8,7 +9,7 @@ sys.path.insert(1, '/home/ben/repos/techleap-flight-software')
 from simulation.api import SimulationClient
 
 # --> Module Import
-from Basilisk.ExternalModules import ImagerVNIR, DataStorage, FineNN, Controller, GimbalControl, InertialMeasurementUnit
+from Basilisk.ExternalModules import ImagerVNIR, DataStorage, FineNN, Controller, GimbalControl, InertialMeasurementUnit, MessageConsumer
 
 # --> Messaging Import
 from Basilisk.architecture import messaging
@@ -31,21 +32,21 @@ from Basilisk.architecture import bskLogging
 
 
 @pytest.mark.parametrize(
-    'param1, param2',
+    'param1, param2, param3',
     [
-        (1.0, 2.0),
+        (1.0, 2.0, 1),
     ]
 )
-def test_function(param1, param2):
+def test_function(param1, param2, param3):
 
     # --> 1. Run test function
-    result = run(param1, param2)
+    result = run(param1, param2, param3)
 
     # --> 2. Assert result
     assert result is True
 
     # --> 3. Set options
-    __tracebackhide__ = True
+    __tracebackhide__ = False
 
 
 
@@ -61,7 +62,7 @@ def test_function(param1, param2):
 #
 # """
 
-def run(param1, param2):
+def run(param1, param2, param3):
 
     # --> 1. Create simulation client + tasks
     sim_client = SimulationClient(time_step=param1, duration=param2)
@@ -73,11 +74,11 @@ def run(param1, param2):
     cont_module = Controller.Controller()
     cont_module.ModelTag = "Controller"
 
-    # msg_module = MessageConsumer.MessageConsumer()
-    # msg_module.ModelTag = "MessageConsumer"
+    msg_module = MessageConsumer.MessageConsumer()
+    msg_module.ModelTag = "MessageConsumer"
 
-    sim_client.new_c_module(cont_module, task_name='A', priority=4)
-    # sim_client.new_c_module(msg_module, task_name='A', priority=2)
+    sim_client.new_c_module(cont_module, task_name='A', priority=1)
+    sim_client.new_c_module(msg_module, task_name='A', priority=2)
 
 
     # --> 3. Task B
@@ -122,6 +123,39 @@ def run(param1, param2):
     vnir_msg_data.nir = nir.tolist()
     vnir_msg = messaging.ImagerVNIROutMsg().write(vnir_msg_data)
 
+    messages = []
+
+    with open('/home/ben/repos/techleap-flight-software/testing/operable_only.csv', mode='r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                print(f'Column names are {", ".join(row)}')
+                line_count += 1
+            messages.append(row)
+            line_count += 1
+        print(f'Processed {line_count} lines.')
+
+    # def get_consumer_msg():
+    #     consumer_msg_data = messaging.MessageConsumerMsgPayload()
+    #     consumer_msg_data.ins_state = param3
+    #     consumer_msg_data.lat = float(messages[0]["Telemetry.INS.latitudeDecDeg"])
+    #     consumer_msg_data.lon = float(messages[0]["Telemetry.INS.longitudeDecDeg"])
+    #     consumer_msg_data.alt = float(messages[0]["Telemetry.INS.altitudeMeter"])
+    #     consumer_msg_data.yaw = float(messages[0]["Telemetry.INS.yawDecDeg"])
+    #     consumer_msg_data.pitch = float(messages[0]["Telemetry.INS.pitchDecDeg"])
+    #     consumer_msg_data.roll = float(messages[0]["Telemetry.INS.rollDecDeg"])
+    #     consumer_msg = messaging.MessageConsumerMsg().write(consumer_msg_data)
+    #     return consumer_msg
+    # def get_manual_msg():
+    #     manual_msg_data = messaging.MessageConsumerManualMsgPayload()
+    #     manual_msg_data.manual_plume = int(-1)
+    #     manual_msg_data.lat = 15.0
+    #     manual_msg_data.lon = 30.0
+    #     manual_msg_data.alt = 0.0
+    #     manual_msg = messaging.MessageConsumerManualMsg().write(manual_msg_data)
+    #     return manual_msg
+
 
     # --> 4. Subscribe to messages
     fine_module.vnir_msg.subscribeTo(vnir_msg)
@@ -131,8 +165,12 @@ def run(param1, param2):
 
     gc_module.fine_msg.subscribeTo(fine_module.fine_msg)
     gc_module.mode_msg.subscribeTo(cont_module.controller_mode_msg)
+    gc_module.manual_msg.subscribeTo(msg_module.manual_msg)
+    gc_module.ins_msg.subscribeTo(msg_module.balloon_msg)
 
     cont_module.fine_msg.subscribeTo(fine_module.fine_msg)
+    cont_module.manual_msg.subscribeTo(msg_module.manual_msg)
+    cont_module.ins_msg.subscribeTo(msg_module.balloon_msg)
 
 
     # --> 5. Set output message recording

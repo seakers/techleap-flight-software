@@ -18,7 +18,9 @@
 // ---------------------------
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
 #include "msgPayloadDefC/ControllerOutMsgPayload.h"
-#include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
+#include "msgPayloadDefC/ControllerManualMsgPayload.h"
+#include "msgPayloadDefC/MessageConsumerManualMsgPayload.h"
+#include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 #include "msgPayloadDefC/FinePredictionMsgPayload.h"
 
 
@@ -57,10 +59,25 @@ public:
     int fine_state;
     Eigen::MatrixXd fine_mask;
 
+    ReadFunctor<MessageConsumerManualMsgPayload> manual_msg;
+    int manual_plume;
+    double manual_lat;
+    double manual_lon;
+    double manual_alt;
+
+    ReadFunctor<MessageConsumerMsgPayload> ins_msg;
+    int ins_state;
+    double lat;
+    double lon;
+    double alt;
+    double yaw;
+    double pitch;
+    double roll;
+
     // --> MESSAGE OUT
     Message<ControllerOutMsgPayload>          controller_msg;
     Message<ControllerModeMsgPayload>         controller_mode_msg;
-    Message<ControllerManualAnglesMsgPayload> controller_manual_angle_msg;
+    Message<ControllerManualMsgPayload> controller_manual_msg;
 
     // --> OUTPUT
     int   msg;       // controller_msg

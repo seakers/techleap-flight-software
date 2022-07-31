@@ -31,7 +31,7 @@ public:
     void FCUinsSubscriber();
     void ZeroOutputVariables();
     void FCUpayloadSend(std::string payloadStr);
-    void FCUpayloadReceiverListener();
+    std::string FCUpayloadReceiverListener();
     bool ConnectToPayloadServer(int pPayload);
     std::string s_recv (zmq::socket_t& socket, int flags);
 
@@ -42,9 +42,8 @@ public:
     // ----- VARIABLES -----
     // ---------------------
 
-    // --> INTERNAL
     Message<MessageConsumerMsgPayload> balloon_msg;
-    int state;
+    int ins_state;
     double lat;
     double lon;
     double alt;
@@ -53,6 +52,7 @@ public:
     double roll;
 
     Message<MessageConsumerManualMsgPayload> manual_msg;
+    int manual_plume;
     double manual_lat;
     double manual_lon;
     double manual_alt;

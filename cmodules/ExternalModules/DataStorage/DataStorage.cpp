@@ -71,19 +71,19 @@ void DataStorage::ReadMessages(uint64_t SimNanos){
     }
 
     // --> Balloon gps data
-    if(this->gps_msg.isLinked()){
+    if(this->ins_msg.isLinked()){
         std::cout << "BALLOON MSG IS LINKED!" << std::endl;
-        MessageConsumerMsgPayload gps_msg_payload = this->gps_msg();
-        this->gps_state = gps_msg_payload.state;
-        this->gps_lat = gps_msg_payload.lat;
-        std::cout << this->gps_lat << std::endl;
-        this->gps_lon = gps_msg_payload.lon;
-        this->gps_alt = gps_msg_payload.alt;
-        this->gps_yaw = gps_msg_payload.yaw;
-        this->gps_pitch = gps_msg_payload.pitch;
-        this->gps_roll = gps_msg_payload.roll;
-        telemetryFile << "Lat: " << this->gps_lat << ", Lon: " << this->gps_lon << ", Alt: " << this->gps_alt << "\n";
-        telemetryFile << "Yaw: " << this->gps_yaw << ", Pitch: " << this->gps_pitch << ", Roll: " << this->gps_roll << "\n";
+        MessageConsumerMsgPayload ins_msg_payload = this->ins_msg();
+        this->ins_state = ins_msg_payload.ins_state;
+        this->ins_lat = ins_msg_payload.lat;
+        std::cout << this->ins_lat << std::endl;
+        this->ins_lon = ins_msg_payload.lon;
+        this->ins_alt = ins_msg_payload.alt;
+        this->ins_yaw = ins_msg_payload.yaw;
+        this->ins_pitch = ins_msg_payload.pitch;
+        this->ins_roll = ins_msg_payload.roll;
+        telemetryFile << "Lat: " << this->ins_lat << ", Lon: " << this->ins_lon << ", Alt: " << this->ins_alt << "\n";
+        telemetryFile << "Yaw: " << this->ins_yaw << ", Pitch: " << this->ins_pitch << ", Roll: " << this->ins_roll << "\n";
     }
     telemetryFile.close();
 }

@@ -8,6 +8,7 @@
 #include "architecture/utilities/avsEigenSupport.h"
 #include "architecture/utilities/linearAlgebra.h"
 
+#define PI 3.14159265
 
 
 GimbalControl::GimbalControl()
@@ -32,20 +33,24 @@ void GimbalControl::ReadMessages(){
         this->mode = mode_msg_payload.mode;
         std::cout << this->mode << std::endl;
     }
-
-    if(this->adcs_angles_msg.isLinked()){
-        AttitudeDeterminationAnglesMsgPayload adcs_angles_msg_payload = this->adcs_angles_msg();
-        this->adcs_state = adcs_angles_msg_payload.state;
-        this->adcs_yaw = adcs_angles_msg_payload.yaw;
-        this->adcs_pitch = adcs_angles_msg_payload.pitch;
-        this->adcs_roll = adcs_angles_msg_payload.roll;
+    if(this->ins_msg.isLinked()){
+        std::cout << "IMU ANGLES LINKED!" << std::endl;
+        MessageConsumerMsgPayload ins_msg_payload = this->ins_msg();
+        this->ins_state = ins_msg_payload.ins_state;
+        this->ins_yaw = ins_msg_payload.yaw;
+        this->ins_pitch = ins_msg_payload.pitch;
+        this->ins_roll = ins_msg_payload.roll;
+        this->ins_lat = ins_msg_payload.lat;
+        this->ins_lon = ins_msg_payload.lon;
+        this->ins_alt = ins_msg_payload.alt;
     }
-
-    if(this->cont_angles_msg.isLinked()){
-        ControllerManualAnglesMsgPayload cont_angles_msg_payload = this->cont_angles_msg();
-        this->cont_state = cont_angles_msg_payload.state;
-        this->cont_pan = cont_angles_msg_payload.pan;
-        this->cont_tilt = cont_angles_msg_payload.tilt;
+    if(this->imu_msg.isLinked()){
+        std::cout << "IMU ANGLES LINKED!" << std::endl;
+        MessageConsumerManualMsgPayload manual_msg_payload = this->manual_msg();
+        this->manual_plume = manual_msg_payload.manual_plume;
+        this->manual_lat = manual_msg_payload.manual_lat;
+        this->manual_lon = manual_msg_payload.manual_lon;
+        this->manual_alt = manual_msg_payload.manual_alt;
     }
     if(this->imu_msg.isLinked()){
         std::cout << "IMU ANGLES LINKED!" << std::endl;
@@ -130,27 +135,74 @@ void GimbalControl::UpdateState(uint64_t CurrentSimNanos)
     }
     if(this->mode == 1 && this->fine_msg.isLinked()) {
         std::cout << "Tracking plume!" << std::endl;
-        float panAngle = this->tiltPID.pidUpdate(this->fine_pan, CurrentSimNanos);
+        float panAngle = this->panPID.pidUpdate(this->fine_pan, CurrentSimNanos);
         panAngle = this->LimitAngle(panAngle, 42.5, 12.5, this->imu_pitch);
         this->MoveBySteps(pan,1,this->DegToSteps(panAngle,1));
         float tiltAngle = this->tiltPID.pidUpdate(this->fine_tilt, CurrentSimNanos);
         tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);
         this->MoveBySteps(tilt,2,this->DegToSteps(tiltAngle,3.5866));
     }
-    if(this->mode == 3 && this->fine_msg.isLinked()) {
+    if(this->mode == 3) {
         std::cout << "Moving manually!" << std::endl;
-        float panAngle = this->tiltPID.pidUpdate(this->cont_pan, CurrentSimNanos);
+        std::vector<double> angles = this->GetManualAngles();
+        float panAngle = this->panPID.pidUpdate((float)angles.at(0), CurrentSimNanos);
         panAngle = this->LimitAngle(panAngle, 42.5, 12.5, this->imu_pitch);
         this->MoveBySteps(pan,1,this->DegToSteps(panAngle,1));
-        float tiltAngle = this->tiltPID.pidUpdate(this->cont_tilt, CurrentSimNanos);
+        float tiltAngle = this->tiltPID.pidUpdate((float)angles.at(1), CurrentSimNanos);
         tiltAngle = this->LimitAngle(tiltAngle, -50, -110, this->imu_pitch);
         this->MoveBySteps(tilt,2,this->DegToSteps(tiltAngle,3.5866));
+    }
+    if(this->mode == 0) {
+        std::cout << "Not moving!" << std::endl;
     }
 
     // -------------------
     // ----- Logging -----
     // -------------------
     bskLogger.bskLog(BSK_INFORMATION, "GimbalControl ------ ran update at %fs", this->moduleID, (float) CurrentSimNanos/(1e9));
+}
+
+std::vector<double> GimbalControl::GetManualAngles(){
+    std::vector<double> angles;
+    double plume_geo[3] = {this->manual_lat*PI/180,this->manual_lon*PI/180,this->manual_alt};
+    double* plume_ecef = this->geo_to_ecef(plume_geo);
+    double balloon_geo[3] = {this->ins_lat*PI/180,this->ins_lon*PI/180,this->ins_alt};
+    double* balloon_ecef = this->geo_to_ecef(balloon_geo);
+    double* plume_ned = this->ecef_to_ned(plume_ecef,balloon_ecef,balloon_geo);
+    double phi = atan2(plume_ned[1],plume_ned[0]) * 180 / PI;
+    double theta = atan2(hypot(plume_ned[0],plume_ned[1]),plume_ned[2]) * 180 / PI;
+    angles.push_back(phi);
+    angles.push_back(theta);
+    return angles;
+}
+
+double* GimbalControl::geo_to_ecef( double* geo ) {
+    double ecef[3];  //Results go here (x, y, z)
+    double lat = geo[0];
+    double lon = geo[1];
+    double alt = geo[2];
+    double a = 6378137.0;
+    double e2 = 6.6943799901377997e-3;
+    double n = a/sqrt( 1 - e2*sin( lat )*sin( lat ) );
+    ecef[0] = ( n + alt )*cos( lat )*cos( lon );    //ECEF x
+    ecef[1] = ( n + alt )*cos( lat )*sin( lon );    //ECEF y
+    ecef[2] = ( n*(1 - e2 ) + alt )*sin( lat );          //ECEF z
+    return( ecef );     //Return x, y, z in ECEF
+}
+
+double* GimbalControl::ecef_to_ned( double* point, double* ref, double* ref_geo ) {
+    double enu[3];  //Results go here (x, y, z)
+    double ned[3];
+    double x_diff = point[0] - ref[0];
+    double y_diff = point[1] - ref[1];
+    double z_diff = point[2] - ref[2];
+    enu[0] = -sin(ref_geo[1])*x_diff + cos(ref_geo[1])*y_diff;
+    enu[1] = -sin(ref_geo[0])*cos(ref_geo[1])*x_diff + -sin(ref_geo[0])*sin(ref_geo[1])*y_diff + cos(ref_geo[0])*z_diff;
+    enu[2] = cos(ref_geo[0])*cos(ref_geo[1])*x_diff + cos(ref_geo[0])*sin(ref_geo[1])*y_diff + sin(ref_geo[0])*z_diff;
+    ned[0] = enu[1];
+    ned[1] = enu[0];
+    ned[2] = -enu[2];
+    return( ned );     //Return x, y, z in NED
 }
 
 void GimbalControl::PanMotorSetup(int port, int motorID) {

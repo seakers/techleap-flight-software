@@ -28,8 +28,8 @@
 // ----- MESSAGE IMPORTS -----
 // ---------------------------
 #include "msgPayloadDefC/ControllerModeMsgPayload.h"
-#include "msgPayloadDefC/ControllerManualAnglesMsgPayload.h"
-#include "msgPayloadDefC/AttitudeDeterminationAnglesMsgPayload.h"
+#include "msgPayloadDefC/MessageConsumerManualMsgPayload.h"
+#include "msgPayloadDefC/MessageConsumerMsgPayload.h"
 #include "msgPayloadDefC/FinePredictionMsgPayload.h"
 #include "msgPayloadDefC/IMUOutMsgPayload.h"
 
@@ -65,6 +65,9 @@ public:
     float LimitAngle(float angle, float upperLimit, float lowerLimit, float imuAngle);
     void ScanPattern();
     void TiltScan();
+    double* ecef_to_ned( double* point, double* ref, double* refGeo );
+    double* geo_to_ecef( double* geo );
+    std::vector<double> GetManualAngles();
 
 public:
 
@@ -84,22 +87,26 @@ public:
     ReadFunctor<ControllerModeMsgPayload> mode_msg;
     int mode;
 
-    ReadFunctor<AttitudeDeterminationAnglesMsgPayload> adcs_angles_msg;
-    int   adcs_state;
-    float adcs_yaw;
-    float adcs_pitch;
-    float adcs_roll;
-
-    ReadFunctor<ControllerManualAnglesMsgPayload> cont_angles_msg;
-    int   cont_state;
-    float cont_pan;
-    float cont_tilt;
-
     ReadFunctor<IMUOutMsgPayload> imu_msg;
     int   imu_state;
     float imu_yaw;
     float imu_pitch;
     float imu_roll;
+
+    ReadFunctor<MessageConsumerMsgPayload> ins_msg;
+    int   ins_state;
+    float ins_yaw;
+    float ins_pitch;
+    float ins_roll;
+    float ins_lat;
+    float ins_lon;
+    float ins_alt;
+
+    ReadFunctor<MessageConsumerManualMsgPayload> manual_msg;
+    int manual_plume;
+    float manual_lat;
+    float manual_lon;
+    float manual_alt;
 
     ReadFunctor<FinePredictionMsgPayload> fine_msg;
     int fine_state;
